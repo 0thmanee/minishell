@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 08:42:35 by obouchta          #+#    #+#             */
-/*   Updated: 2024/03/01 15:26:32 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/03/03 02:26:35 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,21 +24,40 @@
 // 	}
 // 	return (1);
 // }
+int	closed_quote(char *input)
+{
+	int	i;
+	int	signle_q;
+	int	double_q;
+
+	i = 0;
+	signle_q = 0;
+	double_q = 0;
+	while (input[i])
+	{
+		if (input[i] == '\"')
+			double_q++;
+		if (input[i] == '\'')
+			signle_q++;
+		i++;
+	}
+	return (!(double_q % 2) && !(signle_q % 2));
+}
 
 int	process_input(char *input)
 {
 	char	**splited_input;
-	char	*joined_input;
+	t_token	*tokens;
 
+	if (!closed_quote(input))
+		return (0);
 	splited_input = ft_split(input, ' ');
 	if (!splited_input)
 		return (0);
-	joined_input = join_input(splited_input, count_words(input, ' '));
-	printf("<%s>\n", joined_input);
-	if (!joined_input)
+	tokens = malloc(sizeof(t_token) * (count_words(input, ' ') + 1));
+	if (!tokens)
 		return (0);
-	// if (!check_syntax(joined_input))
-	// 	return (-1);
+	fill_tokens(tokens, splited_input, count_words(input, ' ') + 1);
 	return (1);
 }
 
@@ -51,19 +70,19 @@ int main()
 	if (!cwd)
 		perror("error");
 	if (getcwd(cwd, BUFFER_SIZE))
-		printf(ANSI_COLOR_CYAN "\n%s » ", cwd);
+		cwd = ft_strjoin(cwd, " » ");
 	else
 		(perror("error"), free(cwd));
-	input = readline("");
-	while (input)
+	using_history();
+	while ((input = readline(cwd)) != NULL)
 	{
-		if (!process_input(input))
-			perror("error");
-		if (getcwd(cwd, BUFFER_SIZE))
-		printf(ANSI_COLOR_CYAN "%s » ", cwd);
+		if (input[0])
+			add_history(input);
 		else
-			(perror("error"), free(cwd), free(input));
-		input = readline("");
+			ft_strcpy(input, history_get(history_length)->line);
+		if (!process_input(input))
+			printf("failed\n");
+		free(input);
 	}
-	return (0);
+	return (free(input), free(cwd), 0);
 }

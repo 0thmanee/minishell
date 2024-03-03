@@ -4,7 +4,7 @@ READLINE = -lreadline
 RM = rm -f
 
 NAME = minishell
-CFILES = main.c utils_1.c utils_2.c
+CFILES = main.c utils_1.c utils_2.c libft/funct
 OFILES = $(CFILES:.c=.o)
 INCLUDES = minishell.h
 

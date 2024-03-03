@@ -6,96 +6,72 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 10:58:53 by obouchta          #+#    #+#             */
-/*   Updated: 2024/03/01 18:44:19 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/03/03 02:38:04 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-size_t	count_words(char const *s, char c)
+char	*join_input(char **splited, int words_nbr)
 {
-	size_t	i;
-	size_t	count;
+	char	*joined;
+	int		total_len;
+	int		i;
 
-	i = 0;
-	count = 0;
-	while (s[i])
-	{
-		while (s[i] && s[i] == c)
-			i++;
-		if (s[i])
-		{
-			if (i == 0 || s[i - 1] == c)
-				count++;
-			i++;
-		}
-	}
-	return (count);
-}
-
-static size_t	calc_len(char const *s, char c)
-{
-	size_t	i;
-	size_t	count;
-
-	count = 0;
-	i = 0;
-	while (s[i] != c && s[i])
-	{
-		i++;
-		count++;
-	}
-	return (count);
-}
-
-static char	*fill_subs(char const **s, char c)
-{
-	size_t	i;
-	char	*subs;
-	size_t	len;
-
-	while (**s == c && **s)
-		(*s)++;
-	len = calc_len(*s, c);
-	subs = (char *) malloc (sizeof (char) * (len + 1));
-	if (!subs)
+	total_len = 0;
+	i = -1;
+	while (splited[++i])
+		total_len += ft_strlen(splited[i]);
+	total_len += (words_nbr - 1);
+	joined = (char *)malloc(total_len + 1);
+	if (!joined)
 		return (NULL);
-	i = 0;
-	while (i < len)
+	i = -1;
+	while (splited[++i])
 	{
-		subs[i] = **s;
-		i++;
-		(*s)++;
+		ft_strlcat(joined, splited[i], total_len + 1);
+		if (splited[i + 1])
+			ft_strlcat(joined, " ", total_len + 1);
 	}
-	subs[i] = '\0';
-	return (subs);
+	return (joined);
 }
 
-char	**ft_split(char const *s, char c)
+int define_token_type(char *token)
 {
-	size_t	nbr_words;
-	char	**strings;
-	size_t	i;
-
-	i = 0;
-	if (!s)
-		return (NULL);
-	nbr_words = count_words(s, c);
-	strings = (char **) malloc (sizeof(char *) * (nbr_words + 1));
-	if (!strings)
-		return (NULL);
-	while (i < nbr_words)
-	{
-		strings[i] = fill_subs(&s, c);
-		if (!strings[i])
-		{
-			while (i > 0)
-				free(strings[--i]);
-			free (strings);
-			return (NULL);
-		}
-		i++;
-	}
-	strings[i] = NULL;
-	return (strings);
+	if (!ft_strcmp(token, ";"))
+		return (SEMICOLON);
+	if (!ft_strcmp(token, "&&"))
+		return (AND);
+	if (!ft_strcmp(token, "||"))
+		return (OR);
+	if (!ft_strcmp(token, "|"))
+		return (PIPE);
+	if (!ft_strcmp(token, ">"))
+		return (OUTPUT);
+	if (!ft_strcmp(token, ">>"))
+		return (APPEND);
+	if (!ft_strcmp(token, "<"))
+		return (INPUT);
+	if (!ft_strcmp(token, "<<"))
+		return (HERE_DOC);
+	if (!ft_strcmp(token, "("))
+		return (OPEN_PAREN);
+	if (!ft_strcmp(token, ")"))
+		return (CLOSE_PAREN);
+	return (EXPRESSION);
 }
+
+void	fill_tokens(t_token *tokens, char **splited, int words_nbr)
+{
+	int	i;
+
+	i = -1;
+	while (++i < words_nbr)
+	{
+		tokens[i].value = splited[i];
+		tokens[i].type = define_token_type(splited[i]);
+	}
+	tokens[i].value = NULL;
+	tokens[i].type = -1;
+}
+
