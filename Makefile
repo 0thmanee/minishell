@@ -1,10 +1,10 @@
 CC = cc
 CFLAGS = -Wall -Wextra -Werror
-READLINE = -lreadline
+READLINE = -lreadline -I ~/brew/opt/readline/include
 RM = rm -f
 
 NAME = minishell
-CFILES = main.c utils_1.c utils_2.c libft/funct
+CFILES = main.c utils_1.c utils_2.c libft/functs_1.c libft/functs_2.c
 OFILES = $(CFILES:.c=.o)
 INCLUDES = minishell.h
 

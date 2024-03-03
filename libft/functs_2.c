@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   functs_1.c                                         :+:      :+:    :+:   */
+/*   functs_2.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/03 02:36:31 by obouchta          #+#    #+#             */
-/*   Updated: 2024/03/03 02:36:40 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/03/03 05:43:45 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-size_t	ft_strlen(char *s)
+int	ft_strlen(char *s)
 {
 	int	len;
 
@@ -22,11 +22,11 @@ size_t	ft_strlen(char *s)
 	return (len);
 }
 
-size_t	ft_strlcat(char *dest, char *src, size_t dstsize)
+int	ft_strlcat(char *dest, char *src, int dstsize)
 {
-	size_t	len_src;
-	size_t	len_dest;
-	size_t	i;
+	int	len_src;
+	int	len_dest;
+	int	i;
 
 	len_dest = ft_strlen(dest);
 	len_src = ft_strlen(src);
@@ -42,15 +42,13 @@ size_t	ft_strlcat(char *dest, char *src, size_t dstsize)
 	return (len_src + len_dest);
 }
 
-int	ft_strncmp(const char *s1, const char *s2, size_t n)
+int	ft_strcmp(const char *s1, const char *s2)
 {
-	size_t	i;
+	int	i;
 
 	i = 0;
-	while (i < n && s1[i] != '\0' && s2[i] != '\0' && s1[i] == s2[i])
+	while (s1[i] != '\0' && s2[i] != '\0' && s1[i] == s2[i])
 		i++;
-	if (i == n)
-		return (0);
 	return ((unsigned char)s1[i] - (unsigned char)s2[i]);
 }
 

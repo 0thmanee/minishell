@@ -6,11 +6,11 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/03 02:37:31 by obouchta          #+#    #+#             */
-/*   Updated: 2024/03/03 02:38:36 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/03/03 06:35:20 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
 
 int	is_quoted(const char *str, int index)
 {
@@ -19,25 +19,23 @@ int	is_quoted(const char *str, int index)
 	int	second;
 	int	opened;
 
-	i = 0;
+	i = -1;
 	opened = 0;
-	while (str[i])
+	while (str[++i])
 	{
 		if (str[i] == '\"' || str[i] == '\'')
 		{
 			if (!opened)
-			{
-				first = i;
-				opened = 1;
-			}
+				(first = i, opened = 1);
 			else
 			{
 				second = i;
 				break ;
 			}
 		}
-		i++;
 	}
+	if (!first && !second)
+		return (0);
 	return (index > first && index < second);
 }
 
