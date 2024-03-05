@@ -5,124 +5,69 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/03/03 02:37:31 by obouchta          #+#    #+#             */
-/*   Updated: 2024/03/03 06:35:20 by obouchta         ###   ########.fr       */
+/*   Created: 2024/03/03 02:36:31 by obouchta          #+#    #+#             */
+/*   Updated: 2024/03/04 21:38:07 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-int	is_quoted(const char *str, int index)
+int	ft_strlen(char *s)
 {
-	int i;
-	int	first;
-	int	second;
-	int	opened;
+	int	len;
 
-	i = -1;
-	opened = 0;
-	while (str[++i])
-	{
-		if (str[i] == '\"' || str[i] == '\'')
-		{
-			if (!opened)
-				(first = i, opened = 1);
-			else
-			{
-				second = i;
-				break ;
-			}
-		}
-	}
-	if (!first && !second)
-		return (0);
-	return (index > first && index < second);
+	len = 0;
+	while (s[len])
+		len++;
+	return (len);
 }
 
-size_t	count_words(char const *s, char c)
+int	ft_strlcat(char *dest, char *src, int dstsize)
 {
-	size_t	i;
-	size_t	count;
+	int	len_src;
+	int	len_dest;
+	int	i;
 
+	len_dest = ft_strlen(dest);
+	len_src = ft_strlen(src);
+	if (dstsize <= len_dest)
+		return (dstsize + len_src);
 	i = 0;
-	count = 0;
-	while (s[i])
+	while (src[i] && len_dest + i < dstsize - 1)
 	{
-		while (s[i] && (s[i] == c && !is_quoted(s, i)))
-			i++;
-		if (s[i])
-		{
-			if (i == 0 || (s[i - 1] == c && !is_quoted(s, i - 1)))
-				count++;
-			i++;
-		}
-	}
-	return (count);
-}
-
-static size_t	calc_len(char const *s, char c)
-{
-	size_t	i;
-	size_t	count;
-
-	count = 0;
-	i = 0;
-	while (((s[i] == c && is_quoted(s, i)) || s[i] != c) && s[i])
-	{
-		i++;
-		count++;
-	}
-	return (count);
-}
-
-static char	*fill_subs(char const **s, char c)
-{
-	size_t	i;
-	char	*subs;
-	size_t	len;
-
-	while (**s == c && **s)
-		(*s)++;
-	len = calc_len(*s, c);
-	subs = (char *) malloc (sizeof (char) * (len + 1));
-	if (!subs)
-		return (NULL);
-	i = 0;
-	while (i < len)
-	{
-		subs[i] = **s;
-		i++;
-		(*s)++;
-	}
-	subs[i] = '\0';
-	return (subs);
-}
-
-char	**ft_split(char const *s, char c)
-{
-	size_t	nbr_words;
-	char	**strings;
-	size_t	i;
-
-	i = 0;
-	if (!s)
-		return (NULL);
-	nbr_words = count_words(s, c);
-	strings = (char **) malloc (sizeof(char *) * (nbr_words + 1));
-	if (!strings)
-		return (NULL);
-	while (i < nbr_words)
-	{
-		strings[i] = fill_subs(&s, c);
-		if (!strings[i])
-		{
-			while (i > 0)
-				free(strings[--i]);
-			free (strings);
-			return (NULL);
-		}
+		dest[len_dest + i] = src[i];
 		i++;
 	}
-	strings[i] = NULL;
-	return (strings);
+	dest[len_dest + i] = '\0';
+	return (len_src + len_dest);
+}
+
+char	*ft_strcpy(char *dest, const char *src)
+{
+	int	i;
+
+	i = 0;
+	while (*(src + i) != '\0')
+	{
+		*(dest + i) = *(src + i);
+		i++;
+	}
+	dest[i] = '\0';
+	return (dest);
+}
+
+char	*ft_strjoin(char *s1, char *s2)
+{
+	char	*s3;
+	int		total_len;
+
+	if (!s1 || !s2)
+		return (NULL);
+	total_len = ft_strlen(s1) + ft_strlen(s2);
+	s3 = (char *)malloc(total_len + 1);
+	if (!s3)
+		return (NULL);
+	ft_strcpy(s3, s1);
+	ft_strlcat(s3, s2, total_len + 1);
+	return (s3);
 }

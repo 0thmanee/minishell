@@ -5,79 +5,41 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/03/03 02:36:31 by obouchta          #+#    #+#             */
-/*   Updated: 2024/03/03 05:43:45 by obouchta         ###   ########.fr       */
+/*   Created: 2024/03/04 21:41:01 by obouchta          #+#    #+#             */
+/*   Updated: 2024/03/05 04:26:23 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-int	ft_strlen(char *s)
+t_token	*ft_lstnew(char *value, int type, char **args)
 {
-	int	len;
+	t_token	*new_node;
 
-	len = 0;
-	while (s[len])
-		len++;
-	return (len);
-}
-
-int	ft_strlcat(char *dest, char *src, int dstsize)
-{
-	int	len_src;
-	int	len_dest;
-	int	i;
-
-	len_dest = ft_strlen(dest);
-	len_src = ft_strlen(src);
-	if (dstsize <= len_dest)
-		return (dstsize + len_src);
-	i = 0;
-	while (src[i] && len_dest + i < dstsize - 1)
-	{
-		dest[len_dest + i] = src[i];
-		i++;
-	}
-	dest[len_dest + i] = '\0';
-	return (len_src + len_dest);
-}
-
-int	ft_strcmp(const char *s1, const char *s2)
-{
-	int	i;
-
-	i = 0;
-	while (s1[i] != '\0' && s2[i] != '\0' && s1[i] == s2[i])
-		i++;
-	return ((unsigned char)s1[i] - (unsigned char)s2[i]);
-}
-
-char	*ft_strcpy(char *dest, const char *src)
-{
-	int	i;
-
-	i = 0;
-	while (*(src + i) != '\0')
-	{
-		*(dest + i) = *(src + i);
-		i++;
-	}
-	dest[i] = '\0';
-	return (dest);
-}
-
-char	*ft_strjoin(char *s1, char *s2)
-{
-	char	*s3;
-	int		total_len;
-
-	if (!s1 || !s2)
+	new_node = (t_token *)malloc(sizeof(t_token));
+	if (!new_node)
 		return (NULL);
-	total_len = ft_strlen(s1) + ft_strlen(s2);
-	s3 = (char *)malloc(total_len + 1);
-	if (!s3)
-		return (NULL);
-	ft_strcpy(s3, s1);
-	ft_strlcat(s3, s2, total_len + 1);
-	return (s3);
+	new_node->value = value;
+	new_node->args = args;
+	new_node->type = type;
+	new_node->next = NULL;
+	return (new_node);
+}
+
+void	ft_lstadd_back(t_token **lst, t_token *new)
+{
+	t_token	*curr;
+
+	if (new == NULL)
+		return ;
+	if (*lst == NULL)
+	{
+		*lst = new;
+		new->next = NULL;
+		return ;
+	}
+	curr = *lst;
+	while (curr && curr->next)
+		curr = curr->next;
+	curr->next = new;
 }

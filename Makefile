@@ -1,21 +1,23 @@
 CC = cc
-CFLAGS = -Wall -Wextra -Werror
-READLINE = -lreadline -I ~/brew/opt/readline/include
+CFLAGS = -Wall -Wextra -Werror -g -fsanitize=address
 RM = rm -f
 
 NAME = minishell
-CFILES = main.c utils_1.c utils_2.c libft/functs_1.c libft/functs_2.c
+CFILES = main.c new_len.c add_spaces.c libft/functs_1.c libft/functs_2.c
 OFILES = $(CFILES:.c=.o)
 INCLUDES = minishell.h
+# READLINEDIR = /Users/$(USER)/homebrew/Cellar/readline/8.2.7
 
 all: $(NAME)
 	@printf "\033[32m[ ✔ ] %s\n\033[0m" "Program Created"
 
 $(NAME): $(OFILES)
-	@$(CC) $(CFLAGS) $(READLINE) $^ -o $@
+	@$(CC) $(CFLAGS) $^ -o $@ -lreadline
+# -L$(READLINEDIR)/lib
 
 %.o: %.c $(INCLUDES)
 	@$(CC) $(CFLAGS) -c $< -o $@
+#-I$(READLINEDIR)/include
 
 clean:
 	@$(RM) $(OFILES) $(OFILES_BONUS)
