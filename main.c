@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 08:42:35 by obouchta          #+#    #+#             */
-/*   Updated: 2024/03/05 06:37:31 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/03/06 04:18:07 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,29 @@ int	regonize_type(char *input, int i)
 		return (PIPE);
 	return (EXPRESSION);
 }
+
+char	*quoted_cmd(char *input, int *i)
+{
+	int		j;
+	int		quote;
+	char	*value;
+
+	quote = input[*i];
+	j = (*i) + 2;
+	while (input[j] && input[j] != quote)
+		j++;
+	value = malloc(j - *i + 2);
+	if (!value)
+		return (NULL);
+	j = 0;
+	value[j++] = input[(*i)++];
+	while (input[*i] && input[*i] != quote)
+		value[j++] = input[(*i)++];
+	value[j++] = input[(*i)++];
+	value[j] = '\0';
+	return (value);
+}
+
 t_token	*get_token(char *input, int *i, int type)
 {
 	int		j;
@@ -56,7 +79,6 @@ t_token	*get_token(char *input, int *i, int type)
 	new_token = ft_lstnew(value, type, NULL);
 	if (!new_token)
 		return (NULL);
-	// (*i)--;
 	return (new_token);
 }
 
@@ -64,11 +86,23 @@ int calc_args_len(char *input, int i)
 {
 	int len = 0;
 	int l = 0;
+	char quote;
 
 	while (input[i])
 	{
 		while (input[i] && input[i] == ' ')
 			i++;
+		if (input[i] == '\'' || input[i] == '\"')
+		{
+			quote = input[i];
+			i++;
+			while (input[i] && input[i] != quote)
+				i++;
+			if (input[i])
+				i++;
+			len++;
+			continue ;
+		}
 		if (regonize_type(input, i))
 			break;
 		while (input[i] && input[i] != ' ')
@@ -101,6 +135,11 @@ char **get_args(char *input, int *i)
 	{
 		while (input[*i] && input[*i] == ' ')
 			(*i)++;
+		if (input[*i] == '\'' || input[*i] == '\"')
+		{
+			args[l++] = quoted_cmd(input, i);
+			continue ;
+		}
 		if (regonize_type(input, *i) != EXPRESSION)
 			break;
 		j = *i;
@@ -143,25 +182,15 @@ t_token	*get_expression(char *input, int *i)
 
 t_token	*get_quoted(char *input, int *i)
 {
-	int		j;
-	int		quote;
 	char	*value;
 	t_token	*new_token;
+	char	**args;
 
-	quote = input[*i];
-	j = (*i) + 2;
-	while (input[j] && input[j] != quote)
-		j++;
-	value = malloc(j - *i + 2);
+	value = quoted_cmd(input, i);
 	if (!value)
 		return (NULL);
-	j = 0;
-	value[j++] = input[(*i)++];
-	while (input[*i] && input[*i] != quote)
-		value[j++] = input[(*i)++];
-	value[j++] = input[(*i)++];
-	value[j] = '\0';
-	new_token = ft_lstnew(value, -1, NULL);
+	args = get_args(input, i);
+	new_token = ft_lstnew(value, CMD, args);
 	if (!new_token)
 		return (NULL);
 	return (new_token);
@@ -189,24 +218,48 @@ t_token	*ft_split(char *input)
 			if (new_token)
 				ft_lstadd_back(&tokens, new_token);
 		}
-		else
-			i++;
+		i++;
 	}
+	// ***********************************
 	t_token *curr = tokens;
 	while (curr)
 	{
-		printf("value: %s\n", curr->value);
+		printf("value: ( %s )\n", curr->value);
 		printf("type: %d\n", curr->type);
-		printf("args:\n");
-		while (curr->args && *curr->args)
+		if (curr->args && *curr->args)
 		{
-			printf("{%s}\n", *curr->args);
-			curr->args++;
+			printf("args:\n");
+			while (curr->args && *curr->args)
+			{
+				printf("{ %s }\n", *curr->args);
+				curr->args++;
+			}
 		}
 		printf("\n");
 		curr = curr->next;
 	}
+	// ***********************************
 	return (tokens);
+}
+
+int	syntax_error(t_token *tokens)
+{
+	t_token *curr;;
+	int		type;
+
+	curr = tokens;
+	while (curr)
+	{
+		type = curr->type;
+		if (type == INPUT || type == OUTPUT || type == APPEND || type == PIPE)
+		{
+			if (!curr->next || curr->next->type == INPUT || curr->next->type == OUTPUT
+				|| curr->next->type == APPEND || curr->next->type == PIPE)
+				return (1);
+		}
+		curr = curr->next;
+	}
+	return (0);
 }
 
 int	process_input(char *input)
@@ -221,8 +274,14 @@ int	process_input(char *input)
 	input = add_spaces(input);
 	if (!input)
 		perror("error");
-	printf("{%s}\n", input);
 	tokens = ft_split(input);
+	if (!tokens)
+		return (0);
+	if (syntax_error(tokens))
+	{
+		printf("minishell: syntax error\n");
+		return (0);
+	}
 	return (1);
 }
 
@@ -231,10 +290,12 @@ int read_input(char *input, char *cwd)
 	while (1)
 	{
 		input = readline(cwd);
+		if (!input[0])
+			continue ;
 		if (input[0])
 			add_history(input);
-		else
-			ft_strcpy(input, history_get(history_length)->line);
+		else if (history_length > 0)
+				ft_strcpy(input, history_get(history_length)->line);
 		if (!process_input(input))
 			printf("failed\n");
 		free(input);
@@ -248,10 +309,7 @@ int main(int ac, char **av)
 	char *input;
 
 	if (ac != 1)
-	{
-		printf("minishell: too many arguments\n");
-		return (1);
-	}
+		return (printf("minishell: too many arguments\n"), 1);
 	(void)av;
 	cwd = malloc(BUFFER_SIZE);
 	input = NULL;

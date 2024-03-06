@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 08:41:08 by obouchta          #+#    #+#             */
-/*   Updated: 2024/03/04 23:03:06 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/03/06 03:46:36 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,15 +33,16 @@ typedef struct s_token
 
 typedef enum
 {
-	EXPRESSION, // 0
+	EXPRESSION,
     CMD,
-    ARG,
-    SPACE,  // 1
-    INPUT, // 3
-    OUTPUT, // 4
-    HERE_DOC, // 5
-    APPEND, // 6
-    PIPE, // 7
+    INPUT,
+    IN_FILE,
+    OUTPUT,
+    OUT_FILE,
+    HERE_DOC,
+    DELIMITER,
+    APPEND,
+    PIPE,
 }	TokenType;
 
 char	*ft_strcpy(char *dest, const char *src);
