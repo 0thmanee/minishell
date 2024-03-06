@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 08:42:35 by obouchta          #+#    #+#             */
-/*   Updated: 2024/03/06 04:18:07 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/03/06 04:52:26 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,17 @@ int	regonize_type(char *input, int i)
 	if (input[i] == '|')
 		return (PIPE);
 	return (EXPRESSION);
+}
+
+int	regonize_type_2(int prev_type)
+{
+	if (prev_type == INPUT)
+		return (IN_FILE);
+	if (prev_type == OUTPUT || prev_type == APPEND)
+		return (OUT_FILE);
+	if (prev_type == HERE_DOC)
+		return (DELIMITER);
+	return (CMD);
 }
 
 char	*quoted_cmd(char *input, int *i)
@@ -157,7 +168,7 @@ char **get_args(char *input, int *i)
 	return (args);
 }
 
-t_token	*get_expression(char *input, int *i)
+t_token	*get_cmd(char *input, int *i, int prev_type)
 {
 	int		j;
 	char	*cmd;
@@ -173,14 +184,14 @@ t_token	*get_expression(char *input, int *i)
 	while (input[*i] && input[*i] != ' ')
 		cmd[j++] = input[(*i)++];
 	cmd[j] = '\0';
-	new_token = ft_lstnew(cmd, CMD, get_args(input, i));
+	new_token = ft_lstnew(cmd, regonize_type_2(prev_type), get_args(input, i));
 	if (!new_token)
 		return (NULL);
 	(*i)--;
 	return (new_token);
 }
 
-t_token	*get_quoted(char *input, int *i)
+t_token	*get_quoted(char *input, int *i, int prev_type)
 {
 	char	*value;
 	t_token	*new_token;
@@ -190,55 +201,95 @@ t_token	*get_quoted(char *input, int *i)
 	if (!value)
 		return (NULL);
 	args = get_args(input, i);
-	new_token = ft_lstnew(value, CMD, args);
+	new_token = ft_lstnew(value, regonize_type_2(prev_type), args);
 	if (!new_token)
 		return (NULL);
 	return (new_token);
 }
 
+int get_last_type(t_token *tokens)
+{
+	t_token *curr;
+
+	curr = tokens;
+	while (curr && curr->next)
+		curr = curr->next;
+	if (curr)
+		return (curr->type);
+	return (EXPRESSION);
+}
+
+void	print_the_shit(t_token *tokens)
+{
+	t_token *curr = tokens;
+	while (curr)
+	{
+		printf("value: ( %s )\n", curr->value);
+		printf("type: ");
+		if (curr->type == CMD)
+			printf("CMD\n");
+		else if (curr->type == INPUT)
+			printf("INPUT\n");
+		else if (curr->type == IN_FILE)
+			printf("IN_FILE\n");
+		else if (curr->type == OUTPUT)
+			printf("OUTPUT\n");
+		else if (curr->type == OUT_FILE)
+			printf("OUT_FILE\n");
+		else if (curr->type == HERE_DOC)
+			printf("HERE_DOC\n");
+		else if (curr->type == DELIMITER)
+			printf("DELIMITER\n");
+		else if (curr->type == APPEND)
+			printf("APPEND\n");
+		else if (curr->type == PIPE)
+			printf("PIPE\n");
+		if (curr->args && *curr->args)
+		{
+			if (curr->type == CMD)
+			{
+				printf("args:\n");
+				while (curr->args && *curr->args)
+				{
+					printf("{ %s }\n", *curr->args);
+					curr->args++;
+				}	
+			}
+		}
+		printf("\n");
+		curr = curr->next;
+	}
+}
+
 t_token	*ft_split(char *input)
 {
-	t_token	*tokens = NULL;
+	t_token	*tokens;
 	t_token	*new_token;
 	int		i;
 
 	i = 0;
+	tokens = NULL;
 	while (input[i])
 	{
 		if (i == 0 || input[i] == ' ')
 		{
 			while (input[i] && input[i] == ' ')
 				i++;
+			if (i == ft_strlen(input))
+				break ;
 			if (input[i] && (input[i] == '\'' || input[i] == '\"'))
-				new_token = get_quoted(input, &i);
+				new_token = get_quoted(input, &i, get_last_type(tokens));
 			else if (regonize_type(input, i) != EXPRESSION)
 				new_token = get_token(input, &i, regonize_type(input, i));
 			else
-				new_token = get_expression(input, &i);
+				new_token = get_cmd(input, &i, get_last_type(tokens));
 			if (new_token)
 				ft_lstadd_back(&tokens, new_token);
 		}
-		i++;
+		else
+			i++;
 	}
-	// ***********************************
-	t_token *curr = tokens;
-	while (curr)
-	{
-		printf("value: ( %s )\n", curr->value);
-		printf("type: %d\n", curr->type);
-		if (curr->args && *curr->args)
-		{
-			printf("args:\n");
-			while (curr->args && *curr->args)
-			{
-				printf("{ %s }\n", *curr->args);
-				curr->args++;
-			}
-		}
-		printf("\n");
-		curr = curr->next;
-	}
-	// ***********************************
+	print_the_shit(tokens);
 	return (tokens);
 }
 
@@ -267,21 +318,15 @@ int	process_input(char *input)
 	t_token *tokens;
 
 	if (!valid_quotes(input))
-	{
-		printf("minishell: syntax error\n");
 		return (0);
-	}
 	input = add_spaces(input);
 	if (!input)
 		perror("error");
 	tokens = ft_split(input);
 	if (!tokens)
-		return (0);
+		perror("error");
 	if (syntax_error(tokens))
-	{
-		printf("minishell: syntax error\n");
 		return (0);
-	}
 	return (1);
 }
 
@@ -297,7 +342,7 @@ int read_input(char *input, char *cwd)
 		else if (history_length > 0)
 				ft_strcpy(input, history_get(history_length)->line);
 		if (!process_input(input))
-			printf("failed\n");
+			printf("minishell: syntax error\n");
 		free(input);
 	}
 	return (1);
