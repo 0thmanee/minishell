@@ -6,36 +6,11 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 10:58:53 by obouchta          #+#    #+#             */
-/*   Updated: 2024/03/04 21:31:08 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/03/06 07:22:42 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-int	valid_quotes(char *input)
-{
-	int		i;
-	char	quote;
-
-	i = 0;
-	while (input[i])
-	{
-		if (input[i] == '\'' || input[i] == '\"')
-		{
-			quote = input[i];
-			i++;
-			while (input[i] && input[i] != quote)
-				i++;
-			if (!input[i])
-				return (0);
-			else
-				i++;
-		}
-		else
-			i++;
-	}
-	return (1);
-}
 
 void	ft_new_len_helper_1(char *input, int i, int *new_len)
 {

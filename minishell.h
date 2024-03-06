@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 08:41:08 by obouchta          #+#    #+#             */
-/*   Updated: 2024/03/06 03:46:36 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/03/06 07:22:15 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,11 +49,21 @@ char	*ft_strcpy(char *dest, const char *src);
 char	*ft_strjoin(char *s1, char *s2);
 int	    ft_strlen(char *s);
 int	    ft_strlcat(char *dest, char *src, int dstsize);
-int 	ft_strcmp(const char *s1, const char *s2);
-int	    valid_quotes(char *input);
 int	    ft_new_len(char *input);
 char	*add_spaces(char *input);
 t_token	*ft_lstnew(char *value, int type, char **args);
 void	ft_lstadd_back(t_token **lst, t_token *new);
+int	    regonize_type(char *input, int i);
+int	    regonize_type_2(int prev_type);
+int     get_last_type(t_token *tokens);
+int     calc_args_len_helper(char *input, int *i, int *len);
+int     calc_args_len(char *input, int i);
+int	    get_args_helper(char *input, int *i, int *j, char **args);
+char    **get_args(char *input, int *i);
+t_token	*get_cmd(char *input, int *i, int prev_type);
+int	    valid_quotes(char *input);
+char	*quoted_cmd(char *input, int *i);
+t_token	*get_token(char *input, int *i, int type);
+t_token	*get_quoted(char *input, int *i, int prev_type);
 
 #endif
