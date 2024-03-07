@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 21:41:01 by obouchta          #+#    #+#             */
-/*   Updated: 2024/03/05 04:26:23 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/03/07 01:22:45 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,4 +42,51 @@ void	ft_lstadd_back(t_token **lst, t_token *new)
 	while (curr && curr->next)
 		curr = curr->next;
 	curr->next = new;
+}
+
+char	*ft_substr(char const *s, int start, int len)
+{
+	int		i;
+	char	*subs;
+
+	if (!s)
+		return (NULL);
+	if (!len)
+		return (NULL);
+	subs = (char *)malloc(len + 1);
+	if (!subs)
+		return (NULL);
+	i = 0;
+	while (i < len && s[start])
+	{
+		subs[i] = s[start];
+		start++;
+		i++;
+	}
+	subs[i] = '\0';
+	return (subs);
+}
+
+char	*ft_strtrim(char *input)
+{
+	int	i;
+	int	start;
+	int	new_len;
+
+	i = 0;
+	new_len = 0;
+	while (input[i] == ' ')
+		i++;
+	start = i;
+	while (input[i])
+	{
+		new_len++;
+		i++;
+	}
+	while (input[i - 1] == ' ')
+	{
+		new_len--;
+		i--;
+	}
+	return (ft_substr(input, start, new_len));
 }

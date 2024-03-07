@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 07:21:28 by obouchta          #+#    #+#             */
-/*   Updated: 2024/03/06 07:22:45 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/03/07 04:55:03 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,8 +44,10 @@ char	*quoted_cmd(char *input, int *i)
 	char	*value;
 
 	quote = input[*i];
-	j = (*i) + 2;
+	j = (*i) + 1;
 	while (input[j] && input[j] != quote)
+		j++;
+	while (input[j] && input[j] != ' ')
 		j++;
 	value = malloc(j - *i + 2);
 	if (!value)
@@ -54,7 +56,8 @@ char	*quoted_cmd(char *input, int *i)
 	value[j++] = input[(*i)++];
 	while (input[*i] && input[*i] != quote)
 		value[j++] = input[(*i)++];
-	value[j++] = input[(*i)++];
+	while (input[*i] && input[*i] != ' ')
+		value[j++] = input[(*i)++];
 	value[j] = '\0';
 	return (value);
 }
@@ -82,19 +85,19 @@ t_token	*get_token(char *input, int *i, int type)
 	return (new_token);
 }
 
-t_token	*get_quoted(char *input, int *i, int prev_type)
-{
-	char	*value;
-	t_token	*new_token;
-	char	**args;
+// t_token	*get_quoted(char *input, int *i, int prev_type)
+// {
+// 	char	*value;
+// 	t_token	*new_token;
+// 	char	**args;
 
-	value = quoted_cmd(input, i);
-	if (!value)
-		return (NULL);
-	args = get_args(input, i);
-	new_token = ft_lstnew(value, regonize_type_2(prev_type), args);
-	if (!new_token)
-		return (NULL);
-	(*i)--;
-	return (new_token);
-}
+// 	value = quoted_cmd(input, i);
+// 	if (!value)
+// 		return (NULL);
+// 	args = get_args(input, i);
+// 	new_token = ft_lstnew(value, regonize_type_2(prev_type), args);
+// 	if (!new_token)
+// 		return (NULL);
+// 	(*i)--;
+// 	return (new_token);
+// }

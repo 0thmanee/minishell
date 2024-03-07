@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/03 02:36:31 by obouchta          #+#    #+#             */
-/*   Updated: 2024/03/04 21:38:07 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/03/07 05:17:13 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@ int	ft_strlen(char *s)
 {
 	int	len;
 
+	if (!s)
+		return (0);
 	len = 0;
 	while (s[len])
 		len++;
@@ -70,4 +72,15 @@ char	*ft_strjoin(char *s1, char *s2)
 	ft_strcpy(s3, s1);
 	ft_strlcat(s3, s2, total_len + 1);
 	return (s3);
+}
+
+int	ft_strcmp(const char *s1, const char *s2)
+{
+	size_t	i;
+	if (!s1 || !s2 || !s1[0])
+		return (1);
+	i = 0;
+	while (s1[i] && s2[i] && s1[i] == s2[i])
+		i++;
+	return ((unsigned char)s1[i] - (unsigned char)s2[i]);
 }

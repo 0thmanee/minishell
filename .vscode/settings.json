@@ -17,6 +17,13 @@
 		"memory": "c",
 		"ratio": "c",
 		"tuple": "c",
-		"utility": "c"
+		"utility": "c",
+		"__bit_reference": "c",
+		"__node_handle": "c",
+		"bitset": "c",
+		"__memory": "c",
+		"optional": "c",
+		"system_error": "c",
+		"vector": "c"
 	}
 }

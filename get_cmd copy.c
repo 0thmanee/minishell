@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_cmd.c                                          :+:      :+:    :+:   */
+/*   get_cmd copy.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 07:19:14 by obouchta          #+#    #+#             */
-/*   Updated: 2024/03/07 06:28:27 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/03/07 06:19:31 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,27 +79,27 @@ int	calc_cmd_len(char *input, int *i)
 	return (j);
 }
 
-int	extract_expr(char *src, char **dest, int *i)
+int	extract_expr(char *src, char *dest, int *i)
 {
 	char	quote;
 	int		j;
 
 	j = 0;
-	dest[0] = malloc(calc_cmd_len(src, i) - *i + 1);
-	if (!dest[0])
+	dest = malloc(calc_cmd_len(src, i) - *i + 1);
+	if (!dest)
 		return (0);
 	while (src[*i] && src[*i] != ' ')
 	{
 		if (src[*i] == '\'' || src[*i] == '\"')
 		{
 			quote = src[*i];
-			dest[0][j++] = src[(*i)++];
+			dest[j++] = src[(*i)++];
 			while (src[*i] && src[*i] != quote)
-				dest[0][j++] = src[(*i)++];
+				dest[j++] = src[(*i)++];
 		}
-		dest[0][j++] = src[(*i)++];
+		dest[j++] = src[(*i)++];
 	}
-	dest[0][j] = '\0';
+	dest[j] = '\0';
 	return (1);
 }
 
@@ -113,7 +113,7 @@ char **get_args(char *input, int *i)
 	len = calc_args_len(input, *i);
 	if (!len)
 		return (NULL);
-	args = malloc((calc_args_len(input, *i) + 2) * sizeof(char *));
+	args = malloc((len + 2) * sizeof(char *));
 	if (!args)
 		return (NULL);
 	while (input[*i])
@@ -127,7 +127,7 @@ char **get_args(char *input, int *i)
 		}
 		if (regonize_type(input, *i) != EXPRESSION)
 			break;
-		if (!extract_expr(input, args + j, i))
+		if (!extract_expr(input, args[j], i))
 			return (NULL);
 		j++;
 	}
@@ -141,8 +141,7 @@ t_token	*get_cmd(char *input, int *i, int prev_type)
 	t_token	*new_token;
 
 	cmd = NULL;
-	if (!extract_expr(input, &cmd, i))
-		return (NULL);
+	extract_expr(input, cmd, i);
 	new_token = ft_lstnew(cmd, regonize_type_2(prev_type), get_args(input, i));
 	if (!new_token)
 		return (NULL);

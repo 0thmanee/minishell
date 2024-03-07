@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 08:41:08 by obouchta          #+#    #+#             */
-/*   Updated: 2024/03/06 07:22:15 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/03/07 01:19:39 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ char	*ft_strcpy(char *dest, const char *src);
 char	*ft_strjoin(char *s1, char *s2);
 int	    ft_strlen(char *s);
 int	    ft_strlcat(char *dest, char *src, int dstsize);
+int	    ft_strcmp(const char *s1, const char *s2);
 int	    ft_new_len(char *input);
 char	*add_spaces(char *input);
 t_token	*ft_lstnew(char *value, int type, char **args);
@@ -65,5 +66,6 @@ int	    valid_quotes(char *input);
 char	*quoted_cmd(char *input, int *i);
 t_token	*get_token(char *input, int *i, int type);
 t_token	*get_quoted(char *input, int *i, int prev_type);
+char	*ft_strtrim(char *input);
 
 #endif

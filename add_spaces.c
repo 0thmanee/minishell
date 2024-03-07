@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 10:57:02 by obouchta          #+#    #+#             */
-/*   Updated: 2024/03/05 20:17:38 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/03/06 22:36:19 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void	add_spaces_helper_1(char *input, char *new_input, int *i, int *j)
 	}
 	else
 	{
-		if (i > 0 && input[*i - 1] != ' ')
+		if (*i > 0 && input[*i - 1] != ' ')
 			new_input[(*j)++] = ' ';
 		new_input[(*j)++] = input[*i];
 		if (input[*i + 1] && input[*i + 1] != ' ')
@@ -35,22 +35,6 @@ void	add_spaces_helper_1(char *input, char *new_input, int *i, int *j)
 }
 
 void	add_spaces_helper_2(char *input, char *new_input, int *i, int *j)
-{
-	char	quote;
-
-	quote = input[*i];
-	if (*i > 0 && input[*i - 1] != ' ')
-		new_input[(*j)++] = ' ';
-	new_input[(*j)++] = input[(*i)++];
-	while (input[*i] && input[*i] != quote)
-		new_input[(*j)++] = input[(*i)++];
-	if (input[*i])
-		new_input[(*j)++] = input[(*i)++];
-	if (input[*i] && input[(*i)--] != ' ')
-		new_input[(*j)++] = ' ';
-}
-
-void	add_spaces_helper_3(char *input, char *new_input, int *i, int *j)
 {
 	if (input[*i] == '|')
 	{
@@ -91,10 +75,8 @@ char	*add_spaces(char *input)
 	{
 		if (input[i] == '<' || input[i] == '>')
 			add_spaces_helper_1(input, new_input, &i, &j);
-		else if (input[i] == '\'' || input[i] == '\"')
-			add_spaces_helper_2(input, new_input, &i, &j);
 		else
-			add_spaces_helper_3(input, new_input, &i, &j);
+			add_spaces_helper_2(input, new_input, &i, &j);
 	}
 	new_input[j] = '\0';
 	return (new_input);

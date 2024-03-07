@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 08:42:35 by obouchta          #+#    #+#             */
-/*   Updated: 2024/03/06 07:23:43 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/03/07 06:30:22 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,32 +61,113 @@ void	print_the_shit(t_token *tokens)
 	}
 }
 
-void	ft_split(char *input, t_token **tokens)
+int	no_quotes_len(char *cmd)
+{
+	int	len;
+	int	i;
+	char	quote;
+	
+	len = ft_strlen(cmd);
+	i = 0;
+	while (cmd[i])
+	{
+		if (cmd[i] == '\'' || cmd[i] == '\"')
+		{
+			len -= 2;
+			quote = cmd[i++];
+			while (cmd[i] && cmd[i] != quote)
+				i++;
+			i++;
+		}
+		else
+			i++;
+	}
+	return (len);
+}
+
+char	*no_quoted_value(char *cmd, int len)
+{
+	char	*new_cmd;
+	int		i;
+	int		j;
+	char	quote;
+
+	i = 0;
+	j = 0;
+	new_cmd = malloc(len + 1);
+	if (!new_cmd)
+		return (NULL);
+	while (cmd[i])
+	{
+		if (cmd[i] == '\'' || cmd[i] == '\"')
+		{
+			quote = cmd[i++];
+			while (cmd[i] != quote)
+				new_cmd[j++] = cmd[i++];
+			i++;
+		}
+		else
+			new_cmd[j++] = cmd[i++];
+	}
+	new_cmd[j] = '\0';
+	return (new_cmd);
+}
+
+int	remove_quotes(t_token **tokens)
+{
+	t_token	*curr;
+	int		i;
+
+	curr = *tokens;
+	i = 0;
+	while (curr)
+	{
+		if (curr->type == CMD || curr->type == OUT_FILE
+			|| curr->type == IN_FILE || curr->type == DELIMITER)
+		{
+			curr->value = no_quoted_value(curr->value, no_quotes_len(curr->value));
+			if (!curr->value)
+				return (0);
+		}
+		if (curr->args)
+		{
+			while (curr->args[i])
+			{
+				curr->args[i] = no_quoted_value(curr->args[i], no_quotes_len(curr->args[i]));
+				i++;
+			}
+		}
+		curr = curr->next;
+	}
+	return (1);
+}
+
+int	ft_split(char *input, t_token **tokens)
 {
 	t_token	*new_token;
 	int		i;
 
 	i = 0;
+	input = ft_strtrim(input);
 	while (input[i])
 	{
 		if (i == 0 || input[i] == ' ')
 		{
 			while (input[i] && input[i] == ' ')
 				i++;
-			if (i == ft_strlen(input))
-				break ;
-			if (input[i] && (input[i] == '\'' || input[i] == '\"'))
-				new_token = get_quoted(input, &i, get_last_type(*tokens));
-			else if (regonize_type(input, i) != EXPRESSION)
+			if (regonize_type(input, i) != EXPRESSION)
 				new_token = get_token(input, &i, regonize_type(input, i));
 			else
 				new_token = get_cmd(input, &i, get_last_type(*tokens));
 			if (new_token)
 				ft_lstadd_back(tokens, new_token);
+			else
+				return (0);
 		}
 		else
 			i++;
 	}
+	return (remove_quotes(tokens));
 }
 
 int	syntax_error(t_token *tokens)
@@ -95,15 +176,19 @@ int	syntax_error(t_token *tokens)
 	int		type;
 
 	curr = tokens;
+	if (curr->type == PIPE)
+		return (1);
 	while (curr)
 	{
 		type = curr->type;
-		if (type == INPUT || type == OUTPUT || type == APPEND || type == PIPE)
+		if (type == INPUT || type == OUTPUT || type == APPEND)
 		{
 			if (!curr->next || curr->next->type == INPUT || curr->next->type == OUTPUT
 				|| curr->next->type == APPEND || curr->next->type == PIPE)
 				return (1);
 		}
+		if (type == PIPE && (!curr->next || curr->next->type == PIPE))
+			return (1);
 		curr = curr->next;
 	}
 	return (0);
@@ -123,7 +208,7 @@ int	process_input(char *input)
 	// Here We'll Start The Execution
 	// Tokens Is A linked List Containing all the words from the input
 	// to print the tokens remove comment from the next line
-	// print_the_shit(tokens);
+	print_the_shit(tokens);
 	if (syntax_error(tokens))
 		return (0);
 	return (1);
@@ -136,6 +221,8 @@ int read_input(char *input, char *cwd)
 		input = readline(cwd);
 		if (!input[0])
 			continue ;
+		if (!ft_strcmp(input, "exit"))
+			exit(0);
 		if (input[0])
 			add_history(input);
 		else if (history_length > 0)
