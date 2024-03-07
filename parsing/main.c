@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 08:42:35 by obouchta          #+#    #+#             */
-/*   Updated: 2024/03/07 17:17:32 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/03/07 20:22:41 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,22 @@ void	print_the_shit(t_token *tokens)
 	}
 }
 
+int	is_whitespace(char c)
+{
+	int		i;
+	char	*set;
+	
+	i = 0;
+	set = " \t\n\v\f\r";
+	while (set[i])
+	{
+		if (c == set[i])
+			return (1);
+		i++;
+	}
+	return (0);
+}
+
 
 int	ft_split(char *input, t_token **tokens)
 {
@@ -80,7 +96,7 @@ int	ft_split(char *input, t_token **tokens)
 			else
 				new_token = get_cmd(input, &i, get_last_type(*tokens));
 			if (new_token)
-				ft_lstadd_back(tokens, new_token);
+				ft_lstadd_back_1(tokens, new_token);
 			else
 				return (0);
 		}
@@ -114,7 +130,7 @@ int	syntax_error(t_token *tokens)
 	return (0);
 }
 
-int	process_input(char *input)
+int	process_input(char *input, t_list **list_env, t_list **list_set)
 {
 	t_token *tokens;
 
@@ -125,17 +141,19 @@ int	process_input(char *input)
 	if (!input)
 		perror("error");
 	ft_split(input, &tokens);
-	// Here We'll Start The Execution
-	// Tokens Is A linked List Containing all the words from the input
-	// to print the tokens remove comment from the next line
-	print_the_shit(tokens);
+	// print_the_shit(tokens);
 	if (syntax_error(tokens))
 		return (0);
+	ft_execution(tokens, list_env, list_set);
 	return (1);
 }
 
-int read_input(char *input, char *cwd)
+int read_input(char *cwd, t_list **list_env)
 {
+	t_list *list_set;
+	char 	*input;
+
+	list_set = NULL;
 	while (1)
 	{
 		input = readline(cwd);
@@ -147,34 +165,33 @@ int read_input(char *input, char *cwd)
 			add_history(input);
 		else if (history_length > 0)
 				ft_strcpy(input, history_get(history_length)->line);
-		if (!process_input(input))
+		if (!process_input(input, list_env, &list_set))
 			printf("minishell: syntax error\n");
 		free(input);
 	}
 	return (1);
 }
 
-int main(int ac, char **av)
+int main(int ac, char **av, char **envp)
 {
 	char 		*cwd;
-	char 		*input;
+	t_list		*list_env;
 
 	if (ac != 1)
 		return (printf("minishell: too many arguments\n"), 1);
 	(void)av;
-	cwd = malloc(BUFFER_SIZE);
-	input = NULL;
-	if (!cwd)
-		perror("error");
-	if (getcwd(cwd, BUFFER_SIZE))
+	list_env = env_lst(envp);
+	if (!list_env)
+		env_init(&list_env);
+	cwd = getcwd(NULL, 0);
+	if (cwd)
 		cwd = ft_strjoin(cwd, " » ");
 	else
-		(perror("error"), free(cwd));
-	// handle_signals();
+		(perror("error"));
 	if (!isatty(STDIN_FILENO))
 		exit(1);
 	using_history();
-	if (!read_input(input, cwd))
+	if (!read_input(cwd, &list_env))
 		return (1);
-	(free(input), free(cwd), printf(" exit\n"), exit(0));
+	(free(cwd), printf(" exit\n"), exit(0));
 }

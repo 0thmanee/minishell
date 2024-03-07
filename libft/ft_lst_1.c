@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   functs_2.c                                         :+:      :+:    :+:   */
+/*   ft_lst_1.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 21:41:01 by obouchta          #+#    #+#             */
-/*   Updated: 2024/03/07 16:36:17 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/03/07 19:09:48 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "minishell.h"
 
-t_token	*ft_lstnew(char *value, int type, char **args)
+t_token	*ft_lstnew_1(char *value, int type, char **args)
 {
 	t_token	*new_node;
 
@@ -26,7 +26,7 @@ t_token	*ft_lstnew(char *value, int type, char **args)
 	return (new_node);
 }
 
-void	ft_lstadd_back(t_token **lst, t_token *new)
+void	ft_lstadd_back_1(t_token **lst, t_token *new)
 {
 	t_token	*curr;
 
@@ -44,69 +44,44 @@ void	ft_lstadd_back(t_token **lst, t_token *new)
 	curr->next = new;
 }
 
-char	*ft_substr(char const *s, int start, int len)
+t_list	*ft_lstnew_2(void *content1, void *content2)
 {
-	int		i;
-	char	*subs;
+	t_list	*new;
 
-	if (!s)
+	new = malloc(sizeof(t_list));
+	if (!new)
 		return (NULL);
-	if (!len)
-		return (NULL);
-	subs = (char *)malloc(len + 1);
-	if (!subs)
-		return (NULL);
-	i = 0;
-	while (i < len && s[start])
-	{
-		subs[i] = s[start];
-		start++;
-		i++;
-	}
-	subs[i] = '\0';
-	return (subs);
+	new->var = ft_strdup(content1);
+	new->value = ft_strdup(content2);
+	new->next = NULL;
+	return (new);
 }
 
-char	*ft_strdup(char *str)
+t_list	*ft_lstlast(t_list *lst)
 {
-	char	*dest;
-	size_t	srclen;
-	size_t	i;
+	t_list	*p;
 
-	srclen = ft_strlen(str);
-	dest = (char *)malloc(srclen + 1);
-	if (!dest)
+	if (!lst)
 		return (NULL);
-	i = 0;
-	while (str[i])
-	{
-		dest[i] = str[i];
-		i++;
-	}
-	dest[i] = '\0';
-	return (dest);
+	p = lst;
+	while (p -> next)
+		p = p -> next;
+	return (p);
 }
 
-char	*ft_strtrim(char *input)
+void	ft_lstadd_back_2(t_list **lst, t_list *new)
 {
-	int	i;
-	int	start;
-	int	new_len;
+	t_list	*p;
 
-	i = 0;
-	new_len = 0;
-	while (input[i] == ' ')
-		i++;
-	start = i;
-	while (input[i])
+	p = NULL;
+	if (!lst || !new)
+		return ;
+	if (! *lst)
+		*lst = new;
+	else
 	{
-		new_len++;
-		i++;
+		p = ft_lstlast(*lst);
+		p -> next = new;
 	}
-	while (input[i - 1] == ' ')
-	{
-		new_len--;
-		i--;
-	}
-	return (ft_substr(input, start, new_len));
 }
+

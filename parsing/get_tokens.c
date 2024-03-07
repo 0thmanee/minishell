@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 07:21:28 by obouchta          #+#    #+#             */
-/*   Updated: 2024/03/07 17:02:23 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/03/07 19:00:42 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ t_token	*get_token(char *input, int *i, int type)
 	while (input[*i] && !is_whitespace(input[*i]))
 		value[j++] = input[(*i)++];
 	value[j] = '\0';
-	new_token = ft_lstnew(value, type, NULL);
+	new_token = ft_lstnew_1(value, type, NULL);
 	if (!new_token)
 		return (NULL);
 	return (new_token);
@@ -95,7 +95,7 @@ t_token	*get_token(char *input, int *i, int type)
 // 	if (!value)
 // 		return (NULL);
 // 	args = get_args(input, i);
-// 	new_token = ft_lstnew(value, regonize_type_2(prev_type), args);
+// 	new_token = ft_lstnew_1(value, regonize_type_2(prev_type), args);
 // 	if (!new_token)
 // 		return (NULL);
 // 	(*i)--;

@@ -5,23 +5,39 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/03/01 08:41:08 by obouchta          #+#    #+#             */
-/*   Updated: 2024/03/07 17:17:54 by obouchta         ###   ########.fr       */
+/*   Created: 2024/02/29 09:26:55 by yboutsli          #+#    #+#             */
+/*   Updated: 2024/03/07 20:23:21 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
+
 # define MINISHELL_H
 
-# include <stdio.h>
-# include <unistd.h>
 # include <stdlib.h>
+# include <unistd.h>
+# include <stdio.h>
+# include <errno.h>
+# include <string.h>
 # include <readline/readline.h>
 # include <readline/history.h>
-
 # define BUFFER_SIZE			2048
 # define ANSI_COLOR_CYAN		"\x1b[36m"
 # define ANSI_COLOR_RESET	"\x1b[0m"
+
+typedef enum
+{
+	EXPRESSION,
+    CMD,
+    INPUT,
+    IN_FILE,
+    OUTPUT,
+    OUT_FILE,
+    HERE_DOC,
+    DELIMITER,
+    APPEND,
+    PIPE,
+}	TokenType;
 
 typedef struct s_token
 {
@@ -38,20 +54,13 @@ typedef struct s_list
 	struct s_list	*next;
 }	t_list;
 
-typedef enum
+typedef	struct s_free
 {
-	EXPRESSION,
-    CMD,
-    INPUT,
-    IN_FILE,
-    OUTPUT,
-    OUT_FILE,
-    HERE_DOC,
-    DELIMITER,
-    APPEND,
-    PIPE,
-}	TokenType;
+	void	*ptr;
+	struct s_free	*next;
+}	t_free;
 
+// libft
 char	*ft_strcpy(char *dest, const char *src);
 char	*ft_strjoin(char *s1, char *s2);
 int	    ft_strlen(char *s);
@@ -60,11 +69,19 @@ int	    ft_strcmp(const char *s1, const char *s2);
 int     ft_strncmp(const char *s1, const char *s2, size_t n);
 char	*ft_substr(char const *s, int start, int len);
 char	*ft_strdup(char *str);
+char	*ft_strtrim(char *input);
+t_token	*ft_lstnew_1(char *value, int type, char **args);
+void	ft_lstadd_back_1(t_token **lst, t_token *new);
+t_list	*ft_lstnew_2(void *content1, void *content2);
+void	ft_lstadd_back_2(t_list **lst, t_list *new);
+t_list	*ft_lstlast(t_list *lst);
+void	ft_lstfree(t_list **lst);
+int		ft_isalpha(int c);
+
+// Parsing
 int 	is_whitespace(char c);
 int	    ft_new_len(char *input);
 char	*add_spaces(char *input);
-t_token	*ft_lstnew(char *value, int type, char **args);
-void	ft_lstadd_back(t_token **lst, t_token *new);
 int	    regonize_type(char *input, int i);
 int	    regonize_type_2(int prev_type);
 int     get_last_type(t_token *tokens);
@@ -77,7 +94,18 @@ int	    valid_quotes(char *input);
 char	*quoted_cmd(char *input, int *i);
 t_token	*get_token(char *input, int *i, int type);
 t_token	*get_quoted(char *input, int *i, int prev_type);
-char	*ft_strtrim(char *input);
 int	    remove_quotes(t_token **tokens);
 
+// Execution
+void	ft_execution(t_token *token, t_list **env, t_list **set);
+char	*get_env(t_list **head, char *env_var);
+int		env_update(t_list **head, char *env_var, char *new);
+t_list	*env_lst(char **envp);
+void	env_init(t_list	**env);
+int		cd(char *str, t_list **env);
+int		env(t_list *list_env);
+int		pwd(void);
+int		echo(char *str, int nl, t_list *env, t_list *set);
+int		set_valid(char *str);
+int		add_set(t_list **set, char *input);
 #endif

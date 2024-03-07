@@ -1,32 +1,38 @@
-CC = cc
-CFLAGS = -Wall -Wextra -Werror -g -fsanitize=address
-RM = rm -f
+builtins_files = execution.c cd.c env_utils.c echo.c pwd.c env.c set.c export.c
+parsing_files = main.c new_len.c add_spaces.c type_check.c get_cmd.c get_tokens.c remove_quotes.c
+libft_files = ft_str_1.c ft_str_2.c ft_lst_1.c ft_lst_2.c ft_char.c
 
+builtins_srcs = $(addprefix builtins/,$(builtins_files))
+parsing_srcs = $(addprefix parsing/,$(parsing_files))
+libft_srcs = $(addprefix libft/,$(libft_files))
+
+builtins_objects = $(addprefix object_files/,$(builtins_srcs:.c=.o))
+parsing_objects = $(addprefix object_files/,$(parsing_srcs:.c=.o))
+libft_objects = $(addprefix object_files/,$(libft_srcs:.c=.o))
+
+CFLAGS = -Wall -Werror -Wextra -fsanitize=address -g
 NAME = minishell
-CFILES = main.c new_len.c add_spaces.c type_check.c get_cmd.c get_tokens.c \
-libft/functs_1.c libft/functs_2.c libft/functs_3.c remove_quotes.c
-OFILES = $(CFILES:.c=.o)
-INCLUDES = minishell.h
-# READLINEDIR = /Users/$(USER)/homebrew/Cellar/readline/8.2.7
 
 all: $(NAME)
-	@printf "\033[32m[ ✔ ] %s\n\033[0m" "Program Created"
+$(NAME): $(builtins_objects) $(parsing_objects) $(libft_objects)
+	cc $(CFLAGS) -lreadline $(builtins_objects) $(parsing_objects) $(libft_objects) -o $(NAME)
 
-$(NAME): $(OFILES)
-	@$(CC) $(CFLAGS) $^ -o $@ -lreadline
-# -L$(READLINEDIR)/lib
+object_files/builtins/%.o: builtins/%.c minishell.h
+	mkdir -p object_files/builtins
+	cc $(CFLAGS) -c $< -I . -o $@
 
-%.o: %.c $(INCLUDES)
-	@$(CC) $(CFLAGS) -c $< -o $@
-#-I$(READLINEDIR)/include
+object_files/parsing/%.o: parsing/%.c minishell.h
+	mkdir -p object_files/parsing
+	cc $(CFLAGS) -c $< -I . -o $@
+
+object_files/libft/%.o: libft/%.c minishell.h
+	mkdir -p object_files/libft
+	cc $(CFLAGS) -c $< -I . -o $@
 
 clean:
-	@$(RM) $(OFILES) $(OFILES_BONUS)
+	rm -rf  object_files
 
 fclean: clean
-	@$(RM) $(NAME) $(NAME_BONUS)
-	@printf "\033[32m[ ✔ ] %s\n\033[0m" "Cleaning Done"
+	rm -rf $(NAME)
 
 re: fclean all
-
-.PHONY: all clean fclean re bonus
