@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 21:41:01 by obouchta          #+#    #+#             */
-/*   Updated: 2024/03/07 01:22:45 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/03/07 16:36:17 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,26 @@ char	*ft_substr(char const *s, int start, int len)
 	}
 	subs[i] = '\0';
 	return (subs);
+}
+
+char	*ft_strdup(char *str)
+{
+	char	*dest;
+	size_t	srclen;
+	size_t	i;
+
+	srclen = ft_strlen(str);
+	dest = (char *)malloc(srclen + 1);
+	if (!dest)
+		return (NULL);
+	i = 0;
+	while (str[i])
+	{
+		dest[i] = str[i];
+		i++;
+	}
+	dest[i] = '\0';
+	return (dest);
 }
 
 char	*ft_strtrim(char *input)

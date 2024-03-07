@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 07:21:28 by obouchta          #+#    #+#             */
-/*   Updated: 2024/03/07 04:55:03 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/03/07 17:02:23 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ char	*quoted_cmd(char *input, int *i)
 	j = (*i) + 1;
 	while (input[j] && input[j] != quote)
 		j++;
-	while (input[j] && input[j] != ' ')
+	while (input[j] && !is_whitespace(input[j]))
 		j++;
 	value = malloc(j - *i + 2);
 	if (!value)
@@ -56,7 +56,7 @@ char	*quoted_cmd(char *input, int *i)
 	value[j++] = input[(*i)++];
 	while (input[*i] && input[*i] != quote)
 		value[j++] = input[(*i)++];
-	while (input[*i] && input[*i] != ' ')
+	while (input[*i] && !is_whitespace(input[*i]))
 		value[j++] = input[(*i)++];
 	value[j] = '\0';
 	return (value);
@@ -76,7 +76,7 @@ t_token	*get_token(char *input, int *i, int type)
 	value = malloc(len + 1);
 	if (!value)
 		return (NULL);
-	while (input[*i] && input[*i] != ' ')
+	while (input[*i] && !is_whitespace(input[*i]))
 		value[j++] = input[(*i)++];
 	value[j] = '\0';
 	new_token = ft_lstnew(value, type, NULL);

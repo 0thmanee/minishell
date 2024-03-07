@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 07:19:14 by obouchta          #+#    #+#             */
-/*   Updated: 2024/03/07 06:28:27 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/03/07 17:05:15 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int calc_args_len_helper(char *input, int *i, int *len)
 			(*i)++;
 		if (input[*i])
 			(*i)++;
-		while (input[*i] && input[*i] != ' ')
+		while (input[*i] && !is_whitespace(input[*i]))
 			(*i)++;
 		(*len)++;
 	}
@@ -41,13 +41,13 @@ int calc_args_len(char *input, int i)
 
 	while (input[i])
 	{
-		while (input[i] && input[i] == ' ')
+		while (input[i] && is_whitespace(input[i]))
 			i++;
 		if (calc_args_len_helper(input, &i, &len))
 			continue ;
 		if (regonize_type(input, i))
 			break;
-		while (input[i] && input[i] != ' ')
+		while (input[i] && !is_whitespace(input[i]))
 		{
 			i++;
 			l++;
@@ -65,7 +65,7 @@ int	calc_cmd_len(char *input, int *i)
 	char	quote;
 
 	j = *i;
-	while (input[j] && input[j] != ' ')
+	while (input[j] && !is_whitespace(input[*i]))
 	{
 		if (input[j] == '\'' || input[j] == '\"')
 		{
@@ -88,7 +88,7 @@ int	extract_expr(char *src, char **dest, int *i)
 	dest[0] = malloc(calc_cmd_len(src, i) - *i + 1);
 	if (!dest[0])
 		return (0);
-	while (src[*i] && src[*i] != ' ')
+	while (src[*i] && !is_whitespace(src[*i]))
 	{
 		if (src[*i] == '\'' || src[*i] == '\"')
 		{
@@ -118,7 +118,7 @@ char **get_args(char *input, int *i)
 		return (NULL);
 	while (input[*i])
 	{
-		while (input[*i] && input[*i] == ' ')
+		while (input[*i] && is_whitespace(input[*i]))
 			(*i)++;
 		if (input[*i] == '\'' || input[*i] == '\"')
 		{

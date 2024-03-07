@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 08:41:08 by obouchta          #+#    #+#             */
-/*   Updated: 2024/03/07 01:19:39 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/03/07 17:17:54 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,13 @@ typedef struct s_token
     struct s_token	*next;
 }	t_token;
 
+typedef struct s_list
+{
+	void			*var;
+	void			*value;
+	struct s_list	*next;
+}	t_list;
+
 typedef enum
 {
 	EXPRESSION,
@@ -50,6 +57,10 @@ char	*ft_strjoin(char *s1, char *s2);
 int	    ft_strlen(char *s);
 int	    ft_strlcat(char *dest, char *src, int dstsize);
 int	    ft_strcmp(const char *s1, const char *s2);
+int     ft_strncmp(const char *s1, const char *s2, size_t n);
+char	*ft_substr(char const *s, int start, int len);
+char	*ft_strdup(char *str);
+int 	is_whitespace(char c);
 int	    ft_new_len(char *input);
 char	*add_spaces(char *input);
 t_token	*ft_lstnew(char *value, int type, char **args);
@@ -67,5 +78,6 @@ char	*quoted_cmd(char *input, int *i);
 t_token	*get_token(char *input, int *i, int type);
 t_token	*get_quoted(char *input, int *i, int prev_type);
 char	*ft_strtrim(char *input);
+int	    remove_quotes(t_token **tokens);
 
 #endif
