@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 08:42:35 by obouchta          #+#    #+#             */
-/*   Updated: 2024/03/07 20:22:41 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/03/08 05:33:13 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ int	is_whitespace(char c)
 }
 
 
-int	ft_split(char *input, t_token **tokens)
+int	tokenize_input(char *input, t_token **tokens)
 {
 	t_token	*new_token;
 	int		i;
@@ -103,7 +103,7 @@ int	ft_split(char *input, t_token **tokens)
 		else
 			i++;
 	}
-	return (remove_quotes(tokens));
+	return (1);
 }
 
 int	syntax_error(t_token *tokens)
@@ -138,9 +138,12 @@ int	process_input(char *input, t_list **list_env, t_list **list_set)
 	if (!valid_quotes(input))
 		return (0);
 	input = add_spaces(input);
+	printf("input: {%s}\n", input);
 	if (!input)
 		perror("error");
-	ft_split(input, &tokens);
+	tokenize_input(input, &tokens);
+	if (!remove_quotes(&tokens))
+		perror("error");
 	// print_the_shit(tokens);
 	if (syntax_error(tokens))
 		return (0);
