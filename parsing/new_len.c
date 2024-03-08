@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 10:58:53 by obouchta          #+#    #+#             */
-/*   Updated: 2024/03/08 05:39:32 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/03/08 05:54:28 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,17 +55,6 @@ void new_len_helper_2(char *input, int i, int *new_len)
 		(*new_len)++;
 }
 
-void new_len_helper_3(char *input, int i, int *new_len)
-{
-	if (i > 0 && input[i - 1] != '|' && input[i - 1] != '<' &&
-		input[i - 1] != '>' && !is_whitespace(input[i - 1]))
-	{
-		(*new_len)++;
-		if (input[i + 1] && !is_whitespace(input[i + 1]))
-			(*new_len)++;
-	}
-}
-
 int	ft_new_len(char *input)
 {
 	int	i;
@@ -88,8 +77,6 @@ int	ft_new_len(char *input)
 			if (input[i] == '|' && input[i + 1] && !is_whitespace(input[i + 1]))
 				new_len++;
 		}
-		else if (input[i] == '=')
-			new_len_helper_3(input, i, &new_len);
 	}
 	return (new_len);
 }

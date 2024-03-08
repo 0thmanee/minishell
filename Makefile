@@ -10,7 +10,7 @@ builtins_objects = $(addprefix object_files/,$(builtins_srcs:.c=.o))
 parsing_objects = $(addprefix object_files/,$(parsing_srcs:.c=.o))
 libft_objects = $(addprefix object_files/,$(libft_srcs:.c=.o))
 
-CFLAGS = -Wall -Werror -Wextra -fsanitize=address -g
+CFLAGS = -Wall -Werror -Wextra 
 NAME = minishell
 
 all: $(NAME)

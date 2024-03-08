@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 07:16:43 by obouchta          #+#    #+#             */
-/*   Updated: 2024/03/06 07:17:26 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/03/08 06:36:44 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,8 @@ int get_last_type(t_token *tokens)
 	t_token *curr;
 
 	curr = tokens;
+	if (!curr)
+		return (-1);
 	while (curr && curr->next)
 		curr = curr->next;
 	if (curr)

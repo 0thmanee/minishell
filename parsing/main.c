@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 08:42:35 by obouchta          #+#    #+#             */
-/*   Updated: 2024/03/08 05:33:13 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/03/08 07:09:11 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,7 +144,7 @@ int	process_input(char *input, t_list **list_env, t_list **list_set)
 	tokenize_input(input, &tokens);
 	if (!remove_quotes(&tokens))
 		perror("error");
-	// print_the_shit(tokens);
+	print_the_shit(tokens);
 	if (syntax_error(tokens))
 		return (0);
 	ft_execution(tokens, list_env, list_set);

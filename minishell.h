@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 09:26:55 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/03/07 20:23:21 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/03/08 07:12:26 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,9 @@ typedef enum
     DELIMITER,
     APPEND,
     PIPE,
+    EQUAL,
+    VAR,
+    VALUE,
 }	TokenType;
 
 typedef struct s_token
@@ -87,7 +90,6 @@ int	    regonize_type_2(int prev_type);
 int     get_last_type(t_token *tokens);
 int     calc_args_len_helper(char *input, int *i, int *len);
 int     calc_args_len(char *input, int i);
-int	    get_args_helper(char *input, int *i, int *j, char **args);
 char    **get_args(char *input, int *i);
 t_token	*get_cmd(char *input, int *i, int prev_type);
 int	    valid_quotes(char *input);
