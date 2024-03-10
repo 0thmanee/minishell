@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
+/*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 08:42:35 by obouchta          #+#    #+#             */
-/*   Updated: 2024/03/10 20:56:17 by yboutsli         ###   ########.fr       */
+/*   Updated: 2024/03/10 22:31:56 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -149,6 +149,7 @@ int	process_input(char *input, t_list **list_env, t_list **list_set)
 	print_the_shit(tokens);
 	if (syntax_error(tokens))
 		return (0);
+
 	ft_execution(tokens, list_env, list_set);
 	return (1);
 }
