@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 08:42:35 by obouchta          #+#    #+#             */
-/*   Updated: 2024/03/08 07:09:11 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/03/10 20:56:17 by yboutsli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@
 // handle signals
 // check exit status
 // check for leaks
-
 
 void	print_the_shit(t_token *tokens)
 {
@@ -85,6 +84,8 @@ int	tokenize_input(char *input, t_token **tokens)
 
 	i = 0;
 	input = ft_strtrim(input);
+	if (!input)
+		return (0);
 	while (input[i])
 	{
 		if (i == 0 || is_whitespace(input[i]))
@@ -108,7 +109,7 @@ int	tokenize_input(char *input, t_token **tokens)
 
 int	syntax_error(t_token *tokens)
 {
-	t_token *curr;;
+	t_token *curr;
 	int		type;
 
 	curr = tokens;
@@ -141,7 +142,8 @@ int	process_input(char *input, t_list **list_env, t_list **list_set)
 	printf("input: {%s}\n", input);
 	if (!input)
 		perror("error");
-	tokenize_input(input, &tokens);
+	if (!tokenize_input(input, &tokens))
+		return (0);
 	if (!remove_quotes(&tokens))
 		perror("error");
 	print_the_shit(tokens);

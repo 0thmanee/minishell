@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_cmd.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 07:19:14 by obouchta          #+#    #+#             */
-/*   Updated: 2024/03/08 07:08:53 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/03/10 20:52:04 by yboutsli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,6 +146,7 @@ t_token	*get_cmd(char *input, int *i, int prev_type)
 	new_token = ft_lstnew_1(cmd, regonize_type_2(prev_type), get_args(input, i));
 	if (!new_token)
 		return (NULL);
-	(*i)--;
+	if (input[*i])
+		(*i)--;
 	return (new_token);
 }

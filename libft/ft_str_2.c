@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_str_2.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 16:47:50 by obouchta          #+#    #+#             */
-/*   Updated: 2024/03/07 19:06:40 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/03/10 20:44:59 by yboutsli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,12 +78,15 @@ char	*ft_strtrim(char *input)
 	while (input[i] == ' ')
 		i++;
 	start = i;
+	if (i == ft_strlen(input))
+		return (NULL);
 	while (input[i])
 	{
 		new_len++;
 		i++;
 	}
-	while (input[i - 1] == ' ')
+	i--;
+	while (i >= 0 && input[i] == ' ')
 	{
 		new_len--;
 		i--;
