@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 08:42:35 by obouchta          #+#    #+#             */
-/*   Updated: 2024/03/11 05:06:44 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/03/11 23:40:20 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -176,6 +176,7 @@ int read_input(t_list **list_env)
 	list_set = NULL;
 	signal(SIGINT, handle_signals);
 	signal(SIGQUIT, handle_signals);
+	rl_catch_signals = 0;
 	while (1)
 	{
 		input = readline("\033[1;32mMinishell $> \033[0m");
