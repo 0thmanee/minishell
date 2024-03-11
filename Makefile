@@ -11,28 +11,31 @@ parsing_objects = $(addprefix object_files/,$(parsing_srcs:.c=.o))
 libft_objects = $(addprefix object_files/,$(libft_srcs:.c=.o))
 
 CFLAGS = -Wall -Werror -Wextra -g -fsanitize=address
+READLINEDIR = $(shell brew --prefix readline)
 NAME = minishell
 
 all: $(NAME)
 $(NAME): $(builtins_objects) $(parsing_objects) $(libft_objects)
-	cc $(CFLAGS) -lreadline $(builtins_objects) $(parsing_objects) $(libft_objects) -o $(NAME)
+	@cc $(CFLAGS) $(builtins_objects) $(parsing_objects) $(libft_objects) -o $(NAME) -L$(READLINEDIR)/lib -lreadline
+	@printf "\033[32m[ ✔ ] %s\n\033[0m" "Program Created"
 
 object_files/builtins/%.o: builtins/%.c minishell.h
-	mkdir -p object_files/builtins
-	cc $(CFLAGS) -c $< -I . -o $@
+	@mkdir -p object_files/builtins
+	@cc $(CFLAGS) -c $< -I . -o $@
 
 object_files/parsing/%.o: parsing/%.c minishell.h
-	mkdir -p object_files/parsing
-	cc $(CFLAGS) -c $< -I . -o $@
+	@mkdir -p object_files/parsing
+	@cc $(CFLAGS) -c $< -I . -o $@ -I$(READLINEDIR)/include
 
 object_files/libft/%.o: libft/%.c minishell.h
-	mkdir -p object_files/libft
-	cc $(CFLAGS) -c $< -I . -o $@
+	@mkdir -p object_files/libft
+	@cc $(CFLAGS) -c $< -I . -o $@
 
 clean:
-	rm -rf  object_files
+	@rm -rf  object_files
 
 fclean: clean
-	rm -rf $(NAME)
+	@rm -rf $(NAME)
+	@printf "\033[32m[ ✔ ] %s\n\033[0m" "Cleaning Done"
 
 re: fclean all

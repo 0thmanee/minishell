@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 08:42:35 by obouchta          #+#    #+#             */
-/*   Updated: 2024/03/10 22:31:56 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/03/11 05:06:44 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,21 @@
 // check exit status
 // check for leaks
 
+
+void	handle_signals(int signum)
+{
+	if (signum == SIGINT)
+	{
+		printf("\n");
+		rl_on_new_line();
+		rl_replace_line("", 1);
+		rl_redisplay();
+	}
+	if (signum == SIGQUIT)
+	{
+		;
+	}
+}
 void	print_the_shit(t_token *tokens)
 {
 	t_token *curr = tokens;
@@ -53,7 +68,7 @@ void	print_the_shit(t_token *tokens)
 				{
 					printf("{%s}\n", *curr->args);
 					curr->args++;
-				}	
+				}
 		}
 		printf("\n");
 		curr = curr->next;
@@ -83,9 +98,7 @@ int	tokenize_input(char *input, t_token **tokens)
 	int		i;
 
 	i = 0;
-	input = ft_strtrim(input);
-	if (!input)
-		return (0);
+
 	while (input[i])
 	{
 		if (i == 0 || is_whitespace(input[i]))
@@ -137,32 +150,37 @@ int	process_input(char *input, t_list **list_env, t_list **list_set)
 
 	tokens = NULL;
 	if (!valid_quotes(input))
-		return (0);
+		return (2);
 	input = add_spaces(input);
-	printf("input: {%s}\n", input);
 	if (!input)
-		perror("error");
+		return (0);
+	input = ft_strtrim(input);
+	if (!input)
+		return (0);
 	if (!tokenize_input(input, &tokens))
 		return (0);
 	if (!remove_quotes(&tokens))
-		perror("error");
-	print_the_shit(tokens);
-	if (syntax_error(tokens))
 		return (0);
-
+	if (syntax_error(tokens))
+		return (2);
+	print_the_shit(tokens);
 	ft_execution(tokens, list_env, list_set);
 	return (1);
 }
 
-int read_input(char *cwd, t_list **list_env)
+int read_input(t_list **list_env)
 {
 	t_list *list_set;
 	char 	*input;
 
 	list_set = NULL;
+	signal(SIGINT, handle_signals);
+	signal(SIGQUIT, handle_signals);
 	while (1)
 	{
-		input = readline(cwd);
+		input = readline("\033[1;32mMinishell $> \033[0m");
+		if (!input)
+			(printf("exit\n"), exit(0));
 		if (!input[0])
 			continue ;
 		if (!ft_strcmp(input, "exit"))
@@ -171,7 +189,7 @@ int read_input(char *cwd, t_list **list_env)
 			add_history(input);
 		else if (history_length > 0)
 				ft_strcpy(input, history_get(history_length)->line);
-		if (!process_input(input, list_env, &list_set))
+		if (process_input(input, list_env, &list_set) == 2)
 			printf("minishell: syntax error\n");
 		free(input);
 	}
@@ -180,7 +198,6 @@ int read_input(char *cwd, t_list **list_env)
 
 int main(int ac, char **av, char **envp)
 {
-	char 		*cwd;
 	t_list		*list_env;
 
 	if (ac != 1)
@@ -189,15 +206,9 @@ int main(int ac, char **av, char **envp)
 	list_env = env_lst(envp);
 	if (!list_env)
 		env_init(&list_env);
-	cwd = getcwd(NULL, 0);
-	if (cwd)
-		cwd = ft_strjoin(cwd, " » ");
-	else
-		(perror("error"));
 	if (!isatty(STDIN_FILENO))
 		exit(1);
 	using_history();
-	if (!read_input(cwd, &list_env))
+	if (!read_input(&list_env))
 		return (1);
-	(free(cwd), printf(" exit\n"), exit(0));
 }
