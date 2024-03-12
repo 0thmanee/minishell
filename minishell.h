@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yasser03 <yasser03@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 09:26:55 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/03/08 07:12:26 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/03/12 03:49:13 by yasser03         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,8 +52,8 @@ typedef struct s_token
 
 typedef struct s_list
 {
-	void			*var;
-	void			*value;
+	char			*var;
+	char			*value;
 	struct s_list	*next;
 }	t_list;
 
@@ -97,6 +97,7 @@ char	*quoted_cmd(char *input, int *i);
 t_token	*get_token(char *input, int *i, int type);
 t_token	*get_quoted(char *input, int *i, int prev_type);
 int	    remove_quotes(t_token **tokens);
+void	print_the_shit(t_token *tokens);
 
 // Execution
 void	ft_execution(t_token *token, t_list **env, t_list **set);
