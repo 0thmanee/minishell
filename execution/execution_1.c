@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution_1.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yasser03 <yasser03@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/12 03:41:21 by yasser03          #+#    #+#             */
-/*   Updated: 2024/03/12 04:44:36 by yasser03         ###   ########.fr       */
+/*   Updated: 2024/03/12 17:11:17 by yboutsli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,15 @@
 
 int execute(t_token  *token, t_list **list_env, t_list **list_set)
 {
+    (void)list_set;
     if (!ft_strcmp(token->value, "cd"))
-        cd(token->args[0], list_env);
-    else if (!ft_strcmp(token->value, "echo"))
-        echo(token->args[0], 1, *list_env, *list_set);
-    else if (!ft_strcmp(token->value, "env"))
-        env(*list_env);
-    else if (!ft_strcmp(token->value, "pwd"))
-        pwd();
+        cd(token->args, list_env);
+    // else if (!ft_strcmp(token->value, "echo"))
+    //     echo(token->args[0], 1, *list_env, *list_set);
+    // else if (!ft_strcmp(token->value, "env"))
+    //     env(*list_env);
+    // else if (!ft_strcmp(token->value, "pwd"))
+    //     pwd();
     return (0);
 }
 

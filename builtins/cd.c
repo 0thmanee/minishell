@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yasser03 <yasser03@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 09:26:13 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/03/12 04:45:31 by yasser03         ###   ########.fr       */
+/*   Updated: 2024/03/12 17:19:59 by yboutsli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,21 +85,27 @@ int	cd_oldpwd(t_list **env)
 			status = 1;
 		}			
 		cwd = getcwd(NULL, 0);
-		printf("%s\n", cwd);
+		// printf("%s\n", cwd);
 		free(cwd);
 	}
 	return (status);
 }
 
-int	cd(char *str, t_list **env)
+int	cd(char **args, t_list **env)
 {
 	char	*cwd;
 	int		status;
+	char	*str;
 
 	status = 0;
+	
 	cwd = getcwd(NULL, 0);
+	if (args != NULL)
+		str = args[0];
+	else
+		status = cd_home(env, NULL);
 	// printf ("old_pwd = %s\n", cwd);
-	if (!str || !str[0] || str[0] == '~' || !ft_strcmp(str, "--") || str[0] == ' ')
+	if (!*args || !str[0] || str[0] == '~' || !ft_strcmp(str, "--") || str[0] == ' ')
 		status = cd_home(env, str);
 	else if (str[0] == '/')
 		status = cd_root(str);
