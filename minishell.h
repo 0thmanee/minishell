@@ -6,7 +6,7 @@
 /*   By: yasser03 <yasser03@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 09:26:55 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/03/12 03:49:13 by yasser03         ###   ########.fr       */
+/*   Updated: 2024/03/12 04:02:47 by yasser03         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 # define MINISHELL_H
 
+#include <signal.h>
 # include <stdlib.h>
 # include <unistd.h>
 # include <stdio.h>
@@ -111,4 +112,5 @@ int		pwd(void);
 int		echo(char *str, int nl, t_list *env, t_list *set);
 int		set_valid(char *str);
 int		add_set(t_list **set, char *input);
+void    ft_execution(t_token *token, t_list **env, t_list **set);
 #endif
