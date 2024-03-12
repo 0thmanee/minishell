@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yasser03 <yasser03@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 20:29:05 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/03/07 19:01:31 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/03/12 04:45:36 by yasser03         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ int	env_update(t_list **head, char *env_var, char *new)
 		{
 			free(current->value);
 			current->value = ft_strdup(new);
-			printf("|%s=%s|\n", current->var,current->value);
+			// printf("|%s=%s|\n", current->var,current->value);
 			return (0);
 		}
 		current = current->next;

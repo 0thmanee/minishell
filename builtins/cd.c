@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yasser03 <yasser03@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 09:26:13 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/03/07 19:23:17 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/03/12 04:45:31 by yasser03         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,7 @@ int	cd(char *str, t_list **env)
 
 	status = 0;
 	cwd = getcwd(NULL, 0);
-	printf ("old_pwd = %s\n", cwd);
+	// printf ("old_pwd = %s\n", cwd);
 	if (!str || !str[0] || str[0] == '~' || !ft_strcmp(str, "--") || str[0] == ' ')
 		status = cd_home(env, str);
 	else if (str[0] == '/')
@@ -113,7 +113,7 @@ int	cd(char *str, t_list **env)
 		free(cwd);
 		cwd = getcwd(NULL, 0);
 		env_update(env, "PWD", cwd);
-		printf ("new_pwd = %s\n", cwd);
+		// printf ("new_pwd = %s\n", cwd);
 	}
 	return (free(cwd), status);
 }
