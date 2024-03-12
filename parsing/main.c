@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 08:42:35 by obouchta          #+#    #+#             */
-/*   Updated: 2024/03/11 23:40:20 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/03/12 04:56:11 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,10 +30,7 @@ void	handle_signals(int signum)
 		rl_on_new_line();
 		rl_replace_line("", 1);
 		rl_redisplay();
-	}
-	if (signum == SIGQUIT)
-	{
-		;
+		g_config = 1;
 	}
 }
 void	print_the_shit(t_token *tokens)
@@ -184,8 +181,6 @@ int read_input(t_list **list_env)
 			(printf("exit\n"), exit(0));
 		if (!input[0])
 			continue ;
-		if (!ft_strcmp(input, "exit"))
-			exit(0);
 		if (input[0])
 			add_history(input);
 		else if (history_length > 0)
@@ -203,6 +198,7 @@ int main(int ac, char **av, char **envp)
 
 	if (ac != 1)
 		return (printf("minishell: too many arguments\n"), 1);
+	g_config = 0;
 	(void)av;
 	list_env = env_lst(envp);
 	if (!list_env)

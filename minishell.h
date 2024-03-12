@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 09:26:55 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/03/08 07:12:26 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/03/12 04:57:27 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,11 +42,14 @@ typedef enum
     VALUE,
 }	TokenType;
 
+int g_config;
+
 typedef struct s_token
 {
     char	*value;
     char    **args;
     int		type;
+    int     var;
     struct s_token	*next;
 }	t_token;
 
@@ -74,9 +77,9 @@ char	*ft_substr(char const *s, int start, int len);
 char	*ft_strdup(char *str);
 char	*ft_strtrim(char *input);
 t_token	*ft_lstnew_1(char *value, int type, char **args);
-void	ft_lstadd_back_1(t_token **lst, t_token *new);
+void	ft_lstadd_back_1(t_token **lst, t_token *new_node);
 t_list	*ft_lstnew_2(void *content1, void *content2);
-void	ft_lstadd_back_2(t_list **lst, t_list *new);
+void	ft_lstadd_back_2(t_list **lst, t_list *new_node);
 t_list	*ft_lstlast(t_list *lst);
 void	ft_lstfree(t_list **lst);
 int		ft_isalpha(int c);
@@ -84,6 +87,7 @@ int		ft_isalpha(int c);
 // Parsing
 int 	is_whitespace(char c);
 int	    ft_new_len(char *input);
+int	    quoted(char *input, int i);
 char	*add_spaces(char *input);
 int	    regonize_type(char *input, int i);
 int	    regonize_type_2(int prev_type);

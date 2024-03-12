@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 21:41:01 by obouchta          #+#    #+#             */
-/*   Updated: 2024/03/07 19:09:48 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/03/12 04:57:50 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,35 +26,36 @@ t_token	*ft_lstnew_1(char *value, int type, char **args)
 	return (new_node);
 }
 
-void	ft_lstadd_back_1(t_token **lst, t_token *new)
+void	ft_lstadd_back_1(t_token **lst, t_token *new_node)
 {
 	t_token	*curr;
 
-	if (new == NULL)
+	if (new_node == NULL)
 		return ;
+	new_node->var = 0;
 	if (*lst == NULL)
 	{
-		*lst = new;
-		new->next = NULL;
+		*lst = new_node;
+		new_node->next = NULL;
 		return ;
 	}
 	curr = *lst;
 	while (curr && curr->next)
 		curr = curr->next;
-	curr->next = new;
+	curr->next = new_node;
 }
 
 t_list	*ft_lstnew_2(void *content1, void *content2)
 {
-	t_list	*new;
+	t_list	*new_node;
 
-	new = malloc(sizeof(t_list));
-	if (!new)
+	new_node = malloc(sizeof(t_list));
+	if (!new_node)
 		return (NULL);
-	new->var = ft_strdup(content1);
-	new->value = ft_strdup(content2);
-	new->next = NULL;
-	return (new);
+	new_node->var = ft_strdup(content1);
+	new_node->value = ft_strdup(content2);
+	new_node->next = NULL;
+	return (new_node);
 }
 
 t_list	*ft_lstlast(t_list *lst)
@@ -69,19 +70,19 @@ t_list	*ft_lstlast(t_list *lst)
 	return (p);
 }
 
-void	ft_lstadd_back_2(t_list **lst, t_list *new)
+void	ft_lstadd_back_2(t_list **lst, t_list *new_node)
 {
 	t_list	*p;
 
 	p = NULL;
-	if (!lst || !new)
+	if (!lst || !new_node)
 		return ;
 	if (! *lst)
-		*lst = new;
+		*lst = new_node;
 	else
 	{
 		p = ft_lstlast(*lst);
-		p -> next = new;
+		p -> next = new_node;
 	}
 }
 
