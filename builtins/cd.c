@@ -6,7 +6,7 @@
 /*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 09:26:13 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/03/12 17:19:59 by yboutsli         ###   ########.fr       */
+/*   Updated: 2024/03/14 14:01:35 by yboutsli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ int	cd_home(t_list **env, char *str)
 	}
 	else if (chdir(home) == -1)
 	{
-		printf("minishell: %s: %s\n", strerror(errno), str + 1);
+		perror(str);
 		return (1);
 	}
 	return (0);
@@ -95,31 +95,24 @@ int	cd(char **args, t_list **env)
 {
 	char	*cwd;
 	int		status;
-	char	*str;
 
 	status = 0;
 	
 	cwd = getcwd(NULL, 0);
-	if (args != NULL)
-		str = args[0];
-	else
+	if (args == NULL)
 		status = cd_home(env, NULL);
-	// printf ("old_pwd = %s\n", cwd);
-	if (!*args || !str[0] || str[0] == '~' || !ft_strcmp(str, "--") || str[0] == ' ')
-		status = cd_home(env, str);
-	else if (str[0] == '/')
-		status = cd_root(str);
-	else if (str[0] == '-' && str[1] == '\0')
+	else if (args[0][0] == '/')
+		status = cd_root(args[0]);
+	else if (args[0][0] == '-' && args[0][1] == '\0')
 		status = cd_oldpwd(env);
-	else if (str != NULL)
-		status = cd_dir(str, cwd);
+	else
+		status = cd_dir(args[0], cwd);
 	if (status == 0)
 	{
 		env_update(env, "OLDPWD", cwd);
 		free(cwd);
 		cwd = getcwd(NULL, 0);
 		env_update(env, "PWD", cwd);
-		// printf ("new_pwd = %s\n", cwd);
 	}
 	return (free(cwd), status);
 }

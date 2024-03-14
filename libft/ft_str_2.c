@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_str_2.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yasser03 <yasser03@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 16:47:50 by obouchta          #+#    #+#             */
-/*   Updated: 2024/03/10 20:44:59 by yboutsli         ###   ########.fr       */
+/*   Updated: 2024/03/14 03:50:19 by yasser03         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,8 @@ char	*ft_strdup(char *str)
 	size_t	srclen;
 	size_t	i;
 
+	if (!str)
+		return (NULL);
 	srclen = ft_strlen(str);
 	dest = (char *)malloc(srclen + 1);
 	if (!dest)
