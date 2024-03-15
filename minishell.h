@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 09:26:55 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/03/12 04:57:27 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/03/15 03:25:44 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 # include <stdio.h>
 # include <errno.h>
 # include <string.h>
+# include <signal.h>
 # include <readline/readline.h>
 # include <readline/history.h>
 # define BUFFER_SIZE			2048
@@ -44,10 +45,17 @@ typedef enum
 
 int g_config;
 
+typedef struct s_arg
+{
+    char    *value;
+    int     var;
+} t_arg;
+
 typedef struct s_token
 {
     char	*value;
-    char    **args;
+    t_arg    **args;
+    int     args_len;
     int		type;
     int     var;
     struct s_token	*next;
@@ -76,7 +84,7 @@ int     ft_strncmp(const char *s1, const char *s2, size_t n);
 char	*ft_substr(char const *s, int start, int len);
 char	*ft_strdup(char *str);
 char	*ft_strtrim(char *input);
-t_token	*ft_lstnew_1(char *value, int type, char **args);
+t_token	*ft_lstnew_1(char *value, int type, t_arg **args);
 void	ft_lstadd_back_1(t_token **lst, t_token *new_node);
 t_list	*ft_lstnew_2(void *content1, void *content2);
 void	ft_lstadd_back_2(t_list **lst, t_list *new_node);
@@ -94,13 +102,16 @@ int	    regonize_type_2(int prev_type);
 int     get_last_type(t_token *tokens);
 int     calc_args_len_helper(char *input, int *i, int *len);
 int     calc_args_len(char *input, int i);
-char    **get_args(char *input, int *i);
+t_arg   **get_args(char *input, int *i, int *args_len);
 t_token	*get_cmd(char *input, int *i, int prev_type);
 int	    valid_quotes(char *input);
 char	*quoted_cmd(char *input, int *i);
 t_token	*get_token(char *input, int *i, int type);
-t_token	*get_quoted(char *input, int *i, int prev_type);
 int	    remove_quotes(t_token **tokens);
+int     join_args(t_token **tokens);
+
+ // Removable
+void	print_it(t_token *tokens);
 
 // Execution
 void	ft_execution(t_token *token, t_list **env, t_list **set);

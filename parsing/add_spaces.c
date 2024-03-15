@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 10:57:02 by obouchta          #+#    #+#             */
-/*   Updated: 2024/03/12 02:48:48 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/03/13 20:13:53 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ void	add_spaces_helper_1(char *input, char *new_input, int *i, int *j)
 
 void	add_spaces_helper_2(char *input, char *new_input, int *i, int *j)
 {
-	if (input[*i] == '|'  && !quoted(input, *i))
+	if (input[*i] == '|' && !quoted(input, *i))
 	{
 		if (*i > 0 && !is_whitespace(input[*i - 1]))
 			new_input[(*j)++] = ' ';
@@ -44,12 +44,12 @@ void	add_spaces_helper_2(char *input, char *new_input, int *i, int *j)
 		if (input[*i + 1] && !is_whitespace(input[*i + 1]))
 			new_input[(*j)++] = ' ';
 	}
-	else if (input[*i] == '$'  && !quoted(input, *i))
-	{
-		if (i > 0 && !is_whitespace(input[*i - 1]))
-			new_input[(*j)++] = ' ';
-		new_input[(*j)++] = input[*i];
-	}
+	// else if (input[*i] == '$'  && !quoted(input, *i))
+	// {
+	// 	if (i > 0 && !is_whitespace(input[*i - 1]))
+	// 		new_input[(*j)++] = ' ';
+	// 	new_input[(*j)++] = input[*i];
+	// }
 	else
 		new_input[(*j)++] = input[*i];
 }

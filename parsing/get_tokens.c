@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 07:21:28 by obouchta          #+#    #+#             */
-/*   Updated: 2024/03/07 19:00:42 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/03/14 21:39:03 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,7 @@ t_token	*get_token(char *input, int *i, int type)
 	new_token = ft_lstnew_1(value, type, NULL);
 	if (!new_token)
 		return (NULL);
+	new_token->args_len = 0;
 	return (new_token);
 }
 

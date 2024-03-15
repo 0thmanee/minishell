@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_cmd.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
+/*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 07:19:14 by obouchta          #+#    #+#             */
-/*   Updated: 2024/03/10 20:52:04 by yboutsli         ###   ########.fr       */
+/*   Updated: 2024/03/15 04:31:27 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,35 +85,61 @@ int	extract_expr(char *src, char **dest, int *i)
 	int		j;
 
 	j = 0;
-	dest[0] = malloc(calc_cmd_len(src, i) - *i + 1);
-	if (!dest[0])
+	(*dest) = malloc(calc_cmd_len(src, i) - *i + 1);
+	if (!(*dest))
 		return (0);
 	while (src[*i] && !is_whitespace(src[*i]))
 	{
 		if (src[*i] == '\'' || src[*i] == '\"')
 		{
 			quote = src[*i];
-			dest[0][j++] = src[(*i)++];
+			(*dest)[j++] = src[(*i)++];
 			while (src[*i] && src[*i] != quote)
-				dest[0][j++] = src[(*i)++];
+				(*dest)[j++] = src[(*i)++];
 		}
-		dest[0][j++] = src[(*i)++];
+		(*dest)[j++] = src[(*i)++];
 	}
-	dest[0][j] = '\0';
+	(*dest)[j++] = '\0';
 	return (1);
 }
 
-char **get_args(char *input, int *i)
+int	extract_expr_2(char *src, t_arg **dest, int *i)
 {
-	int j;
-	int len;
-	char **args;
+	char	quote;
+	int		j;
 
 	j = 0;
-	len = calc_args_len(input, *i);
-	if (!len)
+	(*dest) = malloc(sizeof(t_arg));
+	if (!(*dest))
+		return (0);
+	(*dest)->value = malloc(calc_cmd_len(src, i) - *i + 1);
+	if (!(*dest)->value)
+		return (0);
+	while (src[*i] && !is_whitespace(src[*i]))
+	{
+		if (src[*i] == '\'' || src[*i] == '\"')
+		{
+			quote = src[*i];
+			(*dest)->value[j++] = src[(*i)++];
+			while (src[*i] && src[*i] != quote)
+				(*dest)->value[j++] = src[(*i)++];
+		}
+		(*dest)->value[j++] = src[(*i)++];
+	}
+	(*dest)->value[j++] = '\0';
+	return (1);
+}
+
+t_arg **get_args(char *input, int *i, int *args_len)
+{
+	int j;
+	t_arg **args;
+
+	j = 0;
+	*args_len = calc_args_len(input, *i);
+	if (!*args_len)
 		return (NULL);
-	args = malloc((calc_args_len(input, *i) + 2) * sizeof(char *));
+	args = malloc((*args_len + 2) * sizeof(t_arg *));
 	if (!args)
 		return (NULL);
 	while (input[*i])
@@ -122,12 +148,13 @@ char **get_args(char *input, int *i)
 			(*i)++;
 		if (input[*i] == '\'' || input[*i] == '\"')
 		{
-			args[j++] = quoted_cmd(input, i);
+			args[j++]->value = quoted_cmd(input, i);
+			args[j++]->var = 0;
 			continue ;
 		}
 		if (regonize_type(input, *i) != EXPRESSION)
 			break;
-		if (!extract_expr(input, args + j, i))
+		if (!extract_expr_2(input, args + j, i))
 			return (NULL);
 		j++;
 	}
@@ -139,13 +166,15 @@ t_token	*get_cmd(char *input, int *i, int prev_type)
 {
 	char	*cmd;
 	t_token	*new_token;
+	int		args_len;
 
 	cmd = NULL;
 	if (!extract_expr(input, &cmd, i))
 		return (NULL);
-	new_token = ft_lstnew_1(cmd, regonize_type_2(prev_type), get_args(input, i));
+	new_token = ft_lstnew_1(cmd, regonize_type_2(prev_type), get_args(input, i, &args_len));
 	if (!new_token)
 		return (NULL);
+	new_token->args_len = args_len;
 	if (input[*i])
 		(*i)--;
 	return (new_token);

@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 08:42:35 by obouchta          #+#    #+#             */
-/*   Updated: 2024/03/12 04:56:11 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/03/15 04:57:04 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ void	handle_signals(int signum)
 		g_config = 1;
 	}
 }
-void	print_the_shit(t_token *tokens)
+void	print_it(t_token *tokens)
 {
 	t_token *curr = tokens;
 	while (curr)
@@ -58,14 +58,16 @@ void	print_the_shit(t_token *tokens)
 			printf("APPEND\n");
 		else if (curr->type == PIPE)
 			printf("PIPE\n");
-		if (curr->args && *curr->args)
+		printf("Args len: %d\n", curr->args_len);
+		if (curr->args)
 		{
-				printf("args:\n");
-				while (curr->args && *curr->args)
-				{
-					printf("{%s}\n", *curr->args);
-					curr->args++;
-				}
+			int i = 0;
+			printf("args:\n");
+			while (curr->args[i])
+			{
+				printf("{%s}\n", curr->args[i]->value);
+				i++;
+			}
 		}
 		printf("\n");
 		curr = curr->next;
@@ -128,7 +130,7 @@ int	syntax_error(t_token *tokens)
 	while (curr)
 	{
 		type = curr->type;
-		if (type == INPUT || type == OUTPUT || type == APPEND)
+		if (type == INPUT || type == OUTPUT || type == APPEND || type == HERE_DOC)
 		{
 			if (!curr->next || curr->next->type == INPUT || curr->next->type == OUTPUT
 				|| curr->next->type == APPEND || curr->next->type == PIPE)
@@ -139,6 +141,19 @@ int	syntax_error(t_token *tokens)
 		curr = curr->next;
 	}
 	return (0);
+}
+
+int	specify_vars(t_token **tokens)
+{
+	t_token	*curr;
+
+	curr = *tokens;
+	while (curr)
+	{
+		
+		curr = curr->next;
+	}
+	return (1);
 }
 
 int	process_input(char *input, t_list **list_env, t_list **list_set)
@@ -156,11 +171,15 @@ int	process_input(char *input, t_list **list_env, t_list **list_set)
 		return (0);
 	if (!tokenize_input(input, &tokens))
 		return (0);
-	if (!remove_quotes(&tokens))
-		return (0);
 	if (syntax_error(tokens))
 		return (2);
-	print_the_shit(tokens);
+	// if (!specify_vars(&tokens))
+	// 	return (0);
+	if (!remove_quotes(&tokens))
+		return (0);
+	if (!join_args(&tokens))
+		return (0);
+	print_it(tokens);
 	ft_execution(tokens, list_env, list_set);
 	return (1);
 }

@@ -1,5 +1,5 @@
 builtins_files = execution.c cd.c env_utils.c echo.c pwd.c env.c set.c export.c
-parsing_files = main.c new_len.c add_spaces.c type_check.c get_cmd.c get_tokens.c remove_quotes.c
+parsing_files = main.c new_len.c add_spaces.c type_check.c get_cmd.c get_tokens.c remove_quotes.c join_args.c
 libft_files = ft_str_1.c ft_str_2.c ft_lst_1.c ft_lst_2.c ft_char.c
 
 builtins_srcs = $(addprefix builtins/,$(builtins_files))

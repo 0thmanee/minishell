@@ -6,13 +6,13 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 21:41:01 by obouchta          #+#    #+#             */
-/*   Updated: 2024/03/12 04:57:50 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/03/15 03:25:31 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_token	*ft_lstnew_1(char *value, int type, char **args)
+t_token	*ft_lstnew_1(char *value, int type, t_arg **args)
 {
 	t_token	*new_node;
 

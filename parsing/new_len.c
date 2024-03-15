@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 10:58:53 by obouchta          #+#    #+#             */
-/*   Updated: 2024/03/12 04:12:48 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/03/13 17:04:21 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ int	quoted(char *input, int i)
 			while (input[j] && input[j] != quote)
 				j++;
 			if (i >= k && i <= j)
-				return (1);
+				return (quote);
 		}
 		if (input[j])
 			j++;
