@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 08:42:35 by obouchta          #+#    #+#             */
-/*   Updated: 2024/03/15 04:57:04 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/03/15 05:54:35 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void	print_it(t_token *tokens)
 	t_token *curr = tokens;
 	while (curr)
 	{
-		printf("value: (%s)\n", curr->value);
+		printf("value: (%s: To Expand: %s)\n", curr->value, curr->var ? "Yes" : "No");
 		printf("type: ");
 		if (curr->type == CMD)
 			printf("CMD\n");
@@ -58,18 +58,18 @@ void	print_it(t_token *tokens)
 			printf("APPEND\n");
 		else if (curr->type == PIPE)
 			printf("PIPE\n");
-		printf("Args len: %d\n", curr->args_len);
 		if (curr->args)
 		{
 			int i = 0;
 			printf("args:\n");
 			while (curr->args[i])
 			{
-				printf("{%s}\n", curr->args[i]->value);
+				printf("{%s: To Expand: %s}\n", curr->args[i]->value,
+					curr->var ? "Yes" : "No");
 				i++;
 			}
 		}
-		printf("\n");
+		printf("=======================\n");
 		curr = curr->next;
 	}
 }
@@ -143,14 +143,48 @@ int	syntax_error(t_token *tokens)
 	return (0);
 }
 
+int	check_for_var(char *value)
+{
+	int		i;
+
+	i = 0;
+	while (value[i])
+	{
+		if (value[i] == '\'')
+		{
+			i++;
+			while (value[i] && value[i] != '\'')
+				i++;
+			continue ;
+		}
+		else if (value[i] == '$' && value[i + 1])
+			return (1);
+		i++;
+	}
+	return (0);
+}
+
 int	specify_vars(t_token **tokens)
 {
 	t_token	*curr;
+	int		i;
 
 	curr = *tokens;
 	while (curr)
 	{
-		
+		if (check_for_var(curr->value))
+			curr->var = 1;
+		if (curr->args)
+		{
+			i = 0;
+			while (curr->args[i])
+			{
+				if (check_for_var(curr->args[i]->value))
+					curr->args[i]->var = 1;
+				i++;
+			}
+			
+		}
 		curr = curr->next;
 	}
 	return (1);
@@ -173,8 +207,8 @@ int	process_input(char *input, t_list **list_env, t_list **list_set)
 		return (0);
 	if (syntax_error(tokens))
 		return (2);
-	// if (!specify_vars(&tokens))
-	// 	return (0);
+	if (!specify_vars(&tokens))
+		return (0);
 	if (!remove_quotes(&tokens))
 		return (0);
 	if (!join_args(&tokens))

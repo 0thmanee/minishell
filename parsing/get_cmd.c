@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 07:19:14 by obouchta          #+#    #+#             */
-/*   Updated: 2024/03/15 04:31:27 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/03/15 05:36:27 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,28 +130,42 @@ int	extract_expr_2(char *src, t_arg **dest, int *i)
 	return (1);
 }
 
+int	get_quoted_arg(char *input, int *i, int *j, t_arg **args)
+{
+	while (input[*i] && is_whitespace(input[*i]))
+		(*i)++;
+	if (input[*i] == '\'' || input[*i] == '\"')
+	{
+		args[*j] = malloc(sizeof(t_arg));
+		if (!args[*j])
+			return (-1);
+		args[*j]->value = quoted_cmd(input, i);
+		args[(*j)++]->var = 0;
+		return (1);
+	}
+	return (0);
+}
+
 t_arg **get_args(char *input, int *i, int *args_len)
 {
 	int j;
 	t_arg **args;
+	int		quoted_status;
 
 	j = 0;
 	*args_len = calc_args_len(input, *i);
 	if (!*args_len)
 		return (NULL);
-	args = malloc((*args_len + 2) * sizeof(t_arg *));
+	args = malloc((*args_len + 1) * sizeof(t_arg *));
 	if (!args)
 		return (NULL);
 	while (input[*i])
 	{
-		while (input[*i] && is_whitespace(input[*i]))
-			(*i)++;
-		if (input[*i] == '\'' || input[*i] == '\"')
-		{
-			args[j++]->value = quoted_cmd(input, i);
-			args[j++]->var = 0;
+		quoted_status = get_quoted_arg(input, i, &j, args);
+		if (quoted_status == 1)
 			continue ;
-		}
+		else if (quoted_status == -1)
+			return (NULL);
 		if (regonize_type(input, *i) != EXPRESSION)
 			break;
 		if (!extract_expr_2(input, args + j, i))
