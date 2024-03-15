@@ -6,16 +6,65 @@
 /*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/12 03:41:21 by yasser03          #+#    #+#             */
-/*   Updated: 2024/03/14 17:11:37 by yboutsli         ###   ########.fr       */
+/*   Updated: 2024/03/15 04:15:03 by yboutsli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	child_process(t_token *token, char **args, char *cmd_fpath)
+int	env_size(t_list *list_env)
 {
+	int	count;
+	t_list *current;
 
-	if (execve(cmd_fpath, args, NULL) == -1)
+	count = 0;
+	current = list_env;	
+	while (current)
+	{
+		if (current->var && current->value)
+			count++;
+		current = current->next;
+	}
+	return (count);
+}
+
+char	**list2tab(t_list *list_env)
+{
+	char 	**tab;
+	t_list *current;
+	char	*tmp2;
+	int		i;
+	char	*tmp1;
+
+	tab = malloc((env_size(list_env) + 1) * sizeof(char *));
+	if (!tab)
+		return (NULL);
+	current = list_env;
+	i = 0;
+	while (current)
+	{
+		if (current->var && current->value)
+		{
+			tmp1 = ft_strjoin(current->var, "=");
+			tmp2 = ft_strjoin(tmp1, current->value);
+			free(tmp1);
+			tab[i] = malloc((ft_strlen(tmp2) + 1));
+			if (!tab[i])
+				return (NULL);
+			ft_strcpy(tab[i], tmp2);
+			i++;
+		}
+		current = current->next;
+	}
+	tab[i] = NULL;
+	return(tab);
+}
+void	child_process(t_token *token, char **args, char *cmd_fpath, t_list *list_env)
+{
+	char	**envp;
+
+	envp = list2tab(list_env);
+	if (execve(cmd_fpath, args, envp) == -1)
 		perror(token->value);
 }
 int	execute_execve(t_token *token, t_list *list_env, char **npath)
@@ -34,23 +83,29 @@ int	execute_execve(t_token *token, t_list *list_env, char **npath)
 	}
 	pid = fork();
 	if (pid == 0)
-		child_process(token, args, cmd_fpath);
+		child_process(token, args, cmd_fpath, list_env);
 	waitpid(pid, NULL, 0);
 	free(args);
 	return(0);
 }
 int	execute(t_token  *token, t_list **list_env, t_list **list_set, char **npath)
 {
-	if (!ft_strcmp(token->value, "cd"))
-		cd(token->args, list_env);
-	else if (!ft_strcmp(token->value, "echo"))
-		echo(token->args[0], 1, *list_env, *list_set);
-	else if (!ft_strcmp(token->value, "env"))
-		env(*list_env);
-	else if (!ft_strcmp(token->value, "pwd"))
-		pwd();
-	else
-		execute_execve(token, *list_env, npath);
+	(void)list_env;
+	(void)list_set;
+	(void)npath;
+	char *var = expanding(token->value, *list_env);
+	printf ("result = %s\n", var);
+	free(var);
+	// if (!ft_strcmp(token->value, "cd"))
+	// 	cd(token->args, list_env);
+	// else if (!ft_strcmp(token->value, "echo"))
+	// 	echo(token, *list_env, *list_set);
+	// else if (!ft_strcmp(token->value, "env"))
+	// 	env(*list_env);
+	// else if (!ft_strcmp(token->value, "pwd"))
+	// 	pwd();
+	// else
+	// 	execute_execve(token, *list_env, npath);
 	return (0);
 }
 
