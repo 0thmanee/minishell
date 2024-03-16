@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 21:41:01 by obouchta          #+#    #+#             */
-/*   Updated: 2024/03/15 03:25:31 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/03/15 23:58:54 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,6 @@ void	ft_lstadd_back_1(t_token **lst, t_token *new_node)
 
 	if (new_node == NULL)
 		return ;
-	new_node->var = 0;
 	if (*lst == NULL)
 	{
 		*lst = new_node;

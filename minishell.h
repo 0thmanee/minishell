@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 09:26:55 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/03/15 03:25:44 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/03/16 03:28:22 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,16 +48,18 @@ int g_config;
 typedef struct s_arg
 {
     char    *value;
-    int     var;
+    int  vars_len;
+    int  *vars;
 } t_arg;
 
 typedef struct s_token
 {
     char	*value;
-    t_arg    **args;
-    int     args_len;
+    t_arg   **args;
+    int  args_len;
     int		type;
-    int     var;
+    int  vars_len;
+    int  *vars;
     struct s_token	*next;
 }	t_token;
 
@@ -77,9 +79,9 @@ typedef	struct s_free
 // libft
 char	*ft_strcpy(char *dest, const char *src);
 char	*ft_strjoin(char *s1, char *s2);
-int	    ft_strlen(char *s);
-int	    ft_strlcat(char *dest, char *src, int dstsize);
-int	    ft_strcmp(const char *s1, const char *s2);
+int     ft_strlen(char *s);
+int     ft_strlcat(char *dest, char *src, int dstsize);
+int     ft_strcmp(const char *s1, const char *s2);
 int     ft_strncmp(const char *s1, const char *s2, size_t n);
 char	*ft_substr(char const *s, int start, int len);
 char	*ft_strdup(char *str);
@@ -91,24 +93,33 @@ void	ft_lstadd_back_2(t_list **lst, t_list *new_node);
 t_list	*ft_lstlast(t_list *lst);
 void	ft_lstfree(t_list **lst);
 int		ft_isalpha(int c);
+int	    is_whitespace(char c);
 
 // Parsing
-int 	is_whitespace(char c);
-int	    ft_new_len(char *input);
-int	    quoted(char *input, int i);
+int     is_whitespace(char c);
+void	handle_signals(int signum);
+int     ft_new_len(char *input);
+int     quoted(char *input, int i);
 char	*add_spaces(char *input);
-int	    regonize_type(char *input, int i);
-int	    regonize_type_2(int prev_type);
+int     regonize_type(char *input, int i);
+int     regonize_type_2(int prev_type);
 int     get_last_type(t_token *tokens);
 int     calc_args_len_helper(char *input, int *i, int *len);
 int     calc_args_len(char *input, int i);
 t_arg   **get_args(char *input, int *i, int *args_len);
 t_token	*get_cmd(char *input, int *i, int prev_type);
-int	    valid_quotes(char *input);
+t_arg **get_args(char *input, int *i, int *args_len);
+int     valid_quotes(char *input);
 char	*quoted_cmd(char *input, int *i);
-t_token	*get_token(char *input, int *i, int type);
-int	    remove_quotes(t_token **tokens);
+t_token	*get_in_out(char *input, int *i, int type, t_token **tokens);
+t_token	*get_pipe(char *input, int *i, int type);
+int     remove_quotes(t_token **tokens);
 int     join_args(t_token **tokens);
+int     extract_expr(char *src, char **dest, int *i);
+void	check_for_var_helper_1(char *value, int *vars, int *i, int *j);
+void	check_for_var_helper_2(char *value, int *vars, int *i, int *j);
+void	check_for_var_helper_3(char *value, int *vars, int *i, int *j);
+int	    specify_vars(t_token **tokens);
 
  // Removable
 void	print_it(t_token *tokens);

@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 07:19:14 by obouchta          #+#    #+#             */
-/*   Updated: 2024/03/15 05:36:27 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/03/16 02:54:02 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,7 +140,7 @@ int	get_quoted_arg(char *input, int *i, int *j, t_arg **args)
 		if (!args[*j])
 			return (-1);
 		args[*j]->value = quoted_cmd(input, i);
-		args[(*j)++]->var = 0;
+		(*j)++;
 		return (1);
 	}
 	return (0);
