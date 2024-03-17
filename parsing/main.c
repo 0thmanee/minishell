@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 08:42:35 by obouchta          #+#    #+#             */
-/*   Updated: 2024/03/16 03:29:05 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/03/17 01:02:02 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,7 +115,9 @@ int	syntax_error(t_token *tokens)
 int	process_input(char *input, t_list **list_env, t_list **list_set)
 {
 	t_token *tokens;
-
+	(void)list_env;
+	(void)list_set;
+	
 	tokens = NULL;
 	if (!valid_quotes(input))
 		return (2);
@@ -136,7 +138,7 @@ int	process_input(char *input, t_list **list_env, t_list **list_set)
 	if (!remove_quotes(&tokens))
 		return (0);
 	print_it(tokens);
-	ft_execution(tokens, list_env, list_set);
+	// ft_execution(tokens, list_env, list_set);
 	return (1);
 }
 
@@ -171,13 +173,13 @@ int main(int ac, char **av, char **envp)
 {
 	t_list		*list_env;
 
+	(void)envp;
 	if (ac != 1)
 		return (printf("minishell: too many arguments\n"), 1);
-	g_config = 0;
 	(void)av;
-	list_env = env_lst(envp);
-	if (!list_env)
-		env_init(&list_env);
+	// list_env = env_lst(envp);
+	// if (!list_env)
+	// 	env_init(&list_env);
 	if (!isatty(STDIN_FILENO))
 		exit(1);
 	using_history();
