@@ -25,5 +25,6 @@
 		"optional": "c",
 		"system_error": "c",
 		"vector": "c"
-	}
+	},
+	"C_Cpp.errorSquiggles": "disabled"
 }
