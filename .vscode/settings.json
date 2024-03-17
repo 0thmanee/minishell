@@ -24,7 +24,13 @@
 		"__memory": "c",
 		"optional": "c",
 		"system_error": "c",
+<<<<<<< HEAD
 		"vector": "c"
 	},
 	"C_Cpp.errorSquiggles": "disabled"
+=======
+		"vector": "c",
+		"sstream": "c"
+	}
+>>>>>>> 6aea5e1c4f77f19973985ea8a4af28a26d627821
 }
