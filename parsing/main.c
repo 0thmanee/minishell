@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 08:42:35 by obouchta          #+#    #+#             */
-/*   Updated: 2024/03/17 01:02:02 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/03/17 06:34:42 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,13 +43,13 @@ void	print_it(t_token *tokens)
 		if (curr->args)
 		{
 			int i = 0;
-			printf("args:\n");
-			while (curr->args[i])
+			printf("args [%d]:\n", curr->args_len);
+			while (i < curr->args_len)
 			{
-				printf("{%s}\n[ ", curr->args[i]->value);
-				if (curr->args[i]->vars_len)
-					for (int j = 0; j < curr->args[i]->vars_len; j++)
-						printf("%d ", curr->args[i]->vars[j]);
+				printf("{%s}\n[ ", curr->args[i].value);
+				if (curr->args[i].vars_len)
+					for (int j = 0; j < curr->args[i].vars_len; j++)
+						printf("%d ", curr->args[i].vars[j]);
 				printf("]\n");
 				i++;
 			}
@@ -79,8 +79,6 @@ int	tokenize_input(char *input, t_token **tokens)
 				new_token = get_cmd(input, &i, CMD);
 			if (new_token)
 				ft_lstadd_back_1(tokens, new_token);
-			else
-				return (0);
 		}
 		else
 			i++;
@@ -138,6 +136,9 @@ int	process_input(char *input, t_list **list_env, t_list **list_set)
 	if (!remove_quotes(&tokens))
 		return (0);
 	print_it(tokens);
+	// expanding
+	if (final_command(&tokens))
+		return (0);
 	// ft_execution(tokens, list_env, list_set);
 	return (1);
 }

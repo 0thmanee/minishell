@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/16 03:19:46 by obouchta          #+#    #+#             */
-/*   Updated: 2024/03/16 03:25:04 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/03/17 06:34:37 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,16 +57,19 @@ int	specify_vars_helper(t_token *curr)
 	int	i;
 
 	i = 0;
+	if (!curr->args_len)
+		return (1);
 	while (i < curr->args_len)
 	{
-		curr->args[i]->vars_len = calc_vars(curr->args[i]->value);
-		if (curr->args[i]->vars_len)
-			curr->args[i]->vars = malloc(curr->args[i]->vars_len * sizeof(int));
-		if (!curr->args[i]->vars)
+		curr->args[i].vars_len = calc_vars(curr->args[i].value);
+		if (curr->args[i].vars_len)
+			curr->args[i].vars = malloc(curr->args[i].vars_len * sizeof(int));
+		if (!curr->args[i].vars)
 			return (0);
-		check_for_var(curr->args[i]->value, curr->args[i]->vars, curr->args[i]->vars_len);
+		check_for_var(curr->args[i].value, curr->args[i].vars, curr->args[i].vars_len);
 		i++;
 	}
+	i = 0;
 	return (1);
 }
 
@@ -78,14 +81,18 @@ int	specify_vars(t_token **tokens)
 	while (curr)
 	{
 		curr->vars_len = calc_vars(curr->value);
-		if (curr->vars_len)
+		if (curr->vars_len > 0)
+		{
 			curr->vars = malloc(curr->vars_len * sizeof(int));
-		if (!curr->vars)
-			return (0);
-		check_for_var(curr->value, curr->vars, curr->vars_len);
-		if (curr->args)
+			if (!curr->vars)
+				return (0);
+			check_for_var(curr->value, curr->vars, curr->vars_len);
+		}
+		if (curr->args_len)
+		{
 			if (!specify_vars_helper(curr))
 				return (0);
+		}
 		curr = curr->next;
 	}
 	return (1);

@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 07:21:28 by obouchta          #+#    #+#             */
-/*   Updated: 2024/03/16 04:25:30 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/03/17 02:12:29 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,16 +68,19 @@ t_token	*get_in_out_helper(char *input, int *i, t_token **tokens)
 	char	*arg_value;
 	
 	arg_value = NULL;
+	arg = NULL;
 	while (input[*i] && is_whitespace(input[*i]))
 		(*i)++;
 	if (input[*i] && regonize_type(input, *i) == EXPRESSION)
+	{
 		if (!extract_expr(input, &arg_value, i))
 			return (NULL);
-	arg = ft_lstnew_1(arg_value,
-		regonize_type_2(get_last_type(*tokens)), NULL);
-	if (!arg)
-		return (NULL);
-	arg->args_len = 0;
+		arg = ft_lstnew_1(arg_value,
+			regonize_type_2(get_last_type(*tokens)), NULL);
+		if (!arg)
+			return (NULL);
+		arg->args_len = 0;
+	}
 	return (arg);
 }
 
