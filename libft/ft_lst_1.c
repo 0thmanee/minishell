@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   ft_lst_1.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 21:41:01 by obouchta          #+#    #+#             */
-/*   Updated: 2024/03/07 19:09:48 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/03/17 00:28:29 by yboutsli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_token	*ft_lstnew_1(char *value, int type, char **args)
+t_token	*ft_lstnew_1(char *value, int type, t_value **args)
 {
 	t_token	*new_node;
 
@@ -26,22 +26,22 @@ t_token	*ft_lstnew_1(char *value, int type, char **args)
 	return (new_node);
 }
 
-void	ft_lstadd_back_1(t_token **lst, t_token *new)
+void	ft_lstadd_back_1(t_token **lst, t_token *new_node)
 {
 	t_token	*curr;
 
-	if (new == NULL)
+	if (new_node == NULL)
 		return ;
 	if (*lst == NULL)
 	{
-		*lst = new;
-		new->next = NULL;
+		*lst = new_node;
+		new_node->next = NULL;
 		return ;
 	}
 	curr = *lst;
 	while (curr && curr->next)
 		curr = curr->next;
-	curr->next = new;
+	curr->next = new_node;
 }
 
 t_list	*ft_lstnew_2(void *content1, void *content2)

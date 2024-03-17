@@ -6,7 +6,7 @@
 /*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 09:26:13 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/03/14 14:01:35 by yboutsli         ###   ########.fr       */
+/*   Updated: 2024/03/15 16:04:06 by yboutsli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,9 +95,9 @@ int	cd(char **args, t_list **env)
 {
 	char	*cwd;
 	int		status;
-
-	status = 0;
+	char	*str;
 	
+	status = 0;
 	cwd = getcwd(NULL, 0);
 	if (args == NULL)
 		status = cd_home(env, NULL);
@@ -106,7 +106,11 @@ int	cd(char **args, t_list **env)
 	else if (args[0][0] == '-' && args[0][1] == '\0')
 		status = cd_oldpwd(env);
 	else
-		status = cd_dir(args[0], cwd);
+	{
+		str = expanding(args[0], *env);
+		status = cd_dir(str, cwd);
+		free(str);
+	}
 	if (status == 0)
 	{
 		env_update(env, "OLDPWD", cwd);

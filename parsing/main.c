@@ -6,42 +6,21 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 08:42:35 by obouchta          #+#    #+#             */
-/*   Updated: 2024/03/11 23:40:20 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/03/16 03:29:05 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-// add spaces when finding opearators x
-// split the input into tokens x
-// check if the tokens are valid x
-// execute the command
-// Create builtins
-// handle signals
-// check exit status
-// check for leaks
-
-
-void	handle_signals(int signum)
-{
-	if (signum == SIGINT)
-	{
-		printf("\n");
-		rl_on_new_line();
-		rl_replace_line("", 1);
-		rl_redisplay();
-	}
-	if (signum == SIGQUIT)
-	{
-		;
-	}
-}
-void	print_the_shit(t_token *tokens)
+void	print_it(t_token *tokens)
 {
 	t_token *curr = tokens;
 	while (curr)
 	{
-		printf("value: (%s)\n", curr->value);
+		printf("\nvalue: (%s)\n[ ", curr->value);
+		for (int i = 0; i < curr->vars_len; i++)
+			printf("%d ", curr->vars[i]);
+		printf("]\n");
 		printf("type: ");
 		if (curr->type == CMD)
 			printf("CMD\n");
@@ -61,36 +40,24 @@ void	print_the_shit(t_token *tokens)
 			printf("APPEND\n");
 		else if (curr->type == PIPE)
 			printf("PIPE\n");
-		if (curr->args && *curr->args)
+		if (curr->args)
 		{
-				printf("args:\n");
-				while (curr->args && *curr->args)
-				{
-					printf("{%s}\n", *curr->args);
-					curr->args++;
-				}
+			int i = 0;
+			printf("args:\n");
+			while (curr->args[i])
+			{
+				printf("{%s}\n[ ", curr->args[i]->value);
+				if (curr->args[i]->vars_len)
+					for (int j = 0; j < curr->args[i]->vars_len; j++)
+						printf("%d ", curr->args[i]->vars[j]);
+				printf("]\n");
+				i++;
+			}
 		}
-		printf("\n");
+		printf("=======================\n");
 		curr = curr->next;
 	}
 }
-
-int	is_whitespace(char c)
-{
-	int		i;
-	char	*set;
-	
-	i = 0;
-	set = " \t\n\v\f\r";
-	while (set[i])
-	{
-		if (c == set[i])
-			return (1);
-		i++;
-	}
-	return (0);
-}
-
 
 int	tokenize_input(char *input, t_token **tokens)
 {
@@ -98,17 +65,18 @@ int	tokenize_input(char *input, t_token **tokens)
 	int		i;
 
 	i = 0;
-
 	while (input[i])
 	{
 		if (i == 0 || is_whitespace(input[i]))
 		{
 			while (input[i] && is_whitespace(input[i]))
 				i++;
-			if (regonize_type(input, i) != EXPRESSION)
-				new_token = get_token(input, &i, regonize_type(input, i));
+			if (regonize_type(input, i) != EXPRESSION && regonize_type(input, i) != PIPE)
+				new_token = get_in_out(input, &i, regonize_type(input, i), tokens);
+			else if (regonize_type(input, i) == PIPE)
+				new_token = get_pipe(input, &i, PIPE);
 			else
-				new_token = get_cmd(input, &i, get_last_type(*tokens));
+				new_token = get_cmd(input, &i, CMD);
 			if (new_token)
 				ft_lstadd_back_1(tokens, new_token);
 			else
@@ -131,7 +99,7 @@ int	syntax_error(t_token *tokens)
 	while (curr)
 	{
 		type = curr->type;
-		if (type == INPUT || type == OUTPUT || type == APPEND)
+		if (type == INPUT || type == OUTPUT || type == APPEND || type == HERE_DOC)
 		{
 			if (!curr->next || curr->next->type == INPUT || curr->next->type == OUTPUT
 				|| curr->next->type == APPEND || curr->next->type == PIPE)
@@ -159,11 +127,15 @@ int	process_input(char *input, t_list **list_env, t_list **list_set)
 		return (0);
 	if (!tokenize_input(input, &tokens))
 		return (0);
-	if (!remove_quotes(&tokens))
-		return (0);
 	if (syntax_error(tokens))
 		return (2);
-	print_the_shit(tokens);
+	if (!join_args(&tokens))
+		return (0);
+	if (!specify_vars(&tokens))
+		return (0);
+	if (!remove_quotes(&tokens))
+		return (0);
+	print_it(tokens);
 	ft_execution(tokens, list_env, list_set);
 	return (1);
 }
@@ -184,8 +156,6 @@ int read_input(t_list **list_env)
 			(printf("exit\n"), exit(0));
 		if (!input[0])
 			continue ;
-		if (!ft_strcmp(input, "exit"))
-			exit(0);
 		if (input[0])
 			add_history(input);
 		else if (history_length > 0)
@@ -203,6 +173,7 @@ int main(int ac, char **av, char **envp)
 
 	if (ac != 1)
 		return (printf("minishell: too many arguments\n"), 1);
+	g_config = 0;
 	(void)av;
 	list_env = env_lst(envp);
 	if (!list_env)

@@ -6,7 +6,7 @@
 /*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/15 02:58:32 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/03/15 04:26:05 by yboutsli         ###   ########.fr       */
+/*   Updated: 2024/03/15 15:56:02 by yboutsli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,28 +48,25 @@ char	*expanding(char *str, t_list *list_env)
 	int	j;
 	char *var;
 	char *value;
-	(void)list_env;
 	char *result;
 
-	result = str;
+	result = ft_strdup(str);
 	i = 0;
 	while (str[i])
 	{
 		if (str[i] == '$' && str[i + 1] != '\0')
 		{
-			printf("hello\n");
 			j = 1;
 			while (!char_is_valid(str[j + i]))
 				j++;
 			var = ft_substr(str, i + 1, j - 1);
-			printf ("var = %s\n", var);
 			value = get_env(&list_env, var);
-			printf ("value = %s\n", value);
 			free(var);
 			if (value != NULL)
 			{
 				result = replace_mini_str(str, i,  i + j, value);
-				// return (expanding(result, list_env));
+				free(str);
+				return (expanding(result, list_env));
 			}
 		}
 		i++;

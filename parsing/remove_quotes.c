@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 17:17:09 by obouchta          #+#    #+#             */
-/*   Updated: 2024/03/07 17:17:40 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/03/15 03:19:34 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,8 @@ int	remove_quotes(t_token **tokens)
 			i = 0;
 			while (curr->args[i])
 			{
-				curr->args[i] = no_quoted_value(curr->args[i], no_quotes_len(curr->args[i]));
+				curr->args[i]->value = no_quoted_value(curr->args[i]->value,
+					no_quotes_len(curr->args[i]->value));
 				i++;
 			}
 		}

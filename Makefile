@@ -1,7 +1,7 @@
 builtins_files = cd.c env_utils.c echo.c pwd.c env.c set.c export.c
-parsing_files = main.c new_len.c add_spaces.c type_check.c get_cmd.c get_tokens.c remove_quotes.c
-libft_files = ft_str_1.c ft_str_2.c ft_lst_1.c ft_lst_2.c ft_char.c
-execution_files = execution_1.c
+parsing_files = main.c new_len.c add_spaces.c type_check.c get_cmd.c get_tokens.c remove_quotes.c join_args.c expanding_init_1.c expanding_init_2.c signals.c 
+libft_files = ft_str_1.c ft_str_2.c ft_lst_1.c ft_lst_2.c ft_lst_3.c ft_char.c ft_split.c 
+execution_files = execution_1.c execution_utils_1.c execv_utils.c expanding.c
 
 builtins_srcs = $(addprefix builtins/,$(builtins_files))
 parsing_srcs = $(addprefix parsing/,$(parsing_files))
@@ -13,7 +13,7 @@ parsing_objects = $(addprefix object_files/,$(parsing_srcs:.c=.o))
 libft_objects = $(addprefix object_files/,$(libft_srcs:.c=.o))
 execution_objects = $(addprefix object_files/,$(execution_srcs:.c=.o))
 
-CFLAGS = -Wall -Werror -Wextra
+CFLAGS = -Wall -Werror -Wextra -fsanitize=address -g
 READLINEDIR = $(shell brew --prefix readline)
 NAME = minishell
 

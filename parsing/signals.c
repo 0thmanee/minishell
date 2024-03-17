@@ -1,37 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_char.c                                          :+:      :+:    :+:   */
+/*   signals.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
+/*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/03/07 19:21:40 by obouchta          #+#    #+#             */
-/*   Updated: 2024/03/17 00:27:51 by yboutsli         ###   ########.fr       */
+/*   Created: 2024/03/16 03:27:56 by obouchta          #+#    #+#             */
+/*   Updated: 2024/03/16 03:28:07 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	ft_isalpha(int c)
+void	handle_signals(int signum)
 {
-	if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z'))
-		return (0);
-	else 
-		return (1);
-}
-
-int	is_whitespace(char c)
-{
-	int		i;
-	char	*set;
-	
-	i = 0;
-	set = " \t\n\v\f\r";
-	while (set[i])
+	if (signum == SIGINT)
 	{
-		if (c == set[i])
-			return (1);
-		i++;
+		printf("\n");
+		rl_on_new_line();
+		rl_replace_line("", 1);
+		rl_redisplay();
+		g_config = 1;
 	}
-	return (0);
 }

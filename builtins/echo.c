@@ -6,7 +6,7 @@
 /*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/05 11:01:54 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/03/15 00:26:38 by yboutsli         ###   ########.fr       */
+/*   Updated: 2024/03/15 16:05:20 by yboutsli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,19 +45,6 @@ int	echo(t_token *token, t_list *list_env, t_list *list_set)
 			break;
 		i++;
 	}
-	// if (str[0] == '$' && str[1])
-	// {
-	// 	str++;
-	// 	env_value = get_env(&env, str);
-	// 	set_value = get_env(&set, str);
-	// 	if (!env_value && !set_value)
-	// 		str = "";
-	// 	else if (!env_value)
-	// 		str = set_value;
-	// 	else
-	// 		str = env_value;	
-	// 	echo(str, nl, env, set);
-	// }
 	while (token->args[i])
 	{
 		printf("%s", token->args[i]);
