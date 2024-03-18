@@ -7,9 +7,13 @@
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 08:42:35 by obouchta          #+#    #+#             */
 <<<<<<< HEAD
+<<<<<<< HEAD
 /*   Updated: 2024/03/16 03:29:05 by obouchta         ###   ########.fr       */
 =======
 /*   Updated: 2024/03/18 03:14:25 by obouchta         ###   ########.fr       */
+>>>>>>> Othmane
+=======
+/*   Updated: 2024/03/18 03:36:57 by obouchta         ###   ########.fr       */
 >>>>>>> Othmane
 /*                                                                            */
 /* ************************************************************************** */
@@ -179,9 +183,7 @@ int	process_input(char *input, t_list **list_env, t_list **list_set)
 	t_token *tokens;
 	t_cmd	*cmd;
 
-	(void)list_env;
-	(void)list_set;
-	
+	(void)list_set;	
 	tokens = NULL;
 	cmd = NULL;
 	if (!valid_quotes(input))
@@ -210,7 +212,20 @@ int	process_input(char *input, t_list **list_env, t_list **list_set)
 	if (!final_command(&tokens, &cmd))
 		return (0);
 	print_it_2(cmd);
+<<<<<<< HEAD
 	// ft_execution(tokens, list_env, list_set);
+>>>>>>> Othmane
+=======
+	// the new linked list is cmd
+	// struct contains char *cmd which is the command (cmd = NULL if there's any)
+	// char **args which are the args the last entry has NULL (args = NULL if there's any)
+	// t_value *infiles and t_value *outfiles (I/Ofiles = NULL if there's any)
+	// which are arrays for the I/O (Including here doc and append) containing the following:
+	// int fd (if -1 it's error), (if -2 it's here doc), else it's a regular fd for input, output or append
+	// int type; 0: infile, 1:here doc, 2:outfile, 3:append
+	// char *delimiter for the here doc, else it's NULL
+	// 9AD 9AD
+	// ft_execution(cmd, list_env, list_set);
 >>>>>>> Othmane
 	return (1);
 }
@@ -246,7 +261,6 @@ int main(int ac, char **av, char **envp)
 {
 	t_list		*list_env;
 
-	// (void)envp;
 	if (ac != 1)
 		return (printf("minishell: too many arguments\n"), 1);
 	(void)av;
