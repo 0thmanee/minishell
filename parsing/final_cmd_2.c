@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/17 05:22:00 by obouchta          #+#    #+#             */
-/*   Updated: 2024/03/18 03:10:13 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/03/18 22:55:40 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,8 @@ int	extract_infiles(t_token *token, t_file **infiles)
 
 	curr = token;
 	i = 0;
+	if (curr && curr->type == PIPE)
+		curr = curr->next;
 	if (!infiles_len(curr))
 		return (1);
 	*infiles = malloc((infiles_len(curr) + 1) * sizeof(t_file));
