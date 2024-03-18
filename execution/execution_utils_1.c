@@ -1,28 +1,44 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env.c                                              :+:      :+:    :+:   */
+/*   execution_utils_1.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/03/05 14:36:05 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/03/07 19:50:49 by obouchta         ###   ########.fr       */
+/*   Created: 2024/03/14 14:59:37 by yboutsli          #+#    #+#             */
+/*   Updated: 2024/03/14 15:00:03 by yboutsli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	env(t_list *list_env)
+void	ft_free(char **tab)
 {
+	int	i;
+
+	i = 0;
+	while (tab[i])
+	{
+		free(tab[i]);
+		i++;
+	}
+	free(tab);
+}
+
+char	**path(t_list **envp)
+{
+	char	**npath;
 	t_list	*current;
 
-	if (!list_env)
-		return (1);
-	current = list_env;
+	current = *envp;
 	while (current)
 	{
-		printf("%s=%s\n", current->var, current->value);
+		if (!ft_strcmp(current->var, "PATH"))
+		{
+			npath = ft_split(current->value, ':');
+			return (npath);
+		}
 		current = current->next;
 	}
-	return (0);
+	return (NULL);
 }

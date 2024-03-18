@@ -6,7 +6,11 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 08:42:35 by obouchta          #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2024/03/16 03:29:05 by obouchta         ###   ########.fr       */
+=======
+/*   Updated: 2024/03/18 03:14:25 by obouchta         ###   ########.fr       */
+>>>>>>> Othmane
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,13 +47,20 @@ void	print_it(t_token *tokens)
 		if (curr->args)
 		{
 			int i = 0;
-			printf("args:\n");
-			while (curr->args[i])
+			printf("args [%d]:\n", curr->args_len);
+			while (i < curr->args_len)
 			{
+<<<<<<< HEAD
 				printf("{%s}\n[ ", curr->args[i]->value);
 				if (curr->args[i]->vars_len)
 					for (int j = 0; j < curr->args[i]->vars_len; j++)
 						printf("%d ", curr->args[i]->vars[j]);
+=======
+				printf("{%s}\n[ ", curr->args[i].value);
+				if (curr->args[i].vars_len)
+					for (int j = 0; j < curr->args[i].vars_len; j++)
+						printf("%d ", curr->args[i].vars[j]);
+>>>>>>> Othmane
 				printf("]\n");
 				i++;
 			}
@@ -59,6 +70,59 @@ void	print_it(t_token *tokens)
 	}
 }
 
+<<<<<<< HEAD
+=======
+void print_it_2(t_cmd *cmds)
+{
+	t_cmd	*curr;
+	int		i;
+	curr = cmds;
+	while (curr)
+	{
+		printf("\nvalue: (%s)\n-----------\n", curr->cmd);
+		if (curr->args)
+		{
+			i = 0;
+			printf("args :\n");
+			while (curr->args[i])
+			{
+				printf("{ %s }\n", curr->args[i]);
+				i++;
+			}
+		}
+		printf("-----------\n");
+		if (curr->infiles)
+		{
+			i = 0;
+			printf("infiles :\n\n");
+			while (curr->infiles[i].fd != -42)
+			{
+				printf("type: %s\n", curr->infiles[i].type == 0 ? "infile" : "here doc");
+				curr->infiles[i].type == 0 ? printf("fd:[ %d ]\n", curr->infiles[i].fd) : printf("");
+				if (curr->infiles[i].type == 1)
+					printf("Delimiter: [ %s ]\n", curr->infiles[i].delimiter);
+				printf("\n");
+				i++;
+			}
+		}
+		if (curr->outfiles)
+		{
+			i = 0;
+			printf("outfiles :\n\n");
+			while (curr->outfiles[i].fd != -42)
+			{
+				printf("type: %s\n", curr->outfiles[i].type == 2 ? "outfile" : "Append");
+				printf("fd:[ %d ]\n", curr->outfiles[i].fd);
+				printf("\n");
+				i++;
+			}
+		}
+		printf("=======================\n");
+		curr = curr->next;
+	}
+}
+
+>>>>>>> Othmane
 int	tokenize_input(char *input, t_token **tokens)
 {
 	t_token	*new_token;
@@ -79,8 +143,6 @@ int	tokenize_input(char *input, t_token **tokens)
 				new_token = get_cmd(input, &i, CMD);
 			if (new_token)
 				ft_lstadd_back_1(tokens, new_token);
-			else
-				return (0);
 		}
 		else
 			i++;
@@ -115,8 +177,13 @@ int	syntax_error(t_token *tokens)
 int	process_input(char *input, t_list **list_env, t_list **list_set)
 {
 	t_token *tokens;
+	t_cmd	*cmd;
 
+	(void)list_env;
+	(void)list_set;
+	
 	tokens = NULL;
+	cmd = NULL;
 	if (!valid_quotes(input))
 		return (2);
 	input = add_spaces(input);
@@ -135,8 +202,16 @@ int	process_input(char *input, t_list **list_env, t_list **list_set)
 		return (0);
 	if (!remove_quotes(&tokens))
 		return (0);
+<<<<<<< HEAD
 	print_it(tokens);
 	ft_execution(tokens, list_env, list_set);
+=======
+	expanding(&tokens, *list_env);
+	if (!final_command(&tokens, &cmd))
+		return (0);
+	print_it_2(cmd);
+	// ft_execution(tokens, list_env, list_set);
+>>>>>>> Othmane
 	return (1);
 }
 
@@ -171,9 +246,9 @@ int main(int ac, char **av, char **envp)
 {
 	t_list		*list_env;
 
+	// (void)envp;
 	if (ac != 1)
 		return (printf("minishell: too many arguments\n"), 1);
-	g_config = 0;
 	(void)av;
 	list_env = env_lst(envp);
 	if (!list_env)

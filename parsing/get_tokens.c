@@ -6,7 +6,11 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 07:21:28 by obouchta          #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2024/03/15 23:35:21 by obouchta         ###   ########.fr       */
+=======
+/*   Updated: 2024/03/17 02:12:29 by obouchta         ###   ########.fr       */
+>>>>>>> Othmane
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +72,7 @@ t_token	*get_in_out_helper(char *input, int *i, t_token **tokens)
 	char	*arg_value;
 	
 	arg_value = NULL;
+<<<<<<< HEAD
 	while (input[*i] && is_whitespace(input[*i]))
 		(*i)++;
 	if (input[*i] && regonize_type(input, *i) == EXPRESSION)
@@ -78,6 +83,21 @@ t_token	*get_in_out_helper(char *input, int *i, t_token **tokens)
 	if (!arg)
 		return (NULL);
 	arg->args_len = 0;
+=======
+	arg = NULL;
+	while (input[*i] && is_whitespace(input[*i]))
+		(*i)++;
+	if (input[*i] && regonize_type(input, *i) == EXPRESSION)
+	{
+		if (!extract_expr(input, &arg_value, i))
+			return (NULL);
+		arg = ft_lstnew_1(arg_value,
+			regonize_type_2(get_last_type(*tokens)), NULL);
+		if (!arg)
+			return (NULL);
+		arg->args_len = 0;
+	}
+>>>>>>> Othmane
 	return (arg);
 }
 
@@ -141,7 +161,7 @@ t_token	*get_pipe(char *input, int *i, int type)
 // 	value = quoted_cmd(input, i);
 // 	if (!value)
 // 		return (NULL);
-// 	args = get_args(input, i);
+// 	args = get_values(input, i);
 // 	new_token = ft_lstnew_1(value, regonize_type_2(prev_type), args);
 // 	if (!new_token)
 // 		return (NULL);

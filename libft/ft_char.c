@@ -3,10 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   ft_char.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 19:21:40 by obouchta          #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2024/03/16 03:26:36 by obouchta         ###   ########.fr       */
+=======
+/*   Updated: 2024/03/17 00:27:51 by yboutsli         ###   ########.fr       */
+>>>>>>> Othmane
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,4 +38,8 @@ int	is_whitespace(char c)
 		i++;
 	}
 	return (0);
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> Othmane

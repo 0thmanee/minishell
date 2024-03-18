@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yasser03 <yasser03@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 20:29:05 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/03/15 02:16:54 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/03/14 04:05:28 by yasser03         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,14 @@ t_list	*env_lst(char **envp)
 		free(var);
 		free(value);
 	}
+	if (i > 6)
+	{
+		var = "OLDPWD";
+		value = get_env(&env, "PWD");
+		ft_lstadd_back_2(&env, ft_lstnew_2(var, value));
+	}
+	else
+		ft_lstadd_back_2(&env, ft_lstnew_2(var, NULL));
 	return (env);
 }
 
@@ -63,7 +71,7 @@ int	env_update(t_list **head, char *env_var, char *new)
 		{
 			free(current->value);
 			current->value = ft_strdup(new);
-			printf("|%s=%s|\n", current->var,current->value);
+			// printf("|%s=%s|\n", current->var,current->value);
 			return (0);
 		}
 		current = current->next;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_str_1.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/03 02:36:31 by obouchta          #+#    #+#             */
-/*   Updated: 2024/03/15 01:18:06 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/03/17 00:29:23 by yboutsli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,7 @@ char	*ft_strjoin(char *s1, char *s2)
 int	ft_strcmp(const char *s1, const char *s2)
 {
 	size_t	i;
+
 	if (!s1 || !s2 || !s1[0])
 		return (1);
 	i = 0;

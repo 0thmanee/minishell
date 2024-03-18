@@ -6,13 +6,17 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 21:41:01 by obouchta          #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2024/03/15 23:58:54 by obouchta         ###   ########.fr       */
+=======
+/*   Updated: 2024/03/17 05:48:48 by obouchta         ###   ########.fr       */
+>>>>>>> Othmane
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_token	*ft_lstnew_1(char *value, int type, t_arg **args)
+t_token	*ft_lstnew_1(char *value, int type, t_value *args)
 {
 	t_token	*new_node;
 
@@ -46,15 +50,15 @@ void	ft_lstadd_back_1(t_token **lst, t_token *new_node)
 
 t_list	*ft_lstnew_2(void *content1, void *content2)
 {
-	t_list	*new_node;
+	t_list	*new;
 
-	new_node = malloc(sizeof(t_list));
-	if (!new_node)
+	new = malloc(sizeof(t_list));
+	if (!new)
 		return (NULL);
-	new_node->var = ft_strdup(content1);
-	new_node->value = ft_strdup(content2);
-	new_node->next = NULL;
-	return (new_node);
+	new->var = ft_strdup(content1);
+	new->value = ft_strdup(content2);
+	new->next = NULL;
+	return (new);
 }
 
 t_list	*ft_lstlast(t_list *lst)
@@ -69,19 +73,19 @@ t_list	*ft_lstlast(t_list *lst)
 	return (p);
 }
 
-void	ft_lstadd_back_2(t_list **lst, t_list *new_node)
+void	ft_lstadd_back_2(t_list **lst, t_list *new)
 {
 	t_list	*p;
 
 	p = NULL;
-	if (!lst || !new_node)
+	if (!lst || !new)
 		return ;
 	if (! *lst)
-		*lst = new_node;
+		*lst = new;
 	else
 	{
 		p = ft_lstlast(*lst);
-		p -> next = new_node;
+		p -> next = new;
 	}
 }
 

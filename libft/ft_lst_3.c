@@ -1,20 +1,13 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   execution.c                                        :+:      :+:    :+:   */
+/*   ft_lst_3.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/03/07 19:53:16 by obouchta          #+#    #+#             */
-/*   Updated: 2024/03/07 20:11:34 by obouchta         ###   ########.fr       */
+/*   Created: 2024/03/16 22:51:37 by obouchta          #+#    #+#             */
+/*   Updated: 2024/03/17 00:38:23 by yboutsli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-	
-void	ft_execution(t_token *token, t_list **env, t_list **set)
-{
-	(void)set;
-	(void)env;
-	(void)token;
-}

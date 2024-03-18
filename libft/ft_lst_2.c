@@ -5,78 +5,43 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/03/07 19:09:27 by obouchta          #+#    #+#             */
-/*   Updated: 2024/03/07 20:26:02 by obouchta         ###   ########.fr       */
+/*   Created: 2024/03/16 22:51:37 by obouchta          #+#    #+#             */
+/*   Updated: 2024/03/17 21:33:47 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	ft_lstfree(t_list **lst)
-{
-	t_list	*p;
-	t_list	*next;
 
-	if (!lst)
-		return ;
-	p = *lst;
-	while (p)
-	{
-		next = p -> next;
-		free(p->var);
-		free(p->value);
-		free(p);
-		p = next;
-	}
-	*lst = NULL;
+t_cmd	*ft_lstnew_3(char *cmd, char **args, t_file *infiles, t_file *outfiles)
+{
+	t_cmd	*new_node;
+
+	new_node = (t_cmd *)malloc(sizeof(t_cmd));
+	if (!new_node)
+		return (NULL);
+	new_node->cmd = cmd;
+	new_node->args = args;
+	new_node->infiles = infiles;
+	new_node->outfiles = outfiles;
+	new_node->next = NULL;
+	return (new_node);
 }
 
-int	free_spesific(t_free **lst, void *ptr)
+void	ft_lstadd_back_3(t_cmd **lst, t_cmd *new_node)
 {
-	t_free	*p;
-	t_free	*prev;
+	t_cmd	*curr;
 
-	if (!lst)
-		return (0);
-	p = *lst;
-	prev = NULL;
-	while (p)
-	{
-		if (p->ptr == ptr)
-		{
-			if (prev)
-				prev->next = p->next;
-			else
-				*lst = p->next;
-			free(p->ptr);
-			free(p);
-			return (1);
-		}
-		prev = p;
-		p = p->next;
-	}
-	return (0);
-}
-
-void	ft_free_ptrs(t_free **lst, void *ptr)
-{
-	t_free	*p;
-
-	if (!lst)
+	if (new_node == NULL)
 		return ;
-	p = *lst;
-	if (free_spesific(lst, ptr))
-		return ;
-	if (ptr == NULL)
+	if (*lst == NULL)
 	{
-		p = *lst;
-		while (p)
-		{
-			t_free *next = p->next;
-			free(p->ptr);
-			free(p);
-			p = next;
-		}
-		*lst = NULL;
+		*lst = new_node;
+		new_node->next = NULL;
+		return ;
 	}
+	curr = *lst;
+	while (curr && curr->next)
+		curr = curr->next;
+	curr->next = new_node;
 }
