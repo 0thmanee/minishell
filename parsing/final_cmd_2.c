@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/17 05:22:00 by obouchta          #+#    #+#             */
-/*   Updated: 2024/03/17 05:34:34 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/03/18 03:10:13 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,20 +28,22 @@ int	infiles_len(t_token *curr)
 
 int	extract_infiles_helper_1(t_token *curr, t_file **infiles, int *i)
 {
-	(*infiles)[*i]->fd = open(curr->value, O_RDWR);
-	if ((*infiles)[*i]->fd == -1)
-		return (0);
-	(*infiles)[*i]->type = 0;
+	(*infiles)[*i].fd = open(curr->value, O_RDWR);
+	if ((*infiles)[*i].fd == -1)
+		perror("minishell");
+	(*infiles)[*i].type = 0;
+	(*i)++;
 	return (1);
 }
 
 int	extract_infiles_helper_2(t_token *curr, t_file **infiles, int *i)
 {
-	(*infiles)[*i]->fd = -1;
-	(*infiles)[*i]->type = 1;
-	(*infiles)[*i]->delimiter = strdup(curr->value);
-	if (!(*infiles)[*i]->delimiter)
+	(*infiles)[*i].fd = -2;
+	(*infiles)[*i].type = 1;
+	(*infiles)[*i].delimiter = strdup(curr->value);
+	if (!(*infiles)[*i].delimiter)
 		return (0);
+	(*i)++;
 	return (1);
 }
 
@@ -67,5 +69,6 @@ int	extract_infiles(t_token *token, t_file **infiles)
 			return (0);
 		curr = curr->next;
 	}
+	(*infiles)[i].fd = -42;
 	return (1);
 }

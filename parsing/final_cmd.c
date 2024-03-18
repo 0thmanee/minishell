@@ -6,15 +6,16 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/17 02:23:24 by obouchta          #+#    #+#             */
-/*   Updated: 2024/03/17 05:34:07 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/03/18 01:45:39 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	final_command(t_token **tokens)
+int	final_command(t_token **tokens, t_cmd **command)
 {
 	t_token	*curr;
+	t_cmd	*new_cmd;
 	char	*cmd;
 	char	**args;
 	t_file	*infiles;
@@ -29,6 +30,10 @@ int	final_command(t_token **tokens)
 			if (!extract_command(curr, &cmd) || !extract_args(curr, &args)
 				|| !extract_infiles(curr, &infiles)|| !extract_outfiles(curr, &outfiles))
 				return (0);
+			new_cmd = ft_lstnew_3(cmd, args, infiles, outfiles);
+			if (!new_cmd)
+				return (0);
+			ft_lstadd_back_3(command, new_cmd);
 		}
 		while (curr && curr->type != PIPE)
 			curr = curr->next;

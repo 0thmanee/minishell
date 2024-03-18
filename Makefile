@@ -1,6 +1,6 @@
-builtins_files = cd.c env_utils.c echo.c pwd.c env.c set.c export.c
-parsing_files = main.c new_len.c add_spaces.c type_check.c get_cmd.c get_tokens.c remove_quotes.c join_args.c expanding_init_1.c expanding_init_2.c signals.c 
-libft_files = ft_str_1.c ft_str_2.c ft_lst_1.c ft_lst_2.c ft_lst_3.c ft_char.c ft_split.c 
+builtins_files =  env_utils.c env.c
+parsing_files = main.c new_len.c add_spaces.c type_check.c get_cmd.c get_tokens.c remove_quotes.c join_args.c expanding.c expanding_init_1.c expanding_init_2.c signals.c final_cmd.c final_cmd_1.c final_cmd_2.c final_cmd_3.c
+libft_files = ft_str_1.c ft_str_2.c ft_lst_1.c ft_lst_2.c ft_char.c ft_split.c 
 execution_files = execution_1.c execution_utils_1.c execv_utils.c expanding.c
 
 builtins_srcs = $(addprefix builtins/,$(builtins_files))
@@ -18,8 +18,8 @@ READLINEDIR = $(shell brew --prefix readline)
 NAME = minishell
 
 all: $(NAME)
-$(NAME): $(builtins_objects) $(parsing_objects) $(libft_objects) $(execution_objects)
-	@cc $(CFLAGS) $(builtins_objects) $(parsing_objects) $(libft_objects) $(execution_objects) -o $(NAME) -L$(READLINEDIR)/lib -lreadline
+$(NAME): $(parsing_objects) $(libft_objects) $(builtins_objects)
+	@cc $(CFLAGS) $(parsing_objects) $(libft_objects) $(builtins_objects) -o $(NAME) -L$(READLINEDIR)/lib -lreadline
 	@printf "\033[32m[ ✔ ] %s\n\033[0m" "Program Created"
 
 object_files/builtins/%.o: builtins/%.c minishell.h
@@ -34,9 +34,9 @@ object_files/libft/%.o: libft/%.c minishell.h
 	@mkdir -p object_files/libft
 	@cc $(CFLAGS) -c $< -I . -o $@
 
-object_files/execution/%.o: execution/%.c minishell.h
-	@mkdir -p object_files/execution
-	@cc $(CFLAGS) -c $< -I . -o $@
+# object_files/execution/%.o: execution/%.c minishell.h
+# 	@mkdir -p object_files/execution
+# 	@cc $(CFLAGS) -c $< -I . -o $@
 
 
 clean:

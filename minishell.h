@@ -73,8 +73,9 @@ typedef struct s_cmd
 {
     char   *cmd;
     char   **args;
-    t_file **infiles;
-    t_file **outfiles;
+    t_file *infiles;
+    t_file *outfiles;
+    struct s_cmd    *next;
 }   t_cmd;
 
 typedef struct s_list
@@ -105,6 +106,8 @@ t_token	*ft_lstnew_1(char *value, int type, t_value *args);
 void	ft_lstadd_back_1(t_token **lst, t_token *new_node);
 t_list	*ft_lstnew_2(void *content1, void *content2);
 void	ft_lstadd_back_2(t_list **lst, t_list *new);
+t_cmd	*ft_lstnew_3(char *cmd, char **args, t_file *infiles, t_file *outfiles);
+void	ft_lstadd_back_3(t_cmd **lst, t_cmd *new_node);
 t_list	*ft_lstlast(t_list *lst);
 int		ft_isalpha(int c);
 char	**ft_split(char const *s, char c);
@@ -129,7 +132,8 @@ t_token	*get_pipe(char *input, int *i, int type);
 int     remove_quotes(t_token **tokens);
 int     join_args(t_token **tokens);
 int     extract_expr(char *src, char **dest, int *i);
-int	    final_command(t_token **tokens);
+void	expanding(t_token **token, t_list *list_env);
+int	    final_command(t_token **tokens, t_cmd **command);
 void	check_for_var_helper_1(char *value, int *vars, int *i, int *j);
 void	check_for_var_helper_2(char *value, int *vars, int *i, int *j);
 void	check_for_var_helper_3(char *value, int *vars, int *i, int *j);
@@ -158,5 +162,5 @@ char	**path(t_list **envp);
 void	ft_free(char **tab);
 char	*cmd_path(char *cmd, char **npath);
 char	**execve_argv(t_token *token, char **npath);
-char	*expanding(char *str, t_list *list_env);
+// char	*expanding(char *str, t_list *list_env);
 #endif

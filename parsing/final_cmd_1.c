@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/17 04:30:01 by obouchta          #+#    #+#             */
-/*   Updated: 2024/03/17 05:21:42 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/03/17 21:12:20 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,19 +44,17 @@ int	extract_command(t_token *token, char **cmd)
 	return (1);
 }
 
-int	extract_args_helper(t_token *curr, char ***args, int *i)
+int	extract_args_helper(t_token *curr, char ***args)
 {
-	t_value	*curr_arg;
+	int	j;
 
-	curr_arg = curr->args;
-	while (curr_arg)
+	j = 0;
+	while (j < curr->args_len)
 	{
-		args[*i] = ft_strdup(curr_arg->value);
-		if (!args[(*i)++])
-			return (0);
-		curr_arg = curr_arg->next;
+		(*args)[j] = ft_strdup(curr->args[j].value);
+		j++;
 	}
-	args[*i]= NULL;
+	(*args)[j] = NULL;
 	return (1);
 }
 
@@ -74,7 +72,7 @@ int	extract_args(t_token *token, char ***args)
 			*args = malloc((curr->args_len + 1) * sizeof(char *));
 			if (!*args)
 				return (0);
-			if (!extract_args_helper(curr, args, &i))
+			if (!extract_args_helper(curr, args))
 				return (0);
 			return (1);
 		}
