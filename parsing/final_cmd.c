@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/17 02:23:24 by obouchta          #+#    #+#             */
-/*   Updated: 2024/03/18 01:45:39 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/03/18 22:57:45 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,10 +34,10 @@ int	final_command(t_token **tokens, t_cmd **command)
 			if (!new_cmd)
 				return (0);
 			ft_lstadd_back_3(command, new_cmd);
+			if (curr && curr->type)
+				curr = curr->next;
 		}
 		while (curr && curr->type != PIPE)
-			curr = curr->next;
-		if (curr)
 			curr = curr->next;
 	}
 	return (1);

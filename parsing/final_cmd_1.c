@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/17 04:30:01 by obouchta          #+#    #+#             */
-/*   Updated: 2024/03/17 21:12:20 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/03/18 22:55:54 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,8 @@ int	extract_command(t_token *token, char **cmd)
 	t_token	*curr;
 
 	curr = token;
+	if (curr && curr->type == PIPE)
+		curr = curr->next;
 	while (curr && curr->type != PIPE)
 	{
 		if (curr->type == CMD)
@@ -65,6 +67,8 @@ int	extract_args(t_token *token, char ***args)
 
 	curr = token;
 	i = 0;
+	if (curr && curr->type == PIPE)
+		curr = curr->next;
 	while (curr && curr->type != PIPE)
 	{
 		if (curr->type == CMD && curr->args_len)
