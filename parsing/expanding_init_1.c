@@ -6,11 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/16 03:19:46 by obouchta          #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2024/03/16 03:25:04 by obouchta         ###   ########.fr       */
-=======
 /*   Updated: 2024/03/17 06:34:37 by obouchta         ###   ########.fr       */
->>>>>>> Othmane
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,18 +57,6 @@ int	specify_vars_helper(t_token *curr)
 	int	i;
 
 	i = 0;
-<<<<<<< HEAD
-	while (i < curr->args_len)
-	{
-		curr->args[i]->vars_len = calc_vars(curr->args[i]->value);
-		if (curr->args[i]->vars_len)
-			curr->args[i]->vars = malloc(curr->args[i]->vars_len * sizeof(int));
-		if (!curr->args[i]->vars)
-			return (0);
-		check_for_var(curr->args[i]->value, curr->args[i]->vars, curr->args[i]->vars_len);
-		i++;
-	}
-=======
 	if (!curr->args_len)
 		return (1);
 	while (i < curr->args_len)
@@ -86,7 +70,6 @@ int	specify_vars_helper(t_token *curr)
 		i++;
 	}
 	i = 0;
->>>>>>> Othmane
 	return (1);
 }
 
@@ -98,16 +81,6 @@ int	specify_vars(t_token **tokens)
 	while (curr)
 	{
 		curr->vars_len = calc_vars(curr->value);
-<<<<<<< HEAD
-		if (curr->vars_len)
-			curr->vars = malloc(curr->vars_len * sizeof(int));
-		if (!curr->vars)
-			return (0);
-		check_for_var(curr->value, curr->vars, curr->vars_len);
-		if (curr->args)
-			if (!specify_vars_helper(curr))
-				return (0);
-=======
 		if (curr->vars_len > 0)
 		{
 			curr->vars = malloc(curr->vars_len * sizeof(int));
@@ -120,7 +93,6 @@ int	specify_vars(t_token **tokens)
 			if (!specify_vars_helper(curr))
 				return (0);
 		}
->>>>>>> Othmane
 		curr = curr->next;
 	}
 	return (1);

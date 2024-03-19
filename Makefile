@@ -1,13 +1,7 @@
-<<<<<<< HEAD
-builtins_files = execution.c cd.c env_utils.c echo.c pwd.c env.c set.c export.c
-parsing_files = main.c new_len.c add_spaces.c type_check.c get_cmd.c get_tokens.c remove_quotes.c join_args.c expanding_init_1.c expanding_init_2.c signals.c 
-libft_files = ft_str_1.c ft_str_2.c ft_lst_1.c ft_lst_2.c ft_char.c
-=======
 builtins_files =  env_utils.c env.c
 parsing_files = main.c new_len.c add_spaces.c type_check.c get_cmd.c get_tokens.c remove_quotes.c join_args.c expanding.c expanding_init_1.c expanding_init_2.c signals.c final_cmd.c final_cmd_1.c final_cmd_2.c final_cmd_3.c
 libft_files = ft_str_1.c ft_str_2.c ft_lst_1.c ft_lst_2.c ft_char.c ft_split.c 
 execution_files = execution_1.c execution_utils_1.c execv_utils.c expanding.c
->>>>>>> Othmane
 
 builtins_srcs = $(addprefix builtins/,$(builtins_files))
 parsing_srcs = $(addprefix parsing/,$(parsing_files))

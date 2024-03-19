@@ -6,11 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 07:19:14 by obouchta          #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2024/03/16 02:54:02 by obouchta         ###   ########.fr       */
-=======
 /*   Updated: 2024/03/17 06:07:30 by obouchta         ###   ########.fr       */
->>>>>>> Othmane
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,14 +133,7 @@ int	get_quoted_arg(char *input, int *i, int *j, t_value *args)
 		(*i)++;
 	if (input[*i] == '\'' || input[*i] == '\"')
 	{
-<<<<<<< HEAD
-		args[*j] = malloc(sizeof(t_arg));
-		if (!args[*j])
-			return (-1);
-		args[*j]->value = quoted_cmd(input, i);
-=======
 		args[*j].value = quoted_cmd(input, i);
->>>>>>> Othmane
 		(*j)++;
 		return (1);
 	}

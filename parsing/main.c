@@ -6,15 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 08:42:35 by obouchta          #+#    #+#             */
-<<<<<<< HEAD
-<<<<<<< HEAD
-/*   Updated: 2024/03/16 03:29:05 by obouchta         ###   ########.fr       */
-=======
-/*   Updated: 2024/03/18 03:14:25 by obouchta         ###   ########.fr       */
->>>>>>> Othmane
-=======
 /*   Updated: 2024/03/18 03:36:57 by obouchta         ###   ########.fr       */
->>>>>>> Othmane
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,17 +46,10 @@ void	print_it(t_token *tokens)
 			printf("args [%d]:\n", curr->args_len);
 			while (i < curr->args_len)
 			{
-<<<<<<< HEAD
-				printf("{%s}\n[ ", curr->args[i]->value);
-				if (curr->args[i]->vars_len)
-					for (int j = 0; j < curr->args[i]->vars_len; j++)
-						printf("%d ", curr->args[i]->vars[j]);
-=======
 				printf("{%s}\n[ ", curr->args[i].value);
 				if (curr->args[i].vars_len)
 					for (int j = 0; j < curr->args[i].vars_len; j++)
 						printf("%d ", curr->args[i].vars[j]);
->>>>>>> Othmane
 				printf("]\n");
 				i++;
 			}
@@ -74,8 +59,6 @@ void	print_it(t_token *tokens)
 	}
 }
 
-<<<<<<< HEAD
-=======
 void print_it_2(t_cmd *cmds)
 {
 	t_cmd	*curr;
@@ -126,7 +109,6 @@ void print_it_2(t_cmd *cmds)
 	}
 }
 
->>>>>>> Othmane
 int	tokenize_input(char *input, t_token **tokens)
 {
 	t_token	*new_token;
@@ -204,18 +186,10 @@ int	process_input(char *input, t_list **list_env, t_list **list_set)
 		return (0);
 	if (!remove_quotes(&tokens))
 		return (0);
-<<<<<<< HEAD
-	print_it(tokens);
-	ft_execution(tokens, list_env, list_set);
-=======
 	expanding(&tokens, *list_env);
 	if (!final_command(&tokens, &cmd))
 		return (0);
 	print_it_2(cmd);
-<<<<<<< HEAD
-	// ft_execution(tokens, list_env, list_set);
->>>>>>> Othmane
-=======
 	// the new linked list is cmd
 	// struct contains char *cmd which is the command (cmd = NULL if there's any)
 	// char **args which are the args the last entry has NULL (args = NULL if there's any)
@@ -226,7 +200,6 @@ int	process_input(char *input, t_list **list_env, t_list **list_set)
 	// char *delimiter for the here doc, else it's NULL
 	// 9AD 9AD
 	// ft_execution(cmd, list_env, list_set);
->>>>>>> Othmane
 	return (1);
 }
 

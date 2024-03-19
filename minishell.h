@@ -6,11 +6,7 @@
 /*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 09:26:55 by yboutsli          #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2024/03/16 03:28:22 by obouchta         ###   ########.fr       */
-=======
 /*   Updated: 2024/03/1 by ybou41li         ###   ########.fr       */
->>>>>>> Othmane
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,24 +47,14 @@ typedef enum
 typedef struct s_value
 {
     char    *value;
-<<<<<<< HEAD
-    int  vars_len;
-    int  *vars;
-} t_arg;
-=======
     int     vars_len;
     int     *vars;
 }   t_value;
->>>>>>> Othmane
 
 typedef struct s_token
 {
     char	*value;
-<<<<<<< HEAD
-    t_arg   **args;
-=======
     t_value   *args;
->>>>>>> Othmane
     int  args_len;
     int		type;
     int  vars_len;
@@ -109,9 +95,9 @@ typedef	struct s_free
 // libft
 char	*ft_strcpy(char *dest, const char *src);
 char	*ft_strjoin(char *s1, char *s2);
-int     ft_strlen(char *s);
-int     ft_strlcat(char *dest, char *src, int dstsize);
-int     ft_strcmp(const char *s1, const char *s2);
+int	    ft_strlen(char *s);
+int	    ft_strlcat(char *dest, char *src, int dstsize);
+int	    ft_strcmp(const char *s1, const char *s2);
 int     ft_strncmp(const char *s1, const char *s2, size_t n);
 char	*ft_substr(char const *s, int start, int len);
 char	*ft_strdup(char *str);
@@ -124,13 +110,8 @@ t_cmd	*ft_lstnew_3(char *cmd, char **args, t_file *infiles, t_file *outfiles);
 void	ft_lstadd_back_3(t_cmd **lst, t_cmd *new_node);
 t_list	*ft_lstlast(t_list *lst);
 int		ft_isalpha(int c);
-<<<<<<< HEAD
-int	    is_whitespace(char c);
-
-=======
 char	**ft_split(char const *s, char c);
 int		is_whitespace(char c);
->>>>>>> Othmane
 // Parsing
 int     is_whitespace(char c);
 void	handle_signals(int signum);
@@ -143,11 +124,7 @@ int     get_last_type(t_token *tokens);
 int     calc_args_len_helper(char *input, int *i, int *len);
 int     calc_args_len(char *input, int i);
 t_token	*get_cmd(char *input, int *i, int prev_type);
-<<<<<<< HEAD
-t_arg **get_args(char *input, int *i, int *args_len);
-=======
 t_value *get_values(char *input, int *i, int *args_len);
->>>>>>> Othmane
 int     valid_quotes(char *input);
 char	*quoted_cmd(char *input, int *i);
 t_token	*get_in_out(char *input, int *i, int type, t_token **tokens);
@@ -155,24 +132,17 @@ t_token	*get_pipe(char *input, int *i, int type);
 int     remove_quotes(t_token **tokens);
 int     join_args(t_token **tokens);
 int     extract_expr(char *src, char **dest, int *i);
-<<<<<<< HEAD
-=======
 void	expanding(t_token **token, t_list *list_env);
 int	    final_command(t_token **tokens, t_cmd **command);
->>>>>>> Othmane
 void	check_for_var_helper_1(char *value, int *vars, int *i, int *j);
 void	check_for_var_helper_2(char *value, int *vars, int *i, int *j);
 void	check_for_var_helper_3(char *value, int *vars, int *i, int *j);
 int	    specify_vars(t_token **tokens);
-<<<<<<< HEAD
-
-=======
 int	    tokens_len(t_token *tokens);
 int	    extract_command(t_token *token, char **cmd);
 int	    extract_args(t_token *token, char ***args);
 int	    extract_infiles(t_token *token, t_file **infiles);
 int	    extract_outfiles(t_token *token, t_file **outfiles);
->>>>>>> Othmane
  // Removable
 void	print_it(t_token *tokens);
 // Execution
