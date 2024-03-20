@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/16 03:19:46 by obouchta          #+#    #+#             */
-/*   Updated: 2024/03/17 06:34:37 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/03/20 03:13:51 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,8 @@ int	specify_vars_helper(t_token *curr)
 			curr->args[i].vars = malloc(curr->args[i].vars_len * sizeof(int));
 		if (!curr->args[i].vars)
 			return (0);
-		check_for_var(curr->args[i].value, curr->args[i].vars, curr->args[i].vars_len);
+		check_for_var(curr->args[i].value,
+			curr->args[i].vars, curr->args[i].vars_len);
 		i++;
 	}
 	i = 0;
