@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/16 01:46:06 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/03/19 01:10:20 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/03/20 22:03:05 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,20 +30,18 @@ void	ft_lstadd_back_aloc(t_free **list_aloc, t_free *new)
 	curr->next = new;
 }
 
-t_free	*ft_lstnew_aloc1(void *ptr)
+t_free	*ft_lstnew_aloc(void *ptr)
 {
 	t_free	*new;
 
 	new = malloc(sizeof(t_free));
 	if (!new)
 		return(NULL);
-	new->ptr1 = ptr;
-	new->ptr2 = NULL;
-	new->next = NULL;
+	new->ptr = ptr;
 	return (new);
 }
 
-void	*ft_malloc1(t_free **list_aloc, int	size)
+void	*ft_malloc1(t_free **list_aloc, size_t size)
 {
 	t_free	*new;
 	void	*ptr;
@@ -56,23 +54,10 @@ void	*ft_malloc1(t_free **list_aloc, int	size)
 	return (ptr);
 }
 
-t_free	*ft_lstnew_aloc2(void **ptr)
+void	**ft_malloc2(t_free **list_aloc, size_t size)
 {
 	t_free	*new;
-
-	new = malloc(sizeof(t_free));
-	if (!new)
-		return(NULL);
-	new->ptr1 = NULL;
-	new->ptr2 = ptr;
-	new->next = NULL;
-	return (new);
-}
-
-void	**ft_malloc2(t_free **list_aloc, int size)
-{
-	t_free	*new;
-	void	**ptr;
+	void	*ptr;
 
 	ptr = malloc(size);
 	if (!ptr)
@@ -81,18 +66,45 @@ void	**ft_malloc2(t_free **list_aloc, int size)
 	ft_lstadd_back_aloc(list_aloc, new);
 	return (ptr);
 }
-void	ft_free_ptr1(t_free **list_aloc, void *ptr)
+void	ft_free_ptr(t_free **list_aloc, void *ptr)
 {
-	t_free	*current;
+	t_free *current;
+	t_free *prev;
 
-	current = *list_aloc;
+	current = *list_aloc
+	prev = NULL
 	while (current)
 	{
-		if (current->ptr1 == ptr)
+		if (current->ptr == ptr)
 		{
-			free(current->ptr1);
+			if (prev)
+				prev->next = current->next;
+			else
+				*list_aloc = current->next;
+			
+			free(current->ptr);
+			free(current);
 			return ;
 		}
+		prev = current;
 		current = current->next;
 	}
+}
+
+void ft_free_all(t_free **list_aloc)
+{
+	t_free *current = *list_aloc;
+	t_free *next;
+
+	while (current)
+	{
+		next = current->next;
+		if (current->ptr1)
+			free(current->ptr1);
+		else if (current->ptr2)
+			free(current->ptr2);
+		free(current);
+		current = next;
+	}
+	*list_aloc = NULL;
 }
