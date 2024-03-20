@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/17 05:23:00 by obouchta          #+#    #+#             */
-/*   Updated: 2024/03/18 22:56:04 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/03/20 03:22:44 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,23 @@ int	extract_outfiles_helper_2(t_token *curr, t_file **outfiles, int *i)
 	return (1);
 }
 
+int	extract_outfiles_helper(t_token **curr, t_file **outfiles, int *i)
+{
+	if ((*curr)->type == OUTPUT)
+	{
+		(*curr) = (*curr)->next;
+		if (!extract_outfiles_helper_1((*curr), outfiles, i))
+			return (0);
+	}
+	if ((*curr)->type == APPEND)
+	{
+		(*curr) = (*curr)->next;
+		if (!extract_outfiles_helper_2((*curr), outfiles, i))
+			return (0);
+	}
+	return (1);
+}
+
 int	extract_outfiles(t_token *token, t_file **outfiles)
 {
 	t_token	*curr;
@@ -64,18 +81,8 @@ int	extract_outfiles(t_token *token, t_file **outfiles)
 		return (0);
 	while (curr && curr->type != PIPE)
 	{
-		if (curr->type == OUTPUT)
-		{
-			curr = curr->next;
-			if (!extract_outfiles_helper_1(curr, outfiles, &i))
-				return (0);
-		}
-		if (curr->type == APPEND)
-		{
-			curr = curr->next;
-			if (!extract_outfiles_helper_2(curr, outfiles, &i))
-				return (0);
-		}
+		if (!extract_outfiles_helper(&curr, outfiles, &i))
+			return (0);
 		curr = curr->next;
 	}
 	(*outfiles)[i].fd = -42;

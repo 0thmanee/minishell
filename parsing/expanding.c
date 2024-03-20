@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/15 02:58:32 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/03/18 03:19:52 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/03/20 21:13:55 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,9 @@ char	*replace_mini_str(char *str, int start, int end, char *mini_str)
 }
 int char_is_valid(char c)
 {
-    if (c == '$' || c == '.' || c == '!' || c == '@' || c == '#' || c == '\0' || c == ' ' || c == '-')
+	if (!(c >= 'a' && c <= 'z')
+		&& !(c >= 'A' && c <= 'Z')
+		&& !(c >= '0' && c <= '9') && c != '_')
 		return (1);
 	else
 		return (0);

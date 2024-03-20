@@ -8,12 +8,16 @@
 /*   Created: 2024/03/01 08:42:35 by obouchta          #+#    #+#             */
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 /*   Updated: 2024/03/16 03:29:05 by obouchta         ###   ########.fr       */
 =======
 /*   Updated: 2024/03/18 03:14:25 by obouchta         ###   ########.fr       */
 >>>>>>> Othmane
 =======
 /*   Updated: 2024/03/18 03:36:57 by obouchta         ###   ########.fr       */
+>>>>>>> Othmane
+=======
+/*   Updated: 2024/03/20 03:11:11 by obouchta         ###   ########.fr       */
 >>>>>>> Othmane
 /*                                                                            */
 /* ************************************************************************** */
@@ -154,38 +158,18 @@ int	tokenize_input(char *input, t_token **tokens)
 	return (1);
 }
 
-int	syntax_error(t_token *tokens)
-{
-	t_token *curr;
-	int		type;
-
-	curr = tokens;
-	if (curr->type == PIPE)
-		return (1);
-	while (curr)
-	{
-		type = curr->type;
-		if (type == INPUT || type == OUTPUT || type == APPEND || type == HERE_DOC)
-		{
-			if (!curr->next || curr->next->type == INPUT || curr->next->type == OUTPUT
-				|| curr->next->type == APPEND || curr->next->type == PIPE)
-				return (1);
-		}
-		if (type == PIPE && (!curr->next || curr->next->type == PIPE))
-			return (1);
-		curr = curr->next;
-	}
-	return (0);
-}
-
 int	process_input(char *input, t_list **list_env, t_list **list_set)
 {
 	t_token *tokens;
 	t_cmd	*cmd;
+	int		here_doc;
+	int		s_error;
 
 	(void)list_set;	
 	tokens = NULL;
 	cmd = NULL;
+	here_doc = 0;
+	s_error = 1;
 	if (!valid_quotes(input))
 		return (2);
 	input = add_spaces(input);
@@ -196,8 +180,14 @@ int	process_input(char *input, t_list **list_env, t_list **list_set)
 		return (0);
 	if (!tokenize_input(input, &tokens))
 		return (0);
-	if (syntax_error(tokens))
+	if (syntax_error(tokens, &here_doc))
+	{
+		if (here_doc)
+			open_heredoc(tokens, here_doc, &s_error);
+		if (!s_error)
+			return (3);
 		return (2);
+	}
 	if (!join_args(&tokens))
 		return (0);
 	if (!specify_vars(&tokens))
@@ -236,6 +226,7 @@ int read_input(t_list **list_env)
 	char 	*input;
 
 	list_set = NULL;
+	using_history();
 	signal(SIGINT, handle_signals);
 	signal(SIGQUIT, handle_signals);
 	rl_catch_signals = 0;
@@ -269,7 +260,6 @@ int main(int ac, char **av, char **envp)
 		env_init(&list_env);
 	if (!isatty(STDIN_FILENO))
 		exit(1);
-	using_history();
 	if (!read_input(&list_env))
 		return (1);
 }

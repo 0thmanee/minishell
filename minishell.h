@@ -27,7 +27,7 @@
 # include <fcntl.h>
 # include <readline/readline.h>
 # include <readline/history.h>
-# define BUFFER_SIZE			2048
+# define BUFFER_SIZE			1
 # define ANSI_COLOR_CYAN		"\x1b[36m"
 # define ANSI_COLOR_RESET	"\x1b[0m"
 
@@ -106,6 +106,12 @@ typedef	struct s_free
 	struct s_free	*next;
 }	t_free;
 
+typedef struct s_get_line
+{
+	char	*total_str;
+	int		end_file;
+}	t_get_line;
+
 // libft
 char	*ft_strcpy(char *dest, const char *src);
 char	*ft_strjoin(char *s1, char *s2);
@@ -130,6 +136,21 @@ int	    is_whitespace(char c);
 =======
 char	**ft_split(char const *s, char c);
 int		is_whitespace(char c);
+<<<<<<< HEAD
+>>>>>>> Othmane
+=======
+
+// Get-next-line
+
+char	*get_next_line(int fd);
+char	*new_total(t_get_line *total_data);
+char	*extract_line(char *total_str);
+char	*read_file(char *total_str, int fd);
+char	*ft_strjoin_2(char *total_str, char *buffer);
+void	ft_strcpy_2(char *dest, char *src);
+int		ft_strchr(char *buffer, int c);
+void	free_total(char **total_str);
+
 >>>>>>> Othmane
 // Parsing
 int     is_whitespace(char c);
@@ -172,6 +193,11 @@ int	    extract_command(t_token *token, char **cmd);
 int	    extract_args(t_token *token, char ***args);
 int	    extract_infiles(t_token *token, t_file **infiles);
 int	    extract_outfiles(t_token *token, t_file **outfiles);
+<<<<<<< HEAD
+>>>>>>> Othmane
+=======
+int     syntax_error(t_token *tokens, int *here_doc);
+void    open_heredoc(t_token *tokens, int here_doc, int *s_error);
 >>>>>>> Othmane
  // Removable
 void	print_it(t_token *tokens);

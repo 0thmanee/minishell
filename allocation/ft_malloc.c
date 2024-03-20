@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_malloc.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
+/*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/16 01:46:06 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/03/16 02:26:37 by yboutsli         ###   ########.fr       */
+/*   Updated: 2024/03/19 01:10:20 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ t_free	*ft_lstnew_aloc2(void **ptr)
 	return (new);
 }
 
-void	**ft_malloc2(t_free **list_aloc, int	size)
+void	**ft_malloc2(t_free **list_aloc, int size)
 {
 	t_free	*new;
 	void	**ptr;
