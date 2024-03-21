@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/17 04:30:01 by obouchta          #+#    #+#             */
-/*   Updated: 2024/03/18 22:55:54 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/03/21 07:35:46 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ int	extract_command(t_token *token, char **cmd)
 	{
 		if (curr->type == CMD)
 		{
-			*cmd = ft_strdup(curr->value);
+			*cmd = ft_strdup_1(curr->value);
 			if (!*cmd)
 				return (0);
 			return (1);
@@ -53,7 +53,7 @@ int	extract_args_helper(t_token *curr, char ***args)
 	j = 0;
 	while (j < curr->args_len)
 	{
-		(*args)[j] = ft_strdup(curr->args[j].value);
+		(*args)[j] = ft_strdup_1(curr->args[j].value);
 		j++;
 	}
 	(*args)[j] = NULL;

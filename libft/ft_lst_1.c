@@ -6,17 +6,17 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 21:41:01 by obouchta          #+#    #+#             */
-/*   Updated: 2024/03/17 05:48:48 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/03/21 07:36:03 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_token	*ft_lstnew_1(char *value, int type, t_value *args)
+t_token	*ft_lstnew_1(char *value, int type, t_value *args, t_free **ptrs)
 {
 	t_token	*new_node;
 
-	new_node = (t_token *)malloc(sizeof(t_token));
+	new_node = ft_malloc1(ptrs, sizeof(t_token));
 	if (!new_node)
 		return (NULL);
 	new_node->value = value;
@@ -51,8 +51,8 @@ t_list	*ft_lstnew_2(void *content1, void *content2)
 	new = malloc(sizeof(t_list));
 	if (!new)
 		return (NULL);
-	new->var = ft_strdup(content1);
-	new->value = ft_strdup(content2);
+	new->var = ft_strdup_1(content1);
+	new->value = ft_strdup_1(content2);
 	new->next = NULL;
 	return (new);
 }

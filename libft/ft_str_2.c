@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 16:47:50 by obouchta          #+#    #+#             */
-/*   Updated: 2024/03/20 03:08:40 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/03/21 07:28:42 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ char	*ft_substr(char const *s, int start, int len)
 	return (subs);
 }
 
-char	*ft_strdup(char *str)
+char	*ft_strdup(char *str, t_free **ptrs)
 {
 	char	*dest;
 	size_t	srclen;
@@ -56,7 +56,29 @@ char	*ft_strdup(char *str)
 	if (!str)
 		return (NULL);
 	srclen = ft_strlen(str);
-	dest = (char *)malloc(srclen + 1);
+	dest = ft_malloc1(ptrs, srclen + 1);
+	if (!dest)
+		(ft_free_all(ptrs), exit(1));
+	i = 0;
+	while (str[i])
+	{
+		dest[i] = str[i];
+		i++;
+	}
+	dest[i] = '\0';
+	return (dest);
+}
+
+char	*ft_strdup_1(char *str)
+{
+	char	*dest;
+	size_t	srclen;
+	size_t	i;
+
+	if (!str)
+		return (NULL);
+	srclen = ft_strlen(str);
+	dest = malloc(srclen + 1);
 	if (!dest)
 		return (NULL);
 	i = 0;
@@ -69,29 +91,31 @@ char	*ft_strdup(char *str)
 	return (dest);
 }
 
-char	*ft_strtrim(char *input)
+void	ft_strtrim(char **input, t_free **ptrs)
 {
 	int	i;
 	int	start;
 	int	new_len;
+	char	*tmp;
 
-	i = 0;
-	new_len = 0;
-	while (input[i] == ' ')
+	(i = 0, new_len = 0, tmp = *input);
+	while ((*input)[i] == ' ')
 		i++;
+	if (i == ft_strlen(*input))
+	{
+		(*input = NULL, ft_free_ptr(ptrs, tmp));
+		return ;
+	}
 	start = i;
-	if (i == ft_strlen(input))
-		return (NULL);
-	while (input[i])
+	while ((*input)[i])
 	{
 		new_len++;
 		i++;
 	}
-	i--;
-	while (i >= 0 && input[i] == ' ')
-	{
+	while (--i >= 0 && (*input)[i] == ' ')
 		new_len--;
-		i--;
-	}
-	return (ft_substr(input, start, new_len));
+	*input = ft_substr(*input, start, new_len);
+	if (!(*input))
+		(ft_free_ptr(ptrs, tmp), exit(1));
+	ft_free_ptr(ptrs, tmp);
 }

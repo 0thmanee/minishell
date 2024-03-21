@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/15 02:58:32 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/03/20 21:13:55 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/03/21 07:35:13 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ char	*replace_mini_str(char *str, int start, int end, char *mini_str)
 
 	tmp1 = ft_substr(str, 0, start);
 	if (!tmp1 && mini_str)
-		tmp2 = ft_strdup(mini_str);
+		tmp2 = ft_strdup_1(mini_str);
 	else
 	{
 		tmp2 = ft_strjoin(tmp1, mini_str);
@@ -124,7 +124,7 @@ char	*expanding_helper(t_list *list_env, char *value, int vars_len, int *vars)
 	i = 0;
 	count = 0;
 	
-	result = ft_strdup(value);
+	result = ft_strdup_1(value);
 	if (!result)
 		return (0);
 	free(value);

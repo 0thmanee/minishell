@@ -87,8 +87,7 @@ typedef struct s_list
 
 typedef	struct s_free
 {
-	void	*ptr1;
-    void    *ptr2;
+	void	*ptr;
 	struct s_free	*next;
 }	t_free;
 
@@ -106,9 +105,13 @@ int	    ft_strlcat(char *dest, char *src, int dstsize);
 int	    ft_strcmp(const char *s1, const char *s2);
 int     ft_strncmp(const char *s1, const char *s2, size_t n);
 char	*ft_substr(char const *s, int start, int len);
-char	*ft_strdup(char *str);
-char	*ft_strtrim(char *input);
-t_token	*ft_lstnew_1(char *value, int type, t_value *args);
+char	*ft_strdup(char *str, t_free **ptrs);
+
+////////
+char	*ft_strdup_1(char *str);
+///////
+
+t_token	*ft_lstnew_1(char *value, int type, t_value *args, t_free **ptrs);
 void	ft_lstadd_back_1(t_token **lst, t_token *new_node);
 t_list	*ft_lstnew_2(void *content1, void *content2);
 void	ft_lstadd_back_2(t_list **lst, t_list *new);
@@ -118,38 +121,32 @@ t_list	*ft_lstlast(t_list *lst);
 int		ft_isalpha(int c);
 char	**ft_split(char const *s, char c);
 int		is_whitespace(char c);
-
-// Get-next-line
-
-char	*get_next_line(int fd);
-char	*new_total(t_get_line *total_data);
-char	*extract_line(char *total_str);
-char	*read_file(char *total_str, int fd);
-char	*ft_strjoin_2(char *total_str, char *buffer);
-void	ft_strcpy_2(char *dest, char *src);
-int		ft_strchr(char *buffer, int c);
-void	free_total(char **total_str);
+void	*ft_malloc1(t_free **list_aloc, size_t size);
+void	**ft_malloc2(t_free **list_aloc, size_t size);
+void	ft_free_ptr(t_free **list_aloc, void *ptr);
+void    ft_free_all(t_free **list_aloc);
 
 // Parsing
 int     is_whitespace(char c);
 void	handle_signals(int signum);
 int     ft_new_len(char *input);
 int     quoted(char *input, int i);
-char	*add_spaces(char *input);
+void	add_spaces(char **input, t_free **ptrs);
+void	ft_strtrim(char **input, t_free **ptrs);
 int     regonize_type(char *input, int i);
 int     regonize_type_2(int prev_type);
 int     get_last_type(t_token *tokens);
 int     calc_args_len_helper(char *input, int *i, int *len);
 int     calc_args_len(char *input, int i);
-t_token	*get_cmd(char *input, int *i, int prev_type);
-t_value *get_values(char *input, int *i, int *args_len);
+t_token	*get_cmd(char *input, int *i, int prev_type, t_free **ptrs);
+t_value *get_values(char *input, int *i, int *args_len, t_free **ptrs);
 int     valid_quotes(char *input);
-char	*quoted_cmd(char *input, int *i);
-t_token	*get_in_out(char *input, int *i, int type, t_token **tokens);
-t_token	*get_pipe(char *input, int *i, int type);
+char	*quoted_cmd(char *input, int *i, t_free **ptrs);
+t_token	*get_in_out(char *input, int *i, t_token **tokens, t_free **ptrs);
+t_token	*get_pipe(char *input, int *i, int type, t_free **ptrs);
 int     remove_quotes(t_token **tokens);
-int     join_args(t_token **tokens);
-int     extract_expr(char *src, char **dest, int *i);
+int	    join_args(t_token **tokens, t_free **ptrs);
+int	    extract_expr(char *src, char **dest, int *i, t_free **ptrs);
 void	expanding(t_token **token, t_list *list_env);
 int	    final_command(t_token **tokens, t_cmd **command);
 void	check_for_var_helper_1(char *value, int *vars, int *i, int *j);
@@ -163,6 +160,7 @@ int	    extract_infiles(t_token *token, t_file **infiles);
 int	    extract_outfiles(t_token *token, t_file **outfiles);
 int     syntax_error(t_token *tokens, int *here_doc);
 void    open_heredoc(t_token *tokens, int here_doc, int *s_error);
+
  // Removable
 void	print_it(t_token *tokens);
 // Execution

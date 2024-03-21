@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 08:42:35 by obouchta          #+#    #+#             */
-/*   Updated: 2024/03/20 03:11:11 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/03/21 07:30:17 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,31 +109,31 @@ void print_it_2(t_cmd *cmds)
 	}
 }
 
-int	tokenize_input(char *input, t_token **tokens)
+int	tokenize_input(char **input, t_token **tokens, t_free **ptrs)
 {
 	t_token	*new_token;
 	int		i;
 
 	i = 0;
-	while (input[i])
+	while ((*input)[i])
 	{
-		if (i == 0 || is_whitespace(input[i]))
+		if (i == 0 || is_whitespace((*input)[i]))
 		{
-			while (input[i] && is_whitespace(input[i]))
+			while ((*input)[i] && is_whitespace((*input)[i]))
 				i++;
-			if (regonize_type(input, i) != EXPRESSION && regonize_type(input, i) != PIPE)
-				new_token = get_in_out(input, &i, regonize_type(input, i), tokens);
-			else if (regonize_type(input, i) == PIPE)
-				new_token = get_pipe(input, &i, PIPE);
+			if (regonize_type(*input, i) != EXPRESSION && regonize_type(*input, i) != PIPE)
+				new_token = get_in_out(*input, &i, tokens, ptrs);
+			else if (regonize_type(*input, i) == PIPE)
+				new_token = get_pipe(*input, &i, PIPE, ptrs);
 			else
-				new_token = get_cmd(input, &i, CMD);
+				new_token = get_cmd(*input, &i, CMD, ptrs);
 			if (new_token)
 				ft_lstadd_back_1(tokens, new_token);
 		}
 		else
 			i++;
 	}
-	return (1);
+	return ((ft_free_ptr(ptrs, *input)), 1);
 }
 
 int	process_input(char *input, t_list **list_env, t_list **list_set)
@@ -142,21 +142,22 @@ int	process_input(char *input, t_list **list_env, t_list **list_set)
 	t_cmd	*cmd;
 	int		here_doc;
 	int		s_error;
+	t_free	*allocated_ptrs;
 
-	(void)list_set;	
+	(void)list_set;
+	(void)list_env;
+	allocated_ptrs = NULL;
 	tokens = NULL;
 	cmd = NULL;
 	here_doc = 0;
 	s_error = 1;
 	if (!valid_quotes(input))
 		return (2);
-	input = add_spaces(input);
+	add_spaces(&input, &allocated_ptrs);
+	ft_strtrim(&input, &allocated_ptrs);
 	if (!input)
-		return (0);
-	input = ft_strtrim(input);
-	if (!input)
-		return (0);
-	if (!tokenize_input(input, &tokens))
+		return (1);
+	if (!tokenize_input(&input, &tokens, &allocated_ptrs))
 		return (0);
 	if (syntax_error(tokens, &here_doc))
 	{
@@ -166,7 +167,7 @@ int	process_input(char *input, t_list **list_env, t_list **list_set)
 			return (3);
 		return (2);
 	}
-	if (!join_args(&tokens))
+	if (!join_args(&tokens, &allocated_ptrs))
 		return (0);
 	if (!specify_vars(&tokens))
 		return (0);
@@ -176,16 +177,7 @@ int	process_input(char *input, t_list **list_env, t_list **list_set)
 	if (!final_command(&tokens, &cmd))
 		return (0);
 	print_it_2(cmd);
-	// the new linked list is cmd
-	// struct contains char *cmd which is the command (cmd = NULL if there's any)
-	// char **args which are the args the last entry has NULL (args = NULL if there's any)
-	// t_value *infiles and t_value *outfiles (I/Ofiles = NULL if there's any)
-	// which are arrays for the I/O (Including here doc and append) containing the following:
-	// int fd (if -1 it's error), (if -2 it's here doc), else it's a regular fd for input, output or append
-	// int type; 0: infile, 1:here doc, 2:outfile, 3:append
-	// char *delimiter for the here doc, else it's NULL
-	// 9AD 9AD
-	// ft_execution(cmd, list_env, list_set);
+	
 	return (1);
 }
 
@@ -212,7 +204,6 @@ int read_input(t_list **list_env)
 				ft_strcpy(input, history_get(history_length)->line);
 		if (process_input(input, list_env, &list_set) == 2)
 			printf("minishell: syntax error\n");
-		free(input);
 	}
 	return (1);
 }
