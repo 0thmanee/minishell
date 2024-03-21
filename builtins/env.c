@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/05 14:36:05 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/03/07 19:50:49 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/03/21 06:08:55 by yboutsli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,8 @@ int	env(t_list *list_env)
 	current = list_env;
 	while (current)
 	{
-		printf("%s=%s\n", current->var, current->value);
+		if (current->value)
+			printf("%s=%s\n", current->var, current->value);
 		current = current->next;
 	}
 	return (0);

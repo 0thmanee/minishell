@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yasser03 <yasser03@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 20:29:05 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/03/14 04:05:28 by yasser03         ###   ########.fr       */
+/*   Updated: 2024/03/21 05:55:00 by yboutsli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,4 +87,31 @@ void	env_init(t_list	**env)
 	cwd = getcwd(NULL, 0);
 	ft_lstadd_back_2(env, ft_lstnew_2("PWD", cwd));
 	free(cwd);
+}
+int	var_exist(char *var, t_list *list_env)
+{
+	t_list	*current;
+
+	current = list_env;
+	while (current)
+	{
+		if (!ft_strcmp(current->var, var))
+			return (0);
+		current = current->next;
+	}
+	return (1);
+}
+
+t_list *get_env_node(t_list **list_env, char *var)
+{
+	t_list	*current;
+
+	current = *list_env;
+	while (current)
+	{
+		if (!ft_strcmp(current->var, var))
+			return (current);
+		current = current->next;
+	}
+	return (NULL);	
 }
