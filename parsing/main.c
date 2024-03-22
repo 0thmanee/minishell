@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 08:42:35 by obouchta          #+#    #+#             */
-/*   Updated: 2024/03/21 07:30:17 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/03/22 09:06:51 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,28 +136,23 @@ int	tokenize_input(char **input, t_token **tokens, t_free **ptrs)
 	return ((ft_free_ptr(ptrs, *input)), 1);
 }
 
-int	process_input(char *input, t_list **list_env, t_list **list_set)
+int	process_input(char *input, t_list **list_env, t_list **list_set, t_free **ptrs)
 {
 	t_token *tokens;
 	t_cmd	*cmd;
 	int		here_doc;
 	int		s_error;
-	t_free	*allocated_ptrs;
 
 	(void)list_set;
 	(void)list_env;
-	allocated_ptrs = NULL;
-	tokens = NULL;
-	cmd = NULL;
-	here_doc = 0;
-	s_error = 1;
+	(tokens = NULL, cmd = NULL, here_doc = 0, s_error = 1);
 	if (!valid_quotes(input))
 		return (2);
-	add_spaces(&input, &allocated_ptrs);
-	ft_strtrim(&input, &allocated_ptrs);
+	add_spaces(&input, ptrs);
+	trim_input(&input, ptrs);
 	if (!input)
 		return (1);
-	if (!tokenize_input(&input, &tokens, &allocated_ptrs))
+	if (!tokenize_input(&input, &tokens, ptrs))
 		return (0);
 	if (syntax_error(tokens, &here_doc))
 	{
@@ -167,17 +162,15 @@ int	process_input(char *input, t_list **list_env, t_list **list_set)
 			return (3);
 		return (2);
 	}
-	if (!join_args(&tokens, &allocated_ptrs))
+	join_args(&tokens, ptrs);
+	specify_vars(&tokens, ptrs);
+	if (!remove_quotes(&tokens, ptrs))
 		return (0);
-	if (!specify_vars(&tokens))
-		return (0);
-	if (!remove_quotes(&tokens))
-		return (0);
-	expanding(&tokens, *list_env);
-	if (!final_command(&tokens, &cmd))
+	expanding(&tokens, *list_env, ptrs);
+	if (!final_command(&tokens, &cmd, ptrs))
 		return (0);
 	print_it_2(cmd);
-	
+	ft_free_all(ptrs);
 	return (1);
 }
 
@@ -185,8 +178,9 @@ int read_input(t_list **list_env)
 {
 	t_list *list_set;
 	char 	*input;
+	t_free	*ptrs;
 
-	list_set = NULL;
+	(list_set = NULL, ptrs = NULL);
 	using_history();
 	signal(SIGINT, handle_signals);
 	signal(SIGQUIT, handle_signals);
@@ -197,16 +191,27 @@ int read_input(t_list **list_env)
 		if (!input)
 			(printf("exit\n"), exit(0));
 		if (!input[0])
+		{
+			free(input);
 			continue ;
+		}
 		if (input[0])
 			add_history(input);
 		else if (history_length > 0)
 				ft_strcpy(input, history_get(history_length)->line);
-		if (process_input(input, list_env, &list_set) == 2)
-			printf("minishell: syntax error\n");
+		if (process_input(input, list_env, &list_set, &ptrs) == 2)
+			(ft_free_all(&ptrs), printf("minishell: syntax error\n"));
 	}
 	return (1);
 }
+
+// void leaks()
+// {
+//     fclose(gfp);
+//     system("leaks minishell");
+//     usleep(1000 * 100 *10000);
+// }
+// void f(){system("leaks minishell");}
 
 int main(int ac, char **av, char **envp)
 {

@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 10:57:02 by obouchta          #+#    #+#             */
-/*   Updated: 2024/03/20 22:40:38 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/03/22 08:57:26 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ void	add_spaces(char **input, t_free **ptrs)
 
 	i = -1;
 	new_len = ft_new_len(*input);
-	new_input = ft_malloc1(ptrs, new_len + 1);
+	new_input = ft_malloc(ptrs, new_len + 1);
 	if (!new_input)
 		(free(*input), exit(1));
 	i = -1;

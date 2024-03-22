@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_str_1.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
+/*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/03 02:36:31 by obouchta          #+#    #+#             */
-/*   Updated: 2024/03/17 00:29:23 by yboutsli         ###   ########.fr       */
+/*   Updated: 2024/03/22 08:57:25 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ char	*ft_strcpy(char *dest, const char *src)
 	return (dest);
 }
 
-char	*ft_strjoin(char *s1, char *s2)
+char	*ft_strjoin(char *s1, char *s2, t_free **ptrs)
 {
 	char	*s3;
 	int		total_len;
@@ -66,9 +66,9 @@ char	*ft_strjoin(char *s1, char *s2)
 	if (!s1 || !s2)
 		return (NULL);
 	total_len = ft_strlen(s1) + ft_strlen(s2);
-	s3 = (char *)malloc(total_len + 1);
+	s3 = ft_malloc(ptrs, total_len + 1);
 	if (!s3)
-		return (NULL);
+		(ft_free_all(ptrs), exit(1));
 	ft_strcpy(s3, s1);
 	ft_strlcat(s3, s2, total_len + 1);
 	return (s3);

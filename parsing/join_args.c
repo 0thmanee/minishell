@@ -6,21 +6,12 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 20:15:35 by obouchta          #+#    #+#             */
-/*   Updated: 2024/03/21 07:38:12 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/03/22 08:57:29 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	fill_args(t_token *cmd, t_value *new_args, int *i, t_free **ptrs)
-{
-	int	j;
-
-	j = 0;
-	if (cmd->args_len)
-		while (j < cmd->args_len)
-			new_args[(*i)++].value = ft_strdup(cmd->args[j++].value, ptrs);
-}
 
 void remove_token(t_token **head, t_token *node_to_remove, t_free **ptrs)
 {
@@ -45,6 +36,16 @@ void remove_token(t_token **head, t_token *node_to_remove, t_free **ptrs)
 	ft_free_ptr(ptrs, node_to_remove);
 }
 
+void	fill_args(t_token *cmd, t_value *new_args, int *i, t_free **ptrs)
+{
+	int	j;
+
+	j = 0;
+	if (cmd->args_len)
+		while (j < cmd->args_len)
+			new_args[(*i)++].value = ft_strdup(cmd->args[j++].value, ptrs);
+}
+
 t_value	*join_args_helper(t_token *cmd, t_token *curr, int *len, t_free **ptrs)
 {
 	t_value	*new_args;
@@ -56,18 +57,18 @@ t_value	*join_args_helper(t_token *cmd, t_token *curr, int *len, t_free **ptrs)
 		args_nbr++;
 	if (!args_nbr)
 		return (NULL);
-	new_args = ft_malloc1(ptrs, (args_nbr + 1) * sizeof(t_value));
+	new_args = ft_malloc(ptrs, (args_nbr + 1) * sizeof(t_value));
 	if (!new_args)
 		(ft_free_all(ptrs), exit(1));
 	fill_args(cmd, new_args, &i, ptrs);
 	if (curr->type == CMD)
-		new_args[i++].value = ft_strdup(cmd->value, ptrs);
+		new_args[i++].value = ft_strdup(curr->value, ptrs);
 	fill_args(curr, new_args, &i, ptrs);
 	(*len) = i;
 	return (new_args);
 }
 
-int	join_args(t_token **tokens, t_free **ptrs)
+void	join_args(t_token **tokens, t_free **ptrs)
 {
 	t_token	*curr;
 	t_token	*cmd;
@@ -93,5 +94,4 @@ int	join_args(t_token **tokens, t_free **ptrs)
 		else
 			curr = curr->next;
 	}
-	return (1);
 }

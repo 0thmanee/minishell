@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 16:47:50 by obouchta          #+#    #+#             */
-/*   Updated: 2024/03/21 07:28:42 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/03/22 09:01:40 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int	ft_strncmp(const char *s1, const char *s2, size_t n)
 	return ((unsigned char)s1[i] - (unsigned char)s2[i]);
 }
 
-char	*ft_substr(char const *s, int start, int len)
+char	*ft_substr(char const *s, int start, int len, t_free **ptrs)
 {
 	int		i;
 	char	*subs;
@@ -33,9 +33,9 @@ char	*ft_substr(char const *s, int start, int len)
 		return (NULL);
 	if (!len)
 		return (NULL);
-	subs = (char *)malloc(len + 1);
+	subs = ft_malloc(ptrs, len + 1);
 	if (!subs)
-		return (NULL);
+		(ft_free_all(ptrs), exit(1));
 	i = 0;
 	while (i < len && s[start])
 	{
@@ -56,7 +56,7 @@ char	*ft_strdup(char *str, t_free **ptrs)
 	if (!str)
 		return (NULL);
 	srclen = ft_strlen(str);
-	dest = ft_malloc1(ptrs, srclen + 1);
+	dest = ft_malloc(ptrs, srclen + 1);
 	if (!dest)
 		(ft_free_all(ptrs), exit(1));
 	i = 0;
@@ -91,31 +91,25 @@ char	*ft_strdup_1(char *str)
 	return (dest);
 }
 
-void	ft_strtrim(char **input, t_free **ptrs)
+char	*ft_substr_2(char const *s, int start, int len)
 {
-	int	i;
-	int	start;
-	int	new_len;
-	char	*tmp;
+	int		i;
+	char	*subs;
 
-	(i = 0, new_len = 0, tmp = *input);
-	while ((*input)[i] == ' ')
-		i++;
-	if (i == ft_strlen(*input))
+	if (!s)
+		return (NULL);
+	if (!len)
+		return (NULL);
+	subs = malloc(len + 1);
+	if (!subs)
+		return (NULL);
+	i = 0;
+	while (i < len && s[start])
 	{
-		(*input = NULL, ft_free_ptr(ptrs, tmp));
-		return ;
-	}
-	start = i;
-	while ((*input)[i])
-	{
-		new_len++;
+		subs[i] = s[start];
+		start++;
 		i++;
 	}
-	while (--i >= 0 && (*input)[i] == ' ')
-		new_len--;
-	*input = ft_substr(*input, start, new_len);
-	if (!(*input))
-		(ft_free_ptr(ptrs, tmp), exit(1));
-	ft_free_ptr(ptrs, tmp);
+	subs[i] = '\0';
+	return (subs);
 }

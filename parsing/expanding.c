@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/15 02:58:32 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/03/22 02:35:47 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/03/22 09:04:27 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ char *remove_char(char *str, int char_index, t_free **ptrs)
 	ft_free_ptr(ptrs, tmp2);
 	return (str);
 }
+
 char	*replace_mini_str(char *str, int start, int end, char *mini_str, t_free **ptrs)
 {
 	char	*tmp1;
@@ -52,6 +53,7 @@ char	*replace_mini_str(char *str, int start, int end, char *mini_str, t_free **p
 	ft_free_ptr(ptrs, tmp2);
 	return (tmp1);
 }
+
 int char_is_valid(char c)
 {
 	if (!(c >= 'a' && c <= 'z')
@@ -102,11 +104,13 @@ char	*case_1(char *result, int *i, t_list *list_env, t_free **ptrs)
 	}
 	return (result);
 }
+
 char	*case_2(char *result, int *i, t_free **ptrs)
 {
 	result = remove_char(result, *i, ptrs);
 	return (result);
 }
+
 
 char	*case_3(char *result, int *i, t_free **ptrs)
 {
@@ -216,4 +220,3 @@ void	expanding(t_token **tokens, t_list *list_env, t_free **ptrs)
 		curr = curr->next;
 	}
 }
-

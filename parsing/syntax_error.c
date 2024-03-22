@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/20 03:10:42 by obouchta          #+#    #+#             */
-/*   Updated: 2024/03/20 03:13:38 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/03/22 01:13:58 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,12 +38,12 @@ int	syntax_error(t_token *tokens, int *here_doc)
 	return (0);
 }
 
-void	read_from_heredoc(t_token *curr, int *pid, int here_doc)
+void	read_from_heredoc(t_token *curr, int *pid, int *here_doc)
 {
 	char	*line;
 	int		id;
 	
-	if (curr->type == HERE_DOC && here_doc > 0)
+	if (curr->type == HERE_DOC && *here_doc > 0)
 	{
 		id = fork();
 		if (id == 0)
@@ -62,7 +62,7 @@ void	read_from_heredoc(t_token *curr, int *pid, int here_doc)
 		else
 		{
 			*pid = id;
-			here_doc--;
+			(*here_doc)--;
 		}
 	}
 }
@@ -74,9 +74,9 @@ void open_heredoc(t_token *tokens, int here_doc, int *s_error)
 	int	status;
 
     curr = tokens;
-    while (curr)
+    while (curr && here_doc)
 	{
-		read_from_heredoc(curr, &pid, here_doc);
+		read_from_heredoc(curr, &pid, &here_doc);
 		curr = curr->next;
 		waitpid(pid, &status, 0);
 		if (WIFSIGNALED(status) && WTERMSIG(status) == SIGINT)

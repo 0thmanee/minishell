@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 07:21:28 by obouchta          #+#    #+#             */
-/*   Updated: 2024/03/21 05:32:09 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/03/22 08:57:28 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ char	*quoted_cmd(char *input, int *i, t_free **ptrs)
 		j++;
 	while (input[j] && !is_whitespace(input[j]))
 		j++;
-	value = ft_malloc1(ptrs, j - *i + 2);
+	value = ft_malloc(ptrs, j - *i + 2);
 	if (!value)
 		(ft_free_all(ptrs), exit(1));
 	j = 0;
@@ -95,7 +95,7 @@ t_token	*get_in_out(char *input, int *i, t_token **tokens, t_free **ptrs)
 	(j = 0, len = 1, type = regonize_type(input, *i));
 	if (type == APPEND || type == HERE_DOC)
 		len = 2;
-	tok_value = ft_malloc1(ptrs, len + 1);
+	tok_value = ft_malloc(ptrs, len + 1);
 	if (!tok_value)
 		(ft_free_all(ptrs), exit(1));
 	while (input[*i] && !is_whitespace(input[*i]))
@@ -118,7 +118,7 @@ t_token	*get_pipe(char *input, int *i, int type, t_free **ptrs)
 
 	j = 0;
 	len = 1;
-	tok_value = ft_malloc1(ptrs, len + 1);
+	tok_value = ft_malloc(ptrs, len + 1);
 	if (!tok_value)
 		(ft_free_all(ptrs), exit(1));
 	while (input[*i] && !is_whitespace(input[*i]))

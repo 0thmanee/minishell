@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 07:19:14 by obouchta          #+#    #+#             */
-/*   Updated: 2024/03/21 05:28:37 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/03/22 08:57:28 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ int	extract_expr(char *src, char **dest, int *i, t_free **ptrs)
 	int		j;
 
 	j = 0;
-	(*dest) = ft_malloc1(ptrs, calc_cmd_len(src, i) - *i + 1);
+	(*dest) = ft_malloc(ptrs, calc_cmd_len(src, i) - *i + 1);
 	if (!(*dest))
 		return (0);
 	while (src[*i] && !is_whitespace(src[*i]))
@@ -109,7 +109,7 @@ int	extract_expr_2(char *src, t_value *dest, int *i, t_free **ptrs)
 	int		k;
 
 	k = 0;
-	(*dest).value = ft_malloc1(ptrs, calc_cmd_len(src, i) - *i + 1);
+	(*dest).value = ft_malloc(ptrs, calc_cmd_len(src, i) - *i + 1);
 	if (!(*dest).value)
 		return (0);
 	while (src[*i] && !is_whitespace(src[*i]))
@@ -161,7 +161,7 @@ t_value *get_values(char *input, int *i, int *args_len, t_free **ptrs)
 	*args_len = calc_args_len(input, *i);
 	if (!*args_len)
 		return (NULL);
-	args = ft_malloc1(ptrs, (*args_len + 1) * sizeof(t_value));
+	args = ft_malloc(ptrs, (*args_len + 1) * sizeof(t_value));
 	if (!args)
 		(ft_free_all(ptrs), exit(1));
 	get_values_helper(input, i, args, ptrs);

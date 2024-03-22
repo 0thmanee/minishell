@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 21:41:01 by obouchta          #+#    #+#             */
-/*   Updated: 2024/03/21 07:36:03 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/03/22 08:57:25 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ t_token	*ft_lstnew_1(char *value, int type, t_value *args, t_free **ptrs)
 {
 	t_token	*new_node;
 
-	new_node = ft_malloc1(ptrs, sizeof(t_token));
+	new_node = ft_malloc(ptrs, sizeof(t_token));
 	if (!new_node)
 		return (NULL);
 	new_node->value = value;
@@ -69,19 +69,19 @@ t_list	*ft_lstlast(t_list *lst)
 	return (p);
 }
 
-void	ft_lstadd_back_2(t_list **lst, t_list *new)
+void	ft_lstadd_back_2(t_list **lst, t_list *new_node)
 {
 	t_list	*p;
 
 	p = NULL;
-	if (!lst || !new)
+	if (!lst || !new_node)
 		return ;
 	if (! *lst)
-		*lst = new;
+		*lst = new_node;
 	else
 	{
 		p = ft_lstlast(*lst);
-		p -> next = new;
+		p -> next = new_node;
 	}
 }
 

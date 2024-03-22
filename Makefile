@@ -1,5 +1,5 @@
 builtins_files =  env_utils.c env.c
-parsing_files = main.c new_len.c add_spaces.c type_check.c get_cmd.c get_tokens.c \
+parsing_files = main.c new_len.c trim_input.c add_spaces.c type_check.c get_cmd.c get_tokens.c \
 remove_quotes.c join_args.c expanding.c expanding_init_1.c expanding_init_2.c signals.c \
 final_cmd.c final_cmd_1.c final_cmd_2.c final_cmd_3.c syntax_error.c ft_malloc.c
 
@@ -16,7 +16,7 @@ parsing_objects = $(addprefix object_files/,$(parsing_srcs:.c=.o))
 libft_objects = $(addprefix object_files/,$(libft_srcs:.c=.o))
 execution_objects = $(addprefix object_files/,$(execution_srcs:.c=.o))
 
-CFLAGS = -Wall -Werror -Wextra -fsanitize=address -g
+# CFLAGS = -Wall -Werror -Wextra -fsanitize=address -g
 READLINEDIR = $(shell brew --prefix readline)
 NAME = minishell
 
