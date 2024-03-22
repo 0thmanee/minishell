@@ -6,7 +6,7 @@
 /*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/05 16:57:06 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/03/21 06:11:33 by yboutsli         ###   ########.fr       */
+/*   Updated: 2024/03/22 01:57:33 by yboutsli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,20 +28,22 @@ void	null_arg(t_list *list_env)
 	}
 }
 
-int valid(char *str)
+int	valid(char *str)
 {
 	int	i;
 
 	i = 0;
 	if (ft_isalpha(str[0]) && str[0] != '_')
 		return (1);
-	while (str[i] != '\0' && str[i] != '=')
+	while (str[i] != '\0' && str[i] != '=' && str[i] != '+')
 	{
-		if (ft_isdigit(str[i]) && str[i] != '_')
+		if (!ft_isdigit(str[i]) && str[i] != '_')
 			return (1);
 		i++;
-    }
-    return (0);
+	}
+	if (str[i] == '+' && str[i + 1] != '=')
+		return (1);
+	return (0);
 }
 
 void nvalid_output(char *str)
@@ -54,7 +56,7 @@ void nvalid_output(char *str)
 	write(2, tmp2, ft_strlen(tmp2));
 	write(2, "\n", 1);
 	free(tmp1);
-	free(tmp2);	
+	free(tmp2);
 }
 void	case0(char *str, t_list **list_env)
 {
@@ -67,16 +69,18 @@ void	case0(char *str, t_list **list_env)
 		exit(1);
 	ft_lstadd_back_2(list_env, new);
 }
-void	case1(char *str, t_list **list_env)
+void	case1(char *str, t_list **list_env, int append)
 {
 	t_list	*new;
 	char	*var;
-
-	var = ft_substr(str, 0, ft_strlen(str) - 1);
+	
+	var = ft_substr(str, 0, ft_strlen(str) - 1 - append);
 	if (!var)
 		exit(1);
 	if (!var_exist(var, *list_env))
 	{
+		if (append == 1)
+			return ;
 		new = get_env_node(list_env, var);
 		if (new->value)
 			free(new->value);
@@ -89,8 +93,23 @@ void	case1(char *str, t_list **list_env)
 		exit(1);
 	ft_lstadd_back_2(list_env, new);
 }
+void	case2_helper(t_list *new, char *value, int append)
+{
+	char	*tmp;
 
-void	case2(char *str, t_list **list_env)
+	if (new->value)
+	{
+		if (append == 1)
+		{
+			tmp = value;
+			value = ft_strjoin(new->value, value);
+			free(tmp);
+		}
+		free(new->value);
+	}
+	new->value = value;
+}
+void	case2(char *str, t_list **list_env, int append)
 {
 	int	i;
 	char	*var;
@@ -98,16 +117,14 @@ void	case2(char *str, t_list **list_env)
 	t_list	*new;
 
 	i = 0;
-	while (str[i] && str[i] != '=')
+	while (str[i] && str[i] != '=' && str[i] != '+')
 		i++;
 	var = ft_substr(str, 0, i);
-	value = ft_substr(str, i + 1, ft_strlen(str) - i - 1);
+	value = ft_substr(str, i + 1 + append, ft_strlen(str) - i - 1);
 	if (!var_exist(var, *list_env))
 	{
 		new = get_env_node(list_env, var);
-		if (new->value)
-			free(new->value);
-		new->value = value;	
+		case2_helper(new, value, append);
 		free(var);
 		return ;
 	}
@@ -122,16 +139,23 @@ void	case2(char *str, t_list **list_env)
 void	valid_arg(char *str, t_list **list_env)
 {
 	int	i;
+	int	append;
 
+	append = 0;
 	i = 0;
-	while (str[i] && str[i] != '=')
+	while (str[i] && str[i] != '=' && str[i] != '+')
 		i++;
+	if (str[i] == '+')
+	{
+		append = 1;
+		i++;
+	}
 	if (!str[i])
 		case0(str, list_env);
 	else if (str[i] == '=' && str[i + 1] == '\0')
-		case1(str, list_env);
+		case1(str, list_env, append);
 	else
-		case2(str, list_env);
+		case2(str, list_env, append);
 }
 void	export(t_cmd *cmd, t_list **list_env)
 {
