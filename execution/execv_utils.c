@@ -6,7 +6,7 @@
 /*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 16:03:22 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/03/21 00:28:36 by yboutsli         ###   ########.fr       */
+/*   Updated: 2024/03/24 22:50:58 by yboutsli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,8 @@ char	*cmd_path(char *cmd, char **npath)
 	i = 0;
 	while (npath[i])
 	{
-		tmp = ft_strjoin(npath[i], "/");
-		tmp1 = ft_strjoin(tmp, cmd);
+		tmp = ft_strjoin_2(npath[i], "/");
+		tmp1 = ft_strjoin_2(tmp, cmd);
 		free(tmp);
 		if (!access(tmp1, F_OK))
 			return (tmp1);
@@ -35,38 +35,38 @@ char	*cmd_path(char *cmd, char **npath)
 	}
 	return (NULL);
 }
-// int	args_size(t_token *token)
-// {
-// 	int	i;
+int	args_size(t_cmd *cmd)
+{
+	int	i;
 
-// 	if (token->args == NULL)
-// 		return (0);
-// 	i = 0;
-// 	while (token->args[i])
-// 		i++;
-// 	return (i);
-// }
-// char	**execve_argv(t_token *token, char **npath)
-// {
-// 	char	**args;
-// 	(void)npath;
-// 	int		size;
-// 	int		i;
+	if (cmd->args == NULL)
+		return (0);
+	i = 0;
+	while (cmd->args[i])
+		i++;
+	return (i);
+}
 
-// 	size = args_size(token);
-// 	args = malloc((size + 2) * sizeof(char *));
-// 	if (!args)
-// 		return (NULL);
-// 	args[0] = token->value;
-// 	if (size == 0)
-// 		args[1] =  NULL;
-// 	else
-// 	{
-// 		i = 0;
-// 		while (++i <= size + 1)
-// 			args[i] = token->args[i - 1];
-// 	}
-// 	return (args);
-// }
+char	**execve_argv(t_cmd *cmd)
+{
+	char	**args;
+	int		size;
+	int		i;
+
+	size = args_size(cmd);
+	args = malloc((size + 2) * sizeof(char *));
+	if (!args)
+		return (NULL);
+	args[0] = cmd->cmd;
+	if (size == 0)
+		args[1] =  NULL;
+	else
+	{
+		i = 0;
+		while (++i <= size + 1)
+			args[i] = cmd->args[i - 1];
+	}
+	return (args);
+}
 
 

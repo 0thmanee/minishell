@@ -6,7 +6,7 @@
 /*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 19:21:40 by obouchta          #+#    #+#             */
-/*   Updated: 2024/03/17 00:27:51 by yboutsli         ###   ########.fr       */
+/*   Updated: 2024/03/24 16:20:13 by yboutsli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,4 +34,12 @@ int	is_whitespace(char c)
 		i++;
 	}
 	return (0);
+}
+
+int	ft_isdigit(int c)
+{
+	if (c >= 48 && c <= 57)
+		return (1);
+	else
+		return (0);
 }

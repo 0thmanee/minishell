@@ -6,7 +6,7 @@
 /*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 09:26:13 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/03/15 16:04:06 by yboutsli         ###   ########.fr       */
+/*   Updated: 2024/03/24 22:53:26 by yboutsli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,8 @@ int	cd_dir(char *str, char *cwd)
 	int		status;
 
 	status = 0;
-	tmp1 = ft_strjoin("/", str);
-	tmp = ft_strjoin(cwd, tmp1);
+	tmp1 = ft_strjoin_2("/", str);
+	tmp = ft_strjoin_2(cwd, tmp1);
 	if (access(str, F_OK) == 0)
 		chdir(tmp);
 	else
@@ -107,8 +107,7 @@ int	cd(char **args, t_list **env)
 		status = cd_oldpwd(env);
 	else
 	{
-		str = expanding(args[0], *env);
-		status = cd_dir(str, cwd);
+		status = cd_dir(args[0], cwd);
 		free(str);
 	}
 	if (status == 0)

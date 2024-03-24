@@ -6,7 +6,7 @@
 /*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/12 03:41:21 by yasser03          #+#    #+#             */
-/*   Updated: 2024/03/21 05:02:09 by yboutsli         ###   ########.fr       */
+/*   Updated: 2024/03/24 22:55:42 by yboutsli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,35 +59,16 @@
 // 	tab[i] = NULL;
 // 	return(tab);
 // }
-// void	child_process(t_token *token, char **args, char *cmd_fpath, t_list *list_env)
-// {
-// 	char	**envp;
+int	child_process(t_cmd *cmd, char **args, char *cmd_fpath)
+{
+	if (execve(cmd_fpath, args, NULL) == -1)
+	{
+		perror(cmd->cmd);
+		return (1);
+	}
+	return (0);
+}
 
-// 	envp = list2tab(list_env);
-// 	if (execve(cmd_fpath, args, envp) == -1)
-// 		perror(token->value);
-// }
-// int	execute_execve(t_token *token, t_list *list_env, char **npath)
-// {
-// 	int	pid;
-// 	(void)list_env;
-// 	char	*cmd_fpath;
-// 	char	**args;
-
-// 	args = execve_argv(token, npath);
-// 	cmd_fpath = cmd_path(token->value, npath);
-// 	if (!cmd_fpath)
-// 	{
-// 		printf("command not found: %s\n", token->value);
-// 		return (0);
-// 	}
-// 	pid = fork();
-// 	if (pid == 0)
-// 		child_process(token, args, cmd_fpath, list_env);
-// 	waitpid(pid, NULL, 0);
-// 	free(args);
-// 	return(0);
-// }
 // char *join_args_y(char **args)
 // {
 // 	int	i;
@@ -117,26 +98,70 @@
 
 // 	str = join_args_y(token->args);
 // 	expanded = expanding(str, *list_env);
-// 	if (!ft_strcmp(token->value, "cd"))
-// 		cd(token->args, list_env);
-// 	else if (!ft_strcmp(token->value, "echo"))
-// 		echo(str, *list_env, *list_set);
-// 	else if (!ft_strcmp(token->value, "env"))
-// 		env(*list_env);
-// 	else if (!ft_strcmp(token->value, "pwd"))
-// 		pwd();
 // 	else
 // 		execute_execve(token, *list_env, npath);
 // 	free(str);
 // 	free(expanded);
 // 	return (0);
 // }
-//0
 
-void	ft_execution(t_cmd *cmd, t_list **list_env)
+int	execute_execve(t_cmd *cmd, t_list *list_env, char **npath)
 {
+	int		pid;
+	char	*cmd_fpath;
+	char	**args;
+	int		status;
+
+	status = 0;
+	args = execve_argv(cmd);
+	cmd_fpath = cmd_path(cmd->cmd, npath);
+	if (!cmd_fpath)
+	{
+		printf("command not found: %s\n", cmd->cmd);
+		return (1);
+	}
+	pid = fork();
+	if (pid == 0)
+		status = child_process(cmd, args, cmd_fpath);
+	waitpid(pid, NULL, 0);
+	status = 1;
+	free(args);
+	return(0);
+}
+
+int	execute_parent(t_cmd *cmd, t_list **list_env, t_free **ptrs)
+{
+	char	**npath;
+	int		status;
+
+	status = 0;
 	if (!ft_strcmp(cmd->cmd, "export"))
-		export(cmd, list_env);
+		status = export(cmd, list_env);
 	else if (!ft_strcmp(cmd->cmd, "env"))
+		status = env(*list_env);
+	else if (!ft_strcmp(cmd->cmd, "cd"))
+		status = cd(cmd->args, list_env);
+	else if (!ft_strcmp(cmd->cmd, "echo"))
+		status = echo(cmd);
+	else if (!ft_strcmp(cmd->cmd, "pwd"))
+		pwd();
+	else
+	{
+		npath = path(list_env);
+		status = execute_execve(cmd, *list_env, npath);
+	}
+	return (status);
+}
+int	ft_execution(t_cmd **cmd, t_list **list_env, t_free **ptrs)
+{
+	int	status;
+
+	status = 0;
+	if (ft_lstsize(*cmd) == 1)
+		status = execute_parent(*cmd, list_env, ptrs);
+	if (!ft_strcmp((*cmd)->cmd, "export"))
+		export((*cmd), list_env);
+	else if (!ft_strcmp((*cmd)->cmd, "env"))
 		env(*list_env);
+	return (status);
 }

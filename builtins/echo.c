@@ -6,37 +6,35 @@
 /*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/05 11:01:54 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/03/15 16:05:20 by yboutsli         ###   ########.fr       */
+/*   Updated: 2024/03/24 16:24:42 by yboutsli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	echo(t_token *token, t_list *list_env, t_list *list_set)
+int	echo(t_cmd *cmd)
 {
 	int		i;
 	int		j;
 	int		nl;
-	(void)list_env;
-	(void)list_set;
 
 	nl = 1;
 	j = 0;
 	i = 0;
-	if (!token->args)
+	if (!cmd->args)
 	{
 		printf("\n");
 		return (0);
 	}
-	while (token->args[i])
+	while (cmd->args[i])
 	{
 		j = 0;
-		if (token->args[i][j] == '-' && token->args[i][j + 1] == 'n')
+		if (cmd->args[i][j] == '-' && cmd->args[i][j + 1] == 'n')
 		{
 			j++;
-			while (token->args[i][j] == 'n')
+			while (cmd->args[i][j] == 'n')
 				j++;
-			if (token->args[i][j] != '\0')
+			if (cmd->args[i][j] != '\0')
 				break;
 			else
 				nl = 0;
@@ -45,10 +43,10 @@ int	echo(t_token *token, t_list *list_env, t_list *list_set)
 			break;
 		i++;
 	}
-	while (token->args[i])
+	while (cmd->args[i])
 	{
-		printf("%s", token->args[i]);
-		if (token->args[i + 1])
+		printf("%s", cmd->args[i]);
+		if (cmd->args[i + 1])
 			printf(" ");
 		i++;
 	}

@@ -144,9 +144,14 @@ int		is_whitespace(char c);
 void	*ft_malloc(t_free **list_aloc, size_t size);
 void	ft_free_ptr(t_free **list_aloc, void *ptr);
 void	ft_free_all(t_free **list_aloc);
+int		ft_isdigit(int c);
+
+int	ft_lstsize(t_cmd *lst);
 
 char	*ft_strdup_1(char *str);
 char	*ft_substr_2(char const *s, int start, int len);
+char	*ft_strjoin_2(char *s1, char *s2);
+
 
 // Parsing
 int		is_whitespace(char c);
@@ -186,20 +191,22 @@ void	open_heredoc(t_token *tokens, int here_doc, int *s_error);
  // Removable
 void	print_it(t_token *tokens);
 // Execution
-void	ft_execution(t_token *token, t_list **env, t_list **set);
 char	*get_env(t_list **head, char *env_var);
-// int		env_update(t_list **head, char *env_var, char *new_char);
+t_list	*get_env_node(t_list **list_env, char *var);
+int	var_exist(char *var, t_list *list_env);
+int		env_update(t_list **head, char *env_var, char *new);
 t_list	*env_lst(char **envp);
 void	env_init(t_list	**env);
 int		cd(char **args, t_list **env);
 int		env(t_list *list_env);
 int		pwd(void);
-int		echo(t_token *token, t_list *env, t_list *set);
 int		set_valid(char *str);
 int		add_set(t_list **set, char *input);
-void	ft_execution(t_token *token, t_list **env, t_list **set);
+int		ft_execution(t_cmd **cmd, t_list **list_env, t_free **ptrs);
 char	**path(t_list **envp);
 void	ft_free(char **tab);
 char	*cmd_path(char *cmd, char **npath);
-char	**execve_argv(t_token *token, char **npath);
+char	**execve_argv(t_cmd *cmd);
+int		export(t_cmd *cmd, t_list **list_env);
+int		echo(t_cmd *cmd);
 #endif

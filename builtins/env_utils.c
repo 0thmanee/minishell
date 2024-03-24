@@ -6,7 +6,7 @@
 /*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 20:29:05 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/03/21 05:55:00 by yboutsli         ###   ########.fr       */
+/*   Updated: 2024/03/24 16:10:58 by yboutsli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,8 @@ t_list	*env_lst(char **envp)
 		j = 0;
 		while (envp[i][j] && envp[i][j] != '=')	
 			j++;
-		var = ft_substr(envp[i], 0, j);
-		value = ft_substr(envp[i], j + 1, ft_strlen(envp[i]));
+		var = ft_substr_2(envp[i], 0, j);
+		value = ft_substr_2(envp[i], j + 1, ft_strlen(envp[i]));
 		ft_lstadd_back_2(&env, ft_lstnew_2(var, value));
 		free(var);
 		free(value);
@@ -70,7 +70,7 @@ int	env_update(t_list **head, char *env_var, char *new)
 		if (!ft_strcmp(current->var, env_var))
 		{
 			free(current->value);
-			current->value = ft_strdup(new);
+			current->value = ft_strdup_1(new);
 			// printf("|%s=%s|\n", current->var,current->value);
 			return (0);
 		}
