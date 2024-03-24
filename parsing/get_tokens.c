@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 07:21:28 by obouchta          #+#    #+#             */
-/*   Updated: 2024/03/20 03:06:28 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/03/22 08:57:28 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ int	valid_quotes(char *input)
 	return (1);
 }
 
-char	*quoted_cmd(char *input, int *i)
+char	*quoted_cmd(char *input, int *i, t_free **ptrs)
 {
 	int		j;
 	int		quote;
@@ -49,9 +49,9 @@ char	*quoted_cmd(char *input, int *i)
 		j++;
 	while (input[j] && !is_whitespace(input[j]))
 		j++;
-	value = malloc(j - *i + 2);
+	value = ft_malloc(ptrs, j - *i + 2);
 	if (!value)
-		return (NULL);
+		(ft_free_all(ptrs), exit(1));
 	j = 0;
 	value[j++] = input[(*i)++];
 	while (input[*i] && input[*i] != quote)
@@ -62,7 +62,7 @@ char	*quoted_cmd(char *input, int *i)
 	return (value);
 }
 
-t_token	*get_in_out_helper(char *input, int *i, t_token **tokens)
+t_token	*get_in_out_helper(char *input, int *i, t_token **tokens, t_free **ptrs)
 {
 	t_token *arg;
 	char	*arg_value;
@@ -73,47 +73,43 @@ t_token	*get_in_out_helper(char *input, int *i, t_token **tokens)
 		(*i)++;
 	if (input[*i] && regonize_type(input, *i) == EXPRESSION)
 	{
-		if (!extract_expr(input, &arg_value, i))
-			return (NULL); 
+		if (!extract_expr(input, &arg_value, i, ptrs))
+			(ft_free_all(ptrs), exit(1));
 		arg = ft_lstnew_1(arg_value,
-			regonize_type_2(get_last_type(*tokens)), NULL);
+			regonize_type_2(get_last_type(*tokens)), NULL, ptrs);
 		if (!arg)
-			return (NULL);
+			(ft_free_all(ptrs), exit(1));
 		arg->args_len = 0;
 	}
 	return (arg);
 }
 
-t_token	*get_in_out(char *input, int *i, int type, t_token **tokens)
+t_token	*get_in_out(char *input, int *i, t_token **tokens, t_free **ptrs)
 {
 	int		j;
 	char	*tok_value;
 	t_token	*new_token;
-	t_token	*arg;
 	int		len;
+	int		type;
 
-	j = 0;
-	len = 1;
+	(j = 0, len = 1, type = regonize_type(input, *i));
 	if (type == APPEND || type == HERE_DOC)
 		len = 2;
-	tok_value = malloc(len + 1);
+	tok_value = ft_malloc(ptrs, len + 1);
 	if (!tok_value)
-		return (NULL);
+		(ft_free_all(ptrs), exit(1));
 	while (input[*i] && !is_whitespace(input[*i]))
 		tok_value[j++] = input[(*i)++];
 	tok_value[j] = '\0';
-	new_token = ft_lstnew_1(tok_value, type, NULL);
+	new_token = ft_lstnew_1(tok_value, type, NULL, ptrs);
 	if (!new_token)
-		return (NULL);
+		(ft_free_all(ptrs), exit(1));
 	new_token->args_len = 0;
 	ft_lstadd_back_1(tokens, new_token);
-	if (type == PIPE)
-		return (NULL);
-	arg = get_in_out_helper(input, i, tokens);
-	return (arg);
+	return (get_in_out_helper(input, i, tokens, ptrs));
 }
 
-t_token	*get_pipe(char *input, int *i, int type)
+t_token	*get_pipe(char *input, int *i, int type, t_free **ptrs)
 {
 	int		j;
 	char	*tok_value;
@@ -122,32 +118,15 @@ t_token	*get_pipe(char *input, int *i, int type)
 
 	j = 0;
 	len = 1;
-	tok_value = malloc(len + 1);
+	tok_value = ft_malloc(ptrs, len + 1);
 	if (!tok_value)
-		return (NULL);
+		(ft_free_all(ptrs), exit(1));
 	while (input[*i] && !is_whitespace(input[*i]))
 		tok_value[j++] = input[(*i)++];
 	tok_value[j] = '\0';
-	new_token = ft_lstnew_1(tok_value, type, NULL);
+	new_token = ft_lstnew_1(tok_value, type, NULL, ptrs);
 	if (!new_token)
-		return (NULL);
+		(ft_free_all(ptrs), exit(1));
 	new_token->args_len = 0;
 	return (new_token);
 }
-
-// t_token	*get_quoted(char *input, int *i, int prev_type)
-// {
-// 	char	*value;
-// 	t_token	*new_token;
-// 	char	**args;
-
-// 	value = quoted_cmd(input, i);
-// 	if (!value)
-// 		return (NULL);
-// 	args = get_values(input, i);
-// 	new_token = ft_lstnew_1(value, regonize_type_2(prev_type), args);
-// 	if (!new_token)
-// 		return (NULL);
-// 	(*i)--;
-// 	return (new_token);
-// }

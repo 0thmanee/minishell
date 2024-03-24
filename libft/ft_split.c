@@ -3,14 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
+/*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/03 19:22:06 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/03/14 14:55:32 by yboutsli         ###   ########.fr       */
+/*   Updated: 2024/03/22 09:01:04 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <minishell.h>
+#include "minishell.h"
+
 static size_t	words_counts(char const *s, char c)
 {
 	size_t	count;

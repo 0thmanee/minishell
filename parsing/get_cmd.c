@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 07:19:14 by obouchta          #+#    #+#             */
-/*   Updated: 2024/03/20 03:06:24 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/03/22 08:57:28 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,13 +79,13 @@ int	calc_cmd_len(char *input, int *i)
 	return (j);
 }
 
-int	extract_expr(char *src, char **dest, int *i)
+int	extract_expr(char *src, char **dest, int *i, t_free **ptrs)
 {
 	char	quote;
 	int		j;
 
 	j = 0;
-	(*dest) = malloc(calc_cmd_len(src, i) - *i + 1);
+	(*dest) = ft_malloc(ptrs, calc_cmd_len(src, i) - *i + 1);
 	if (!(*dest))
 		return (0);
 	while (src[*i] && !is_whitespace(src[*i]))
@@ -103,86 +103,84 @@ int	extract_expr(char *src, char **dest, int *i)
 	return (1);
 }
 
-int	extract_expr_2(char *src, t_value *dest, int *i, int *j)
+int	extract_expr_2(char *src, t_value *dest, int *i, t_free **ptrs)
 {
 	char	quote;
 	int		k;
 
 	k = 0;
-	dest[*j].value = malloc(calc_cmd_len(src, i) - *i + 1);
-	if (!dest[*j].value)
+	(*dest).value = ft_malloc(ptrs, calc_cmd_len(src, i) - *i + 1);
+	if (!(*dest).value)
 		return (0);
 	while (src[*i] && !is_whitespace(src[*i]))
 	{
 		if (src[*i] == '\'' || src[*i] == '\"')
 		{
 			quote = src[*i];
-			dest[*j].value[k++] = src[(*i)++];
+			(*dest).value[k++] = src[(*i)++];
 			while (src[*i] && src[*i] != quote)
-				dest[*j].value[k++] = src[(*i)++];
+				(*dest).value[k++] = src[(*i)++];
 		}
-		dest[*j].value[k++] = src[(*i)++];
+		(*dest).value[k++] = src[(*i)++];
 	}
-	dest[*j].value[k++] = '\0';
+	(*dest).value[k++] = '\0';
 	return (1);
 }
 
-int	get_quoted_arg(char *input, int *i, int *j, t_value *args)
+void	get_values_helper(char *input, int *i, t_value *args, t_free **ptrs)
 {
-	while (input[*i] && is_whitespace(input[*i]))
-		(*i)++;
-	if (input[*i] == '\'' || input[*i] == '\"')
+	int	j;
+	
+	j = 0;
+	while (input[*i])
 	{
-		args[*j].value = quoted_cmd(input, i);
-		(*j)++;
-		return (1);
+		while (input[*i] && is_whitespace(input[*i]))
+			(*i)++;
+		if (regonize_type(input, *i) != EXPRESSION)
+			break ;
+		if (input[*i] == '\'' || input[*i] == '\"')
+		{
+			args[j].value = quoted_cmd(input, i, ptrs);
+			j++;
+		}
+		else
+		{
+			if (!extract_expr_2(input, args + j, i, ptrs))
+				(ft_free_all(ptrs), exit(1));
+			j++;
+		}
 	}
-	return (0);
 }
 
-t_value *get_values(char *input, int *i, int *args_len)
+t_value *get_values(char *input, int *i, int *args_len, t_free **ptrs)
 {
 	int j;
 	t_value *args;
-	int		quoted_status;
 
 	j = 0;
 	*args_len = calc_args_len(input, *i);
 	if (!*args_len)
 		return (NULL);
-	args = malloc((*args_len + 1) * sizeof(t_value));
+	args = ft_malloc(ptrs, (*args_len + 1) * sizeof(t_value));
 	if (!args)
-		return (NULL);
-	while (input[*i])
-	{
-		quoted_status = get_quoted_arg(input, i, &j, args);
-		if (quoted_status == 1)
-			continue ;
-		else if (quoted_status == -1)
-			return (NULL);
-		if (regonize_type(input, *i) != EXPRESSION)
-			break;
-		if (!extract_expr_2(input, args, i, &j))
-			return (NULL);
-		j++;
-	}
-	j = 0;
+		(ft_free_all(ptrs), exit(1));
+	get_values_helper(input, i, args, ptrs);
 	return (args);
 }
 
-t_token	*get_cmd(char *input, int *i, int prev_type)
+t_token	*get_cmd(char *input, int *i, int prev_type, t_free **ptrs)
 {
 	char	*cmd;
 	t_token	*new_token;
 	int		args_len;
 
 	cmd = NULL;
-	if (!extract_expr(input, &cmd, i))
-		return (NULL);
+	if (!extract_expr(input, &cmd, i, ptrs))
+		(ft_free_all(ptrs), exit(1));
 	new_token = ft_lstnew_1(cmd, regonize_type_2(prev_type),
-		get_values(input, i, &args_len));
+		get_values(input, i, &args_len, ptrs), ptrs);
 	if (!new_token)
-		return (NULL);
+		(ft_free_all(ptrs), exit(1));
 	new_token->args_len = args_len;
 	if (input[*i])
 		(*i)--;

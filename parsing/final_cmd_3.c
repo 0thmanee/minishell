@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/17 05:23:00 by obouchta          #+#    #+#             */
-/*   Updated: 2024/03/20 03:22:44 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/03/22 09:05:09 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,26 +65,27 @@ int	extract_outfiles_helper(t_token **curr, t_file **outfiles, int *i)
 	return (1);
 }
 
-int	extract_outfiles(t_token *token, t_file **outfiles)
+void	extract_outfiles(t_token *token, t_file **outfiles, t_free **ptrs)
 {
 	t_token	*curr;
 	int		i;
 
-	curr = token;
-	i = 0;
+	(curr = token, i = 0);
 	if (curr && curr->type == PIPE)
 		curr = curr->next;
 	if (!outfiles_len(curr))
-		return (1);
-	*outfiles = malloc((outfiles_len(curr) + 1) * sizeof(t_file));
+		return ;
+	*outfiles = ft_malloc(ptrs, (outfiles_len(curr) + 1) * sizeof(t_file));
 	if (!(*outfiles))
-		return (0);
+		(ft_free_all(ptrs), exit(1));
 	while (curr && curr->type != PIPE)
 	{
-		if (!extract_outfiles_helper(&curr, outfiles, &i))
-			return (0);
+		if (curr->type == OUTPUT)
+			(curr = curr->next, extract_outfiles_helper_1(curr, outfiles, &i));
+		if (curr->type == APPEND)
+			(curr = curr->next, extract_outfiles_helper_2(curr, outfiles, &i));
 		curr = curr->next;
 	}
 	(*outfiles)[i].fd = -42;
-	return (1);
 }
+

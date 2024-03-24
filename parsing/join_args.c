@@ -6,101 +6,73 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 20:15:35 by obouchta          #+#    #+#             */
-/*   Updated: 2024/03/17 06:20:02 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/03/22 08:57:29 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	fill_args_helper(t_token *cmd, t_value *new_args, int *i)
+
+void remove_token(t_token **head, t_token *node_to_remove, t_free **ptrs)
+{
+	t_token *prev;
+	
+	prev = *head;
+	if (!(*head) || !node_to_remove)
+		return ;
+	if (*head == node_to_remove)
+	{
+		*head = node_to_remove->next;
+		ft_free_ptr(ptrs, node_to_remove->value);
+		ft_free_ptr(ptrs, node_to_remove);
+		return;
+	}
+	while (prev->next && prev->next != node_to_remove)
+		prev = prev->next;
+	if (prev->next == NULL)
+		return ;
+	prev->next = node_to_remove->next;
+	ft_free_ptr(ptrs, node_to_remove->value);
+	ft_free_ptr(ptrs, node_to_remove);
+}
+
+void	fill_args(t_token *cmd, t_value *new_args, int *i, t_free **ptrs)
 {
 	int	j;
 
 	j = 0;
 	if (cmd->args_len)
 		while (j < cmd->args_len)
-		{
-			new_args[*i].value = ft_strdup(cmd->args[j].value);
-			if (!new_args[*i].value)
-				return (0);
-			(*i)++;
-			j++;
-		}
-	return (1);
+			new_args[(*i)++].value = ft_strdup(cmd->args[j++].value, ptrs);
 }
 
-int	fill_curr_f_arg(char *cmd, t_value *new_args, int *i)
-{
-	int	j;
-
-	j = 0;
-	new_args[*i].value = ft_strdup(cmd);
-	if (!new_args[*i].value)
-		return (0);
-	(*i)++;
-	return (1);
-}
-int	fill_args(t_token *cmd, t_token *curr, int *len, t_value *new_args)
-{
-	int	i;
-
-	i = 0;
-	if (!fill_args_helper(cmd, new_args, &i))
-		return (0);
-	if (curr->type == CMD)
-	{
-		if (!fill_curr_f_arg(curr->value, new_args, &i))
-			return (0);
-	}
-	if (!fill_args_helper(curr, new_args, &i))
-		return (0);
-	(*len) = i;
-	return (1);
-}
-
-t_value	*join_args_helper(t_token *cmd, t_token *curr, int *len)
+t_value	*join_args_helper(t_token *cmd, t_token *curr, int *len, t_free **ptrs)
 {
 	t_value	*new_args;
 	int		args_nbr;
+	int		i = 0;
 	
 	args_nbr = cmd->args_len + curr->args_len;
 	if (curr->type == CMD)
 		args_nbr++;
 	if (!args_nbr)
 		return (NULL);
-	new_args = malloc((args_nbr + 1) * sizeof(t_value));
+	new_args = ft_malloc(ptrs, (args_nbr + 1) * sizeof(t_value));
 	if (!new_args)
-		return (NULL);
-	if (!fill_args(cmd, curr, len, new_args))
-		return (NULL);
+		(ft_free_all(ptrs), exit(1));
+	fill_args(cmd, new_args, &i, ptrs);
+	if (curr->type == CMD)
+		new_args[i++].value = ft_strdup(curr->value, ptrs);
+	fill_args(curr, new_args, &i, ptrs);
+	(*len) = i;
 	return (new_args);
 }
 
-void remove_token(t_token **head, t_token *node_to_remove)
-{
-	t_token *prev = *head;
-	
-	if (*head == NULL || node_to_remove == NULL)
-		return ;
-	if (*head == node_to_remove)
-	{
-		*head = node_to_remove->next;
-		free(node_to_remove);
-		return;
-	}
-	while (prev->next != NULL && prev->next != node_to_remove)
-		prev = prev->next;
-	if (prev->next == NULL)
-		return ;
-	prev->next = node_to_remove->next;
-	free(node_to_remove);
-}
-
-int	join_args(t_token **tokens)
+void	join_args(t_token **tokens, t_free **ptrs)
 {
 	t_token	*curr;
 	t_token	*cmd;
-	t_value	*tmp;
+	t_token	*tmp;
 
 	curr = *tokens;
 	while (curr)
@@ -110,14 +82,16 @@ int	join_args(t_token **tokens)
 			(cmd = curr, curr = curr->next);
 			while (curr && curr->type != PIPE)
 			{
-				tmp = cmd->args;
-				cmd->args = join_args_helper(cmd, curr, &cmd->args_len);
-				curr->args_len = 0;
-				curr = curr->next;
+				tmp = curr;
+				cmd->args = join_args_helper(cmd, curr, &cmd->args_len, ptrs);
+				(curr->args_len = 0, curr = curr->next);
+				if (tmp->type == CMD)
+					remove_token(tokens, tmp, ptrs);
+				else
+					ft_free_ptr(ptrs, tmp->args);
 			}
 		}
 		else
 			curr = curr->next;
 	}
-	return (1);
 }

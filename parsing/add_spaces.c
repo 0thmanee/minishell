@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 10:57:02 by obouchta          #+#    #+#             */
-/*   Updated: 2024/03/20 03:13:05 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/03/22 08:57:26 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,27 +48,30 @@ void	add_spaces_helper_2(char *input, char *new_input, int *i, int *j)
 		new_input[(*j)++] = input[*i];
 }
 
-char	*add_spaces(char *input)
+void	add_spaces(char **input, t_free **ptrs)
 {
 	int		i;
 	int		j;
 	int		new_len;
 	char	*new_input;
+	char	*tmp;
 
 	i = -1;
-	new_len = ft_new_len(input);
-	new_input = malloc((new_len + 1) * sizeof(char));
+	new_len = ft_new_len(*input);
+	new_input = ft_malloc(ptrs, new_len + 1);
 	if (!new_input)
-		perror("error");
+		(free(*input), exit(1));
 	i = -1;
 	j = 0;
-	while (input[++i])
+	while ((*input)[++i])
 	{
-		if ((input[i] == '<' || input[i] == '>') && !quoted(input, i))
-			add_spaces_helper_1(input, new_input, &i, &j);
+		if (((*input)[i] == '<' || (*input)[i] == '>') && !quoted((*input), i))
+			add_spaces_helper_1(*input, new_input, &i, &j);
 		else
-			add_spaces_helper_2(input, new_input, &i, &j);
+			add_spaces_helper_2(*input, new_input, &i, &j);
 	}
 	new_input[j] = '\0';
-	return (new_input);
+	tmp = *input;
+	*input = new_input;
+	free(tmp);
 }

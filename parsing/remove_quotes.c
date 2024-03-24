@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 17:17:09 by obouchta          #+#    #+#             */
-/*   Updated: 2024/03/17 06:01:02 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/03/22 08:57:29 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ int	no_quotes_len(char *cmd)
 	return (len);
 }
 
-char	*no_quoted_value(char *cmd, int len)
+char	*no_quoted_value(char *cmd, int len, t_free **ptrs)
 {
 	char	*new_cmd;
 	int		i;
@@ -45,9 +45,9 @@ char	*no_quoted_value(char *cmd, int len)
 
 	i = 0;
 	j = 0;
-	new_cmd = malloc(len + 1);
+	new_cmd = ft_malloc(ptrs, len + 1);
 	if (!new_cmd)
-		return (NULL);
+		(ft_free_all(ptrs), exit(1));
 	while (cmd[i])
 	{
 		if (cmd[i] == '\'' || cmd[i] == '\"')
@@ -64,9 +64,10 @@ char	*no_quoted_value(char *cmd, int len)
 	return (new_cmd);
 }
 
-int	remove_quotes(t_token **tokens)
+int	remove_quotes(t_token **tokens, t_free **ptrs)
 {
 	t_token	*curr;
+	char	*tmp;
 	int		i;
 
 	curr = *tokens;
@@ -74,20 +75,15 @@ int	remove_quotes(t_token **tokens)
 	{
 		if (curr->type == CMD || curr->type == OUT_FILE
 			|| curr->type == IN_FILE || curr->type == DELIMITER)
-		{
-			curr->value = no_quoted_value(curr->value, no_quotes_len(curr->value));
-			if (!curr->value)
-				return (0);
-		}
+			(tmp = curr->value, curr->value = no_quoted_value(curr->value,
+				no_quotes_len(curr->value), ptrs), ft_free_ptr(ptrs, tmp));
 		if (curr->args)
 		{
-			i = 0;
-			while (i < curr->args_len)
-			{
+			i = -1;
+			while (++i < curr->args_len)
+				(tmp = curr->args[i].value, 
 				curr->args[i].value = no_quoted_value(curr->args[i].value,
-					no_quotes_len(curr->args[i].value));
-				i++;
-			}
+					no_quotes_len(curr->args[i].value), ptrs), ft_free_ptr(ptrs, tmp));
 		}
 		curr = curr->next;
 	}

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_str_2.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
+/*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 16:47:50 by obouchta          #+#    #+#             */
-/*   Updated: 2024/03/21 05:14:46 by yboutsli         ###   ########.fr       */
+/*   Updated: 2024/03/22 09:01:40 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int	ft_strncmp(const char *s1, const char *s2, size_t n)
 	return ((unsigned char)s1[i] - (unsigned char)s2[i]);
 }
 
-char	*ft_substr(char const *s, int start, int len)
+char	*ft_substr(char const *s, int start, int len, t_free **ptrs)
 {
 	int		i;
 	char	*subs;
@@ -33,9 +33,9 @@ char	*ft_substr(char const *s, int start, int len)
 		return (NULL);
 	if (!len)
 		return (NULL);
-	subs = (char *)malloc(len + 1);
+	subs = ft_malloc(ptrs, len + 1);
 	if (!subs)
-		return (NULL);
+		(ft_free_all(ptrs), exit(1));
 	i = 0;
 	while (i < len && s[start])
 	{
@@ -47,7 +47,7 @@ char	*ft_substr(char const *s, int start, int len)
 	return (subs);
 }
 
-char	*ft_strdup(char *str)
+char	*ft_strdup(char *str, t_free **ptrs)
 {
 	char	*dest;
 	size_t	srclen;
@@ -56,7 +56,29 @@ char	*ft_strdup(char *str)
 	if (!str)
 		return (NULL);
 	srclen = ft_strlen(str);
-	dest = (char *)malloc(srclen + 1);
+	dest = ft_malloc(ptrs, srclen + 1);
+	if (!dest)
+		(ft_free_all(ptrs), exit(1));
+	i = 0;
+	while (str[i])
+	{
+		dest[i] = str[i];
+		i++;
+	}
+	dest[i] = '\0';
+	return (dest);
+}
+
+char	*ft_strdup_1(char *str)
+{
+	char	*dest;
+	size_t	srclen;
+	size_t	i;
+
+	if (!str)
+		return (NULL);
+	srclen = ft_strlen(str);
+	dest = malloc(srclen + 1);
 	if (!dest)
 		return (NULL);
 	i = 0;
@@ -69,29 +91,25 @@ char	*ft_strdup(char *str)
 	return (dest);
 }
 
-char	*ft_strtrim(char *input)
+char	*ft_substr_2(char const *s, int start, int len)
 {
-	int	i;
-	int	start;
-	int	new_len;
+	int		i;
+	char	*subs;
 
-	i = 0;
-	new_len = 0;
-	while (input[i] == ' ')
-		i++;
-	start = i;
-	if (i == ft_strlen(input))
+	if (!s)
 		return (NULL);
-	while (input[i])
+	if (!len)
+		return (NULL);
+	subs = malloc(len + 1);
+	if (!subs)
+		return (NULL);
+	i = 0;
+	while (i < len && s[start])
 	{
-		new_len++;
+		subs[i] = s[start];
+		start++;
 		i++;
 	}
-	i--;
-	while (i >= 0 && input[i] == ' ')
-	{
-		new_len--;
-		i--;
-	}
-	return (ft_substr(input, start, new_len));
+	subs[i] = '\0';
+	return (subs);
 }
