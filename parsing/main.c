@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 08:42:35 by obouchta          #+#    #+#             */
-/*   Updated: 2024/03/22 09:06:51 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/03/25 06:03:48 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,15 +136,13 @@ int	tokenize_input(char **input, t_token **tokens, t_free **ptrs)
 	return ((ft_free_ptr(ptrs, *input)), 1);
 }
 
-int	process_input(char *input, t_list **list_env, t_list **list_set, t_free **ptrs)
+int	process_input(char *input, t_list **list_env, t_free **ptrs)
 {
 	t_token *tokens;
 	t_cmd	*cmd;
 	int		here_doc;
 	int		s_error;
 
-	(void)list_set;
-	(void)list_env;
 	(tokens = NULL, cmd = NULL, here_doc = 0, s_error = 1);
 	if (!valid_quotes(input))
 		return (2);
@@ -169,7 +167,8 @@ int	process_input(char *input, t_list **list_env, t_list **list_set, t_free **pt
 	expanding(&tokens, *list_env, ptrs);
 	if (!final_command(&tokens, &cmd, ptrs))
 		return (0);
-	print_it_2(cmd);
+	// print_it_2(cmd);
+	ft_execution(&cmd, list_env, ptrs);
 	ft_free_all(ptrs);
 	return (1);
 }
@@ -199,7 +198,7 @@ int read_input(t_list **list_env)
 			add_history(input);
 		else if (history_length > 0)
 				ft_strcpy(input, history_get(history_length)->line);
-		if (process_input(input, list_env, &list_set, &ptrs) == 2)
+		if (process_input(input, list_env, &ptrs) == 2)
 			(ft_free_all(&ptrs), printf("minishell: syntax error\n"));
 	}
 	return (1);
@@ -216,7 +215,6 @@ int read_input(t_list **list_env)
 int main(int ac, char **av, char **envp)
 {
 	t_list		*list_env;
-
 	if (ac != 1)
 		return (printf("minishell: too many arguments\n"), 1);
 	(void)av;

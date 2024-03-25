@@ -6,11 +6,52 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/20 03:10:42 by obouchta          #+#    #+#             */
-/*   Updated: 2024/03/22 01:13:58 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/03/25 06:30:40 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int	check_braces(char *value)
+{
+	int	i;
+
+	i = 0;
+	while (value[i])
+	{
+		if ((quoted(value, i) == '\"' || !quoted(value, i))
+			&& value[i] == '$' && value[i + 1] == '{')
+		{
+			i++;
+			if (!value[i + 1] || value[i + 1] == '{'
+				|| value[i + 1] == '}'
+				|| is_whitespace(value[i + 1]))
+				return (1);
+		}
+		else
+			i++;
+	}
+	return (0);
+}
+
+int	invalid_braces(t_token *curr)
+{
+	int	i;
+
+	i = 0;
+	if (curr->value && check_braces(curr->value))
+		return (1);
+	if (curr->args_len)
+	{
+		while (i < curr->args_len)
+		{
+			if (check_braces(curr->args[i].value))
+				return (1);
+			i++;
+		}
+	}
+	return (0);
+}
 
 int	syntax_error(t_token *tokens, int *here_doc)
 {
@@ -31,7 +72,9 @@ int	syntax_error(t_token *tokens, int *here_doc)
 				|| curr->next->type == APPEND || curr->next->type == PIPE || curr->next->type == HERE_DOC)
 				return (1);
 		}
-		if (type == PIPE && (!curr->next || curr->next->type == PIPE))
+		else if (type == PIPE && (!curr->next || curr->next->type == PIPE))
+			return (1);
+		else if (invalid_braces(curr))
 			return (1);
 		curr = curr->next;
 	}
