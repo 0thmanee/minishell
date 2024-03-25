@@ -6,7 +6,7 @@
 /*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/12 03:41:21 by yasser03          #+#    #+#             */
-/*   Updated: 2024/03/25 02:49:22 by yboutsli         ###   ########.fr       */
+/*   Updated: 2024/03/25 03:21:25 by yboutsli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,9 +117,10 @@ int	execute_execve(t_cmd *cmd, t_list **list_env, char **npath)
 	int		status;
 
 	status = 0;
+	if (!(cmd->cmd) || !(cmd->cmd[0]))
+		return (0);
 	args = execve_argv(cmd);
 	cmd_fpath = cmd_path(cmd->cmd, npath);
-	printf("cmd = %s\n", cmd_fpath);
 	if (!cmd_fpath)
 	{
 		printf("command not found: %s\n", cmd->cmd);
@@ -136,6 +137,7 @@ int	execute_execve(t_cmd *cmd, t_list **list_env, char **npath)
 
 int	execute_parent(t_cmd *cmd, t_list **list_env, t_free **ptrs)
 {
+	(void)ptrs;
 	char	**npath;
 	int		status;
 

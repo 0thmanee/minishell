@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_malloc.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/16 01:46:06 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/03/22 08:57:27 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/03/25 03:22:22 by yboutsli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,9 @@ void	ft_free_ptr(t_free **list_aloc, void *ptr)
 				*list_aloc = current->next;
 			
 			free(current->ptr);
+			current->ptr = NULL;
 			free(current);
+			current = NULL;
 			return ;
 		}
 		prev = current;

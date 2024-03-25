@@ -6,7 +6,7 @@
 /*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 16:47:50 by obouchta          #+#    #+#             */
-/*   Updated: 2024/03/24 16:29:26 by yboutsli         ###   ########.fr       */
+/*   Updated: 2024/03/25 03:08:51 by yboutsli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,7 +141,7 @@ char	*ft_strjoin_2(char *s1, char *s2)
 	i = 0;
 	j = 0;
 	len_s1 = ft_strlen(s1);
-	len_s2 = ft_strlen (s2);
+	len_s2 = ft_strlen(s2);
 	p = (char *)malloc (sizeof(char) * (len_s1 + len_s2 + 1));
 	if (!p)
 		return (NULL);

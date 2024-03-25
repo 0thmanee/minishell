@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expanding.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/15 02:58:32 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/03/22 09:04:27 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/03/25 03:12:31 by yboutsli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ char *remove_char(char *str, int char_index, t_free **ptrs)
 		return (tmp2);
 	else if (!tmp2)
 		return (tmp1);
-	str = ft_strjoin(tmp1, tmp2, ptrs);
+	str = ft_strjoin_2(tmp1, tmp2);
 	ft_free_ptr(ptrs, tmp1);
 	ft_free_ptr(ptrs, tmp2);
 	return (str);
@@ -41,14 +41,14 @@ char	*replace_mini_str(char *str, int start, int end, char *mini_str, t_free **p
 		tmp2 = ft_strdup(mini_str, ptrs);
 	else
 	{
-		tmp2 = ft_strjoin(tmp1, mini_str, ptrs);
+		tmp2 = ft_strjoin_2(tmp1, mini_str);
 		ft_free_ptr(ptrs, tmp1);
 	}
 	tmp3 = ft_substr(str, end, ft_strlen(str) - end + 1, ptrs);
 	if (!tmp3)
 		return (tmp2);
 	else
-		tmp1 = ft_strjoin(tmp2, tmp3, ptrs);
+		tmp1 = ft_strjoin_2(tmp2, tmp3);
 	ft_free_ptr(ptrs, tmp3);
 	ft_free_ptr(ptrs, tmp2);
 	return (tmp1);
@@ -76,6 +76,7 @@ char	*case_1(char *result, int *i, t_list *list_env, t_free **ptrs)
 	var = ft_substr(result, *i + 1, j - 1, ptrs);
 	value = get_env(&list_env, var);
 	ft_free_ptr(ptrs, var);
+	var = NULL;
 	if (value != NULL)
 	{
 		tmp = result;
@@ -96,7 +97,7 @@ char	*case_1(char *result, int *i, t_list *list_env, t_free **ptrs)
 		if (var)
 		{
 			tmp = result;
-			result = ft_strjoin(tmp, var, ptrs);
+			result = ft_strjoin_2(tmp, var);
 			ft_free_ptr(ptrs, tmp);
 			ft_free_ptr(ptrs, var);
 			(*i)--;
