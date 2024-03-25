@@ -209,4 +209,5 @@ char	*cmd_path(char *cmd, char **npath);
 char	**execve_argv(t_cmd *cmd);
 int		export(t_cmd *cmd, t_list **list_env);
 int		echo(t_cmd *cmd);
+int unset(t_list **list_env, char **args);
 #endif

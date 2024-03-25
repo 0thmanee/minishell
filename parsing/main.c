@@ -6,7 +6,7 @@
 /*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 08:42:35 by obouchta          #+#    #+#             */
-/*   Updated: 2024/03/24 16:06:33 by yboutsli         ###   ########.fr       */
+/*   Updated: 2024/03/25 02:27:55 by yboutsli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -167,7 +167,7 @@ int	process_input(char *input, t_list **list_env, t_free **ptrs)
 	expanding(&tokens, *list_env, ptrs);
 	if (!final_command(&tokens, &cmd, ptrs))
 		return (0);
-	print_it_2(cmd);
+	// print_it_2(cmd);
 	ft_execution(&cmd, list_env, ptrs);
 	ft_free_all(ptrs);
 	return (1);

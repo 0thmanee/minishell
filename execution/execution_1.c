@@ -6,62 +6,66 @@
 /*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/12 03:41:21 by yasser03          #+#    #+#             */
-/*   Updated: 2024/03/24 22:55:42 by yboutsli         ###   ########.fr       */
+/*   Updated: 2024/03/25 02:49:22 by yboutsli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-// int	env_size(t_list *list_env)
-// {
-// 	int	count;
-// 	t_list *current;
-
-// 	count = 0;
-// 	current = list_env;	
-// 	while (current)
-// 	{
-// 		if (current->var && current->value)
-// 			count++;
-// 		current = current->next;
-// 	}
-// 	return (count);
-// }
-
-// char	**list2tab(t_list *list_env)
-// {
-// 	char 	**tab;
-// 	t_list *current;
-// 	char	*tmp2;
-// 	int		i;
-// 	char	*tmp1;
-
-// 	tab = malloc((env_size(list_env) + 1) * sizeof(char *));
-// 	if (!tab)
-// 		return (NULL);
-// 	current = list_env;
-// 	i = 0;
-// 	while (current)
-// 	{
-// 		if (current->var && current->value)
-// 		{
-// 			tmp1 = ft_strjoin(current->var, "=");
-// 			tmp2 = ft_strjoin(tmp1, current->value);
-// 			free(tmp1);
-// 			tab[i] = malloc((ft_strlen(tmp2) + 1));
-// 			if (!tab[i])
-// 				return (NULL);
-// 			ft_strcpy(tab[i], tmp2);
-// 			i++;
-// 		}
-// 		current = current->next;
-// 	}
-// 	tab[i] = NULL;
-// 	return(tab);
-// }
-int	child_process(t_cmd *cmd, char **args, char *cmd_fpath)
+int	env_size(t_list *list_env)
 {
-	if (execve(cmd_fpath, args, NULL) == -1)
+	int	count;
+	t_list *current;
+
+	count = 0;
+	current = list_env;	
+	while (current)
+	{
+		if (current->var && current->value)
+			count++;
+		current = current->next;
+	}
+	return (count);
+}
+
+char	**list2tab(t_list *list_env)
+{
+	char 	**tab;
+	t_list *current;
+	char	*tmp2;
+	int		i;
+	char	*tmp1;
+
+	tab = malloc((env_size(list_env) + 1) * sizeof(char *));
+	if (!tab)
+		return (NULL);
+	current = list_env;
+	i = 0;
+	while (current)
+	{
+		if (current->var && current->value)
+		{
+			tmp1 = ft_strjoin_2(current->var, "=");
+			tmp2 = ft_strjoin_2(tmp1, current->value);
+			free(tmp1);
+			tab[i] = malloc((ft_strlen(tmp2) + 1));
+			if (!tab[i])
+				return (NULL);
+			ft_strcpy(tab[i], tmp2);
+			i++;
+		}
+		current = current->next;
+	}
+	tab[i] = NULL;
+	return(tab);
+}
+
+int	child_process(t_cmd *cmd, char **args, char *cmd_fpath, t_list **list_env)
+{
+	char	**env_tab;
+
+	env_tab = list2tab(*list_env);
+	if (execve(cmd_fpath, args, env_tab) == -1)
 	{
 		perror(cmd->cmd);
 		return (1);
@@ -105,7 +109,7 @@ int	child_process(t_cmd *cmd, char **args, char *cmd_fpath)
 // 	return (0);
 // }
 
-int	execute_execve(t_cmd *cmd, t_list *list_env, char **npath)
+int	execute_execve(t_cmd *cmd, t_list **list_env, char **npath)
 {
 	int		pid;
 	char	*cmd_fpath;
@@ -115,6 +119,7 @@ int	execute_execve(t_cmd *cmd, t_list *list_env, char **npath)
 	status = 0;
 	args = execve_argv(cmd);
 	cmd_fpath = cmd_path(cmd->cmd, npath);
+	printf("cmd = %s\n", cmd_fpath);
 	if (!cmd_fpath)
 	{
 		printf("command not found: %s\n", cmd->cmd);
@@ -122,7 +127,7 @@ int	execute_execve(t_cmd *cmd, t_list *list_env, char **npath)
 	}
 	pid = fork();
 	if (pid == 0)
-		status = child_process(cmd, args, cmd_fpath);
+		status = child_process(cmd, args, cmd_fpath, list_env);
 	waitpid(pid, NULL, 0);
 	status = 1;
 	free(args);
@@ -145,10 +150,12 @@ int	execute_parent(t_cmd *cmd, t_list **list_env, t_free **ptrs)
 		status = echo(cmd);
 	else if (!ft_strcmp(cmd->cmd, "pwd"))
 		pwd();
+	else if (!ft_strcmp(cmd->cmd, "unset"))
+		unset(list_env, cmd->args);
 	else
 	{
 		npath = path(list_env);
-		status = execute_execve(cmd, *list_env, npath);
+		status = execute_execve(cmd, list_env, npath);
 	}
 	return (status);
 }
