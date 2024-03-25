@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expanding.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
+/*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/15 02:58:32 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/03/25 03:12:31 by yboutsli         ###   ########.fr       */
+/*   Updated: 2024/03/25 06:07:49 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,8 +75,7 @@ char	*case_1(char *result, int *i, t_list *list_env, t_free **ptrs)
 		j++;
 	var = ft_substr(result, *i + 1, j - 1, ptrs);
 	value = get_env(&list_env, var);
-	ft_free_ptr(ptrs, var);
-	var = NULL;
+	(ft_free_ptr(ptrs, var), var = NULL);
 	if (value != NULL)
 	{
 		tmp = result;
@@ -92,7 +91,7 @@ char	*case_1(char *result, int *i, t_list *list_env, t_free **ptrs)
 		if (result[j + *i] != '\0')
 			var = ft_substr(result, j + *i, ft_strlen(result) - j - *i, ptrs);
 		tmp = result;
-		result = ft_substr(tmp, 0, *i - 1, ptrs);
+		result = ft_substr(tmp, 0, *i, ptrs);
 		ft_free_ptr(ptrs, tmp);
 		if (var)
 		{
@@ -100,7 +99,6 @@ char	*case_1(char *result, int *i, t_list *list_env, t_free **ptrs)
 			result = ft_strjoin_2(tmp, var);
 			ft_free_ptr(ptrs, tmp);
 			ft_free_ptr(ptrs, var);
-			(*i)--;
 		}
 	}
 	return (result);
@@ -150,8 +148,8 @@ char	*expanding_helper1(t_list *list_env, t_token *token, t_free **ptrs)
 				return (0);
 			count++;
 		}
-		if (i > ft_strlen(result) || !result[i])
-			break;
+		if (i >= ft_strlen(result))
+			break ;
 		else if (result[i] == '$')
 			continue;
 		i++;

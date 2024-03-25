@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/16 03:21:04 by obouchta          #+#    #+#             */
-/*   Updated: 2024/03/20 03:14:06 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/03/25 06:03:12 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,15 +29,20 @@ void	check_for_var_helper_2(char *value, int *vars, int *i, int *j)
 	(*i)++;
 	while (value[*i] && value[*i] != '\"')
 	{
-		if (value[*i] == '$' && value[(*i) + 1]
-			&& value[(*i) + 1] >= '0' && value[(*i) + 1] <= '9')
-			vars[(*j)++] = 3;
-		else if (value[*i] == '$' && value[(*i) + 1]
-			&& !is_whitespace(value[(*i) + 1])
-			&& value[(*i) + 1] != '\'' && value[(*i) + 1] != '\"')
-			vars[(*j)++] = 1;
-		else if (value[*i] == '$')
-			vars[(*j)++] = 0;
+		if (value[*i] == '$')
+		{
+			if (is_whitespace(value[(*i) + 1])
+				|| value[(*i) + 1] != '\'' || value[(*i) + 1] != '\"')
+				vars[(*j)++] = 0;
+			else if (value[(*i) + 1] && value[*i + 1] == '?')
+				vars[(*j)++] = 4;
+			else if (value[(*i) + 1] && ft_isalpha(value[*i + 1]))
+				vars[(*j)++] = 3;
+			else if (value[(*i) + 1])
+				vars[(*j)++] = 1;
+			else
+				vars[(*j)++] = 0;
+		}
 		(*i)++;
 	}
 	(*i)++;
@@ -47,7 +52,9 @@ void	check_for_var_helper_3(char *value, int *vars, int *i, int *j)
 {
 	if (value[(*i) + 1] == '\"' || value[(*i) + 1] == '\'')
 		vars[(*j)++] = 2;
-	else if (value[(*i) + 1] >= '0' && value[(*i) + 1] <= '9')
+	else if (value[(*i) + 1] == '?')
+		vars[(*j)++] = 4;
+	else if (ft_isalpha(value[(*i) + 1]))
 		vars[(*j)++] = 3;
 	else
 		vars[(*j)++] = 1;
