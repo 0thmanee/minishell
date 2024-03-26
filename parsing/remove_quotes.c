@@ -6,11 +6,25 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 17:17:09 by obouchta          #+#    #+#             */
-/*   Updated: 2024/03/22 08:57:29 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/03/26 03:29:39 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int	barces_len(char *cmd, int *i, int *len)
+{
+	if ((quoted(cmd, *i) == '\"' || !quoted(cmd, *i))
+		&& *i > 0 && cmd[*i - 1] == '$' && cmd[*i] == '{')
+	{
+		(*len) -= 2;
+		while (cmd[*i] && cmd[*i] != '}')
+			(*i)++;
+		(*i)++;
+		return (1);
+	}
+	return (0);
+}
 
 int	no_quotes_len(char *cmd)
 {
@@ -30,10 +44,26 @@ int	no_quotes_len(char *cmd)
 				i++;
 			i++;
 		}
+		else if (barces_len(cmd, &i, &len))
+			continue ;
 		else
 			i++;
 	}
 	return (len);
+}
+
+int	barces_remmover(char *cmd, char *new_cmd, int *i, int *j)
+{
+	if ((quoted(cmd, *i) == '\"' || !quoted(cmd, *i))
+		&& *i > 0 && cmd[*i - 1] == '$' && cmd[*i] == '{')
+	{
+		(*i)++;
+		while (cmd[*i] && cmd[*i] != '}')
+			new_cmd[(*j)++] = cmd[(*i)++];
+		(*i)++;
+		return (1);
+	}
+	return (0);
 }
 
 char	*no_quoted_value(char *cmd, int len, t_free **ptrs)
@@ -43,9 +73,7 @@ char	*no_quoted_value(char *cmd, int len, t_free **ptrs)
 	int		j;
 	char	quote;
 
-	i = 0;
-	j = 0;
-	new_cmd = ft_malloc(ptrs, len + 1);
+	(i = 0, j = 0, new_cmd = ft_malloc(ptrs, len + 1));
 	if (!new_cmd)
 		(ft_free_all(ptrs), exit(1));
 	while (cmd[i])
@@ -57,6 +85,8 @@ char	*no_quoted_value(char *cmd, int len, t_free **ptrs)
 				new_cmd[j++] = cmd[i++];
 			i++;
 		}
+		else if (barces_remmover(cmd, new_cmd, &i, &j))
+			continue ;
 		else
 			new_cmd[j++] = cmd[i++];
 	}

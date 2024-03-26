@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 08:42:35 by obouchta          #+#    #+#             */
-/*   Updated: 2024/03/25 06:03:48 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/03/26 03:43:30 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,11 +146,8 @@ int	process_input(char *input, t_list **list_env, t_free **ptrs)
 	(tokens = NULL, cmd = NULL, here_doc = 0, s_error = 1);
 	if (!valid_quotes(input))
 		return (2);
-	add_spaces(&input, ptrs);
-	trim_input(&input, ptrs);
-	if (!input)
-		return (1);
-	if (!tokenize_input(&input, &tokens, ptrs))
+	(add_spaces(&input, ptrs), trim_input(&input, ptrs));
+	if (!input || !tokenize_input(&input, &tokens, ptrs))
 		return (0);
 	if (syntax_error(tokens, &here_doc))
 	{
@@ -160,14 +157,12 @@ int	process_input(char *input, t_list **list_env, t_free **ptrs)
 			return (3);
 		return (2);
 	}
-	join_args(&tokens, ptrs);
-	specify_vars(&tokens, ptrs);
+	(join_args(&tokens, ptrs), specify_vars(&tokens, ptrs));
 	if (!remove_quotes(&tokens, ptrs))
 		return (0);
 	expanding(&tokens, *list_env, ptrs);
 	if (!final_command(&tokens, &cmd, ptrs))
 		return (0);
-	// print_it_2(cmd);
 	ft_execution(&cmd, list_env, ptrs);
 	ft_free_all(ptrs);
 	return (1);

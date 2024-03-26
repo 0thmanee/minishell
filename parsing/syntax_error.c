@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/20 03:10:42 by obouchta          #+#    #+#             */
-/*   Updated: 2024/03/25 06:30:40 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/03/26 02:22:48 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,20 +16,28 @@ int	check_braces(char *value)
 {
 	int	i;
 
-	i = 0;
-	while (value[i])
+	i = -1;
+	while (value[++i])
 	{
 		if ((quoted(value, i) == '\"' || !quoted(value, i))
-			&& value[i] == '$' && value[i + 1] == '{')
+			&& value[i] == '$' && value[i + 1] && value[i + 1] == '{')
 		{
-			i++;
-			if (!value[i + 1] || value[i + 1] == '{'
-				|| value[i + 1] == '}'
-				|| is_whitespace(value[i + 1]))
+			i += 2;
+			if (!value[i] || value[i] == '{' || value[i] == '}'
+				|| value[i] == '\"')
 				return (1);
+			else
+			{
+				while (value[i] && value[i] != '}' && value[i] != '\"')
+				{
+					if (is_whitespace(value[i]) || value[i] == '{' || value[i++] == '$')
+						return (1);
+				}
+				if (value[i] != '}')
+					return (1);
+			}
+			continue ;
 		}
-		else
-			i++;
 	}
 	return (0);
 }
