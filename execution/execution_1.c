@@ -6,7 +6,7 @@
 /*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/12 03:41:21 by yasser03          #+#    #+#             */
-/*   Updated: 2024/03/25 03:21:25 by yboutsli         ###   ########.fr       */
+/*   Updated: 2024/03/26 20:55:16 by yboutsli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,10 +132,10 @@ int	execute_execve(t_cmd *cmd, t_list **list_env, char **npath)
 	waitpid(pid, NULL, 0);
 	status = 1;
 	free(args);
-	return(0);
+	return(status);
 }
 
-int	execute_parent(t_cmd *cmd, t_list **list_env, t_free **ptrs)
+int	execute_1(t_cmd *cmd, t_list **list_env, t_free **ptrs)
 {
 	(void)ptrs;
 	char	**npath;
@@ -161,16 +161,149 @@ int	execute_parent(t_cmd *cmd, t_list **list_env, t_free **ptrs)
 	}
 	return (status);
 }
+int	child_execution(int fd[2], t_cmd *cmd, t_list **list_env, int io_fd[2])
+{
+	int		status;
+	char	**npath;
+	char	*cmd_fpath;
+	char	**args;
+
+	close2(io_fd);
+	dup2(fd[1], 1);
+	close2(fd);
+	status = 0;
+	if (!(cmd->cmd) || !(cmd->cmd[0]))
+			return (0);
+	if (!ft_strcmp(cmd->cmd, "export"))
+		status = export(cmd, list_env);
+	else if (!ft_strcmp(cmd->cmd, "env"))
+		status = env(*list_env);
+	else if (!ft_strcmp(cmd->cmd, "cd"))
+		status = cd(cmd->args, list_env);
+	else if (!ft_strcmp(cmd->cmd, "echo"))
+		status = echo(cmd);
+	else if (!ft_strcmp(cmd->cmd, "pwd"))
+		pwd();
+	else if (!ft_strcmp(cmd->cmd, "unset"))
+		unset(list_env, cmd->args);
+	else
+	{
+		args = execve_argv(cmd);
+		npath = path(list_env);
+		cmd_fpath = cmd_path(cmd->cmd, npath);
+		if (!cmd_fpath)
+		{
+			printf("command not found: %s\n", cmd->cmd);
+			exit (1);
+		}
+		status = child_process(cmd, args, cmd_fpath, list_env);
+	}
+	return (status);		
+}
+int middle_process(t_cmd *cmd, t_list **list_env, t_free **ptrs, int io_fd[2])
+{
+	int status;
+	int	fd[2];
+	int	pid;
+	(void)ptrs;
+
+	status = 0;
+	if (pipe(fd) == -1)
+	{
+		perror("pipe");
+		exit(1);
+	}
+	pid = fork();
+	if (pid < 0)
+	{
+		perror("Fork: ");
+		exit(1);
+	}
+	if (pid == 0)
+		status = child_execution(fd, cmd, list_env, io_fd);
+	dup2(fd[0], 0);
+	close2(fd);
+	return (status);
+}
+int	final_cmd(t_cmd *cmd, t_list **list_env, int io_fd[2])
+{
+	int 	status;
+	char	**npath;
+	char	*cmd_fpath;
+	char	**args;
+	int		pid;
+	status = 0;
+	dup2(io_fd[1], 1);
+	close(io_fd[1]);
+	pid = fork();
+	if (pid < 0)
+	{
+		perror("Fork: ");
+		exit(1);
+	}
+	if (pid == 0)
+	{
+		status = 0;
+		if (!ft_strcmp(cmd->cmd, "export"))
+			status = export(cmd, list_env);
+		else if (!ft_strcmp(cmd->cmd, "env"))
+			status = env(*list_env);
+		else if (!ft_strcmp(cmd->cmd, "cd"))
+			status = cd(cmd->args, list_env);
+		else if (!ft_strcmp(cmd->cmd, "echo"))
+			status = echo(cmd);
+		else if (!ft_strcmp(cmd->cmd, "pwd"))
+			pwd();
+		else if (!ft_strcmp(cmd->cmd, "unset"))
+			unset(list_env, cmd->args);
+		else
+		{
+			if (!(cmd->cmd) || !(cmd->cmd[0]))
+				return (0);
+			args = execve_argv(cmd);
+			npath = path(list_env);
+			cmd_fpath = cmd_path(cmd->cmd, npath);
+			if (!cmd_fpath)
+			{
+				printf("command not found: %s\n", cmd->cmd);
+				exit (1);
+			}
+			status = child_process(cmd, args, cmd_fpath, list_env);
+		}
+	}
+	dup2(io_fd[0], 0);
+	close(io_fd[0]);
+	return (status);		
+}
+
+int	execute_2(t_cmd **cmd_list, t_list **list_env, t_free **ptrs)
+{
+	t_cmd	*curr;
+	int	io_fd[2];
+	int status;
+
+	io_fd[0] = dup(0);
+	io_fd[1] = dup(1);
+	curr = *cmd_list;
+	while (curr->next)
+	{
+		status = middle_process(curr, list_env, ptrs, io_fd);
+		curr = curr->next;
+	}
+	status = final_cmd(curr, list_env, io_fd);
+	while (waitpid(0, 0, 0) != -1)
+		;
+	return (status);
+}
+
 int	ft_execution(t_cmd **cmd, t_list **list_env, t_free **ptrs)
 {
 	int	status;
 
 	status = 0;
 	if (ft_lstsize(*cmd) == 1)
-		status = execute_parent(*cmd, list_env, ptrs);
-	if (!ft_strcmp((*cmd)->cmd, "export"))
-		export((*cmd), list_env);
-	else if (!ft_strcmp((*cmd)->cmd, "env"))
-		env(*list_env);
+		status = execute_1(*cmd, list_env, ptrs);
+	else
+		status = execute_2(cmd, list_env, ptrs);
 	return (status);
 }

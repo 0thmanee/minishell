@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution_utils_1.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yasser03 <yasser03@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 14:59:37 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/03/14 15:00:03 by yboutsli         ###   ########.fr       */
+/*   Updated: 2024/03/26 17:46:09 by yasser03         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,4 +41,9 @@ char	**path(t_list **envp)
 		current = current->next;
 	}
 	return (NULL);
+}
+void	close2(int tab[2])
+{
+	close(tab[0]);
+	close(tab[1]);
 }
