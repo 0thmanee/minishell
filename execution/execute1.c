@@ -6,7 +6,7 @@
 /*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 11:49:46 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/03/27 16:30:57 by yboutsli         ###   ########.fr       */
+/*   Updated: 2024/03/27 17:25:42 by yboutsli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,47 +47,22 @@ void	handel_io(t_cmd *cmd)
 			}
 		}
 	}
-}	
-
-int	new_execve(t_cmd *cmd, char **args, char *cmd_fpath, t_list **list_env)
-{
-	char	**env_tab;
-
-	env_tab = list2tab(*list_env);
-	if (execve(cmd_fpath, args, env_tab) == -1)
-	{
-		perror(cmd->cmd);
-		return (1);
-	}
-	return (0);
 }
+
 
 int	child_execve(t_cmd *cmd, t_list **list_env)
 {
 	int		pid;
-	char	*cmd_fpath;
-	char	**args;
 	int		status;
-	char	**npath;
 
 	status = 0;
 	if (!(cmd->cmd) || !(cmd->cmd[0]))
 		return (0);
-	args = execve_argv(cmd);
-	npath = path(list_env);
-	cmd_fpath = cmd_path(cmd->cmd, npath);
-	if (!cmd_fpath)
-	{
-		printf("command not found: %s\n", cmd->cmd);
-		return (1);
-	}
+
 	pid = fork();
 	if (pid == 0)
-		status = new_execve(cmd, args, cmd_fpath, list_env);
+		status = new_execve(cmd, list_env);
 	waitpid(pid, NULL, 0);
-	free(args);
-	ft_free(npath);
-	free(cmd_fpath);
 	return(status);
 }
 

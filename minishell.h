@@ -212,9 +212,12 @@ int		export(t_cmd *cmd, t_list **list_env);
 int		echo(t_cmd *cmd);
 int unset(t_list **list_env, char **args);
 int	execute_1(t_cmd *cmd, t_list **list_env, t_free **ptrs);
-int	new_execve(t_cmd *cmd, char **args, char *cmd_fpath, t_list **list_env);
 char	**list2tab(t_list *list_env);
 int	env_size(t_list *list_env);
 void	close2(int tab[2]);
 void	here_doc(t_cmd *cmd);
+int	new_execve(t_cmd *cmd, t_list **list_env);
+int	execute_2(t_cmd **cmd_list, t_list **list_env, t_free **ptrs, int *io_fd);
+int new_fork();
+void	handel_io(t_cmd *cmd);
 #endif

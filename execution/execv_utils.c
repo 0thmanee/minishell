@@ -6,7 +6,7 @@
 /*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 16:03:22 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/03/27 16:22:42 by yboutsli         ###   ########.fr       */
+/*   Updated: 2024/03/27 16:49:34 by yboutsli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,4 +67,27 @@ char	**execve_argv(t_cmd *cmd)
 			args[i] = cmd->args[i - 1];
 	}
 	return (args);
+}
+int	new_execve(t_cmd *cmd, t_list **list_env)
+{
+	char	**env_tab;
+	char	**args;
+	char	**npath;
+	char	*cmd_fpath;
+
+	args = execve_argv(cmd);
+	npath = path(list_env);
+	cmd_fpath = cmd_path(cmd->cmd, npath);
+	env_tab = list2tab(*list_env);
+	if (!cmd_fpath)
+	{
+		printf("command not found: %s\n", cmd->cmd);//write instead
+		exit (1);
+	}
+	if (execve(cmd_fpath, args, env_tab) == -1)
+	{
+		perror(cmd->cmd);
+		exit (1);
+	}
+	return (0);
 }
