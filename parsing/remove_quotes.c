@@ -6,25 +6,11 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 17:17:09 by obouchta          #+#    #+#             */
-/*   Updated: 2024/03/26 03:29:39 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/03/26 05:07:38 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-int	barces_len(char *cmd, int *i, int *len)
-{
-	if ((quoted(cmd, *i) == '\"' || !quoted(cmd, *i))
-		&& *i > 0 && cmd[*i - 1] == '$' && cmd[*i] == '{')
-	{
-		(*len) -= 2;
-		while (cmd[*i] && cmd[*i] != '}')
-			(*i)++;
-		(*i)++;
-		return (1);
-	}
-	return (0);
-}
 
 int	no_quotes_len(char *cmd)
 {
@@ -44,26 +30,10 @@ int	no_quotes_len(char *cmd)
 				i++;
 			i++;
 		}
-		else if (barces_len(cmd, &i, &len))
-			continue ;
 		else
 			i++;
 	}
 	return (len);
-}
-
-int	barces_remmover(char *cmd, char *new_cmd, int *i, int *j)
-{
-	if ((quoted(cmd, *i) == '\"' || !quoted(cmd, *i))
-		&& *i > 0 && cmd[*i - 1] == '$' && cmd[*i] == '{')
-	{
-		(*i)++;
-		while (cmd[*i] && cmd[*i] != '}')
-			new_cmd[(*j)++] = cmd[(*i)++];
-		(*i)++;
-		return (1);
-	}
-	return (0);
 }
 
 char	*no_quoted_value(char *cmd, int len, t_free **ptrs)
@@ -85,8 +55,6 @@ char	*no_quoted_value(char *cmd, int len, t_free **ptrs)
 				new_cmd[j++] = cmd[i++];
 			i++;
 		}
-		else if (barces_remmover(cmd, new_cmd, &i, &j))
-			continue ;
 		else
 			new_cmd[j++] = cmd[i++];
 	}
@@ -113,7 +81,8 @@ int	remove_quotes(t_token **tokens, t_free **ptrs)
 			while (++i < curr->args_len)
 				(tmp = curr->args[i].value, 
 				curr->args[i].value = no_quoted_value(curr->args[i].value,
-					no_quotes_len(curr->args[i].value), ptrs), ft_free_ptr(ptrs, tmp));
+					no_quotes_len(curr->args[i].value), ptrs),
+					ft_free_ptr(ptrs, tmp));
 		}
 		curr = curr->next;
 	}

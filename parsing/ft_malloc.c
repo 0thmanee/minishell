@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/16 01:46:06 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/03/25 06:08:07 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/03/27 02:28:23 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,7 @@ void	ft_free_ptr(t_free **list_aloc, void *ptr)
 			else
 				*list_aloc = current->next;
 			free(current->ptr);
+			current->ptr = NULL;
 			free(current);
 			current = NULL;
 			return ;

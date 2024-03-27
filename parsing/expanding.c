@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/15 02:58:32 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/03/25 06:07:49 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/03/27 03:47:39 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,15 +54,27 @@ char	*replace_mini_str(char *str, int start, int end, char *mini_str, t_free **p
 	return (tmp1);
 }
 
-int char_is_valid(char c)
+void	case_1_helper(char **result, int *i, t_free **ptrs)
 {
-	if (!(c >= 'a' && c <= 'z')
-		&& !(c >= 'A' && c <= 'Z')
-		&& !(c >= '0' && c <= '9') && c != '_')
-		return (1);
-	else
-		return (0);
+	char	*var;
+	char	*tmp;
+	int		j;
+
+	(j = 1, var = NULL, tmp = NULL);
+	while (!char_is_valid((*result)[j + *i]))
+		j++;
+	if ((*result)[j + *i] != '\0')
+		var = ft_substr(*result, j + *i, ft_strlen(*result) - j - *i, ptrs);
+	tmp = *result;
+	*result = ft_substr(tmp, 0, *i, ptrs);
+	ft_free_ptr(ptrs, tmp);
+	if (var)
+	{
+		(tmp = *result, *result = ft_strjoin_2(tmp, var));
+		(ft_free_ptr(ptrs, tmp), ft_free_ptr(ptrs, var));
+	}
 }
+
 char	*case_1(char *result, int *i, t_list *list_env, t_free **ptrs)
 {
 	int		j;
@@ -80,27 +92,10 @@ char	*case_1(char *result, int *i, t_list *list_env, t_free **ptrs)
 	{
 		tmp = result;
 		result = replace_mini_str(tmp, *i,  *i + j, value, ptrs);
-		*i += ft_strlen(value);
-		ft_free_ptr(ptrs, tmp);
+		(*i += ft_strlen(value), ft_free_ptr(ptrs, tmp));
 	}
 	else
-	{
-		j = 1;
-		while (!char_is_valid(result[j + *i]))
-			j++;
-		if (result[j + *i] != '\0')
-			var = ft_substr(result, j + *i, ft_strlen(result) - j - *i, ptrs);
-		tmp = result;
-		result = ft_substr(tmp, 0, *i, ptrs);
-		ft_free_ptr(ptrs, tmp);
-		if (var)
-		{
-			tmp = result;
-			result = ft_strjoin_2(tmp, var);
-			ft_free_ptr(ptrs, tmp);
-			ft_free_ptr(ptrs, var);
-		}
-	}
+		case_1_helper(&result, i, ptrs);
 	return (result);
 }
 
@@ -116,6 +111,51 @@ char	*case_3(char *result, int *i, t_free **ptrs)
 	result = remove_char(result, *i, ptrs);
 	result = remove_char(result, *i, ptrs);
 	(*i)++;
+	return (result);
+}
+
+void	case_4_helper(char **result, int *i, t_free **ptrs)
+{
+	char	*var;
+	char	*tmp;
+	int		j;
+
+	(j = 2, var = NULL, tmp = NULL);
+	while ((*result)[j + *i] && (*result)[j + *i] != '}')
+		j++;
+	if ((*result)[j + *i] != '\0')
+		var = ft_substr(*result, j + *i, ft_strlen(*result) - j - *i - 1, ptrs);
+	tmp = *result;
+	*result = ft_substr(tmp, 0, *i, ptrs);
+	ft_free_ptr(ptrs, tmp);
+	if (var)
+	{
+		(tmp = *result, *result = ft_strjoin_2(tmp, var));
+		(ft_free_ptr(ptrs, tmp), ft_free_ptr(ptrs, var));
+	}
+}
+
+char	*case_4(char *result, int *i, t_list *list_env, t_free **ptrs)
+{
+	int		j;
+	char	*tmp;
+	char	*var;
+	char	*value;
+
+	j = 2;
+	while (result[j + *i] && result[j + *i] != '}')
+		j++;
+	var = ft_substr(result, *i + 2, j - 2, ptrs);
+	value = get_env(&list_env, var);
+	(ft_free_ptr(ptrs, var), var = NULL);
+	if (value != NULL)
+	{
+		tmp = result;
+		result = replace_mini_str(tmp, *i,  *i + j + 1, value, ptrs);
+		(*i += ft_strlen(value) + 1, ft_free_ptr(ptrs, tmp));
+	}
+	else
+		case_4_helper(&result, i, ptrs);
 	return (result);
 }
 
@@ -144,6 +184,8 @@ char	*expanding_helper1(t_list *list_env, t_token *token, t_free **ptrs)
 				result = case_2(result, &i, ptrs);
 			else if (token->vars[count] == 3)
 				result = case_3(result, &i, ptrs);
+			else if (token->vars[count] == 4)
+				result = case_4(result, &i, list_env, ptrs);
 			if (!result)
 				return (0);
 			count++;
@@ -183,6 +225,8 @@ char	*expanding_helper2(t_list *list_env, t_value args, t_free **ptrs)
 				result = case_2(result, &i, ptrs);
 			else if (args.vars[count] == 3)
 				result = case_3(result, &i, ptrs);
+			else if (args.vars[count] == 4)
+				result = case_4(result, &i, list_env, ptrs);
 			if (!result)
 				return (0);
 			count++;
