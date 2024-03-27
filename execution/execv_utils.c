@@ -6,7 +6,7 @@
 /*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 16:03:22 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/03/24 22:50:58 by yboutsli         ###   ########.fr       */
+/*   Updated: 2024/03/27 16:22:42 by yboutsli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,5 +68,3 @@ char	**execve_argv(t_cmd *cmd)
 	}
 	return (args);
 }
-
-

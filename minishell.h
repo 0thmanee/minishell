@@ -154,6 +154,7 @@ char	*ft_strjoin_2(char *s1, char *s2);
 
 
 // Parsing
+int char_is_valid(char c);
 int		is_whitespace(char c);
 void	handle_signals(int signum);
 int		ft_new_len(char *input);
@@ -210,4 +211,10 @@ char	**execve_argv(t_cmd *cmd);
 int		export(t_cmd *cmd, t_list **list_env);
 int		echo(t_cmd *cmd);
 int unset(t_list **list_env, char **args);
+int	execute_1(t_cmd *cmd, t_list **list_env, t_free **ptrs);
+int	new_execve(t_cmd *cmd, char **args, char *cmd_fpath, t_list **list_env);
+char	**list2tab(t_list *list_env);
+int	env_size(t_list *list_env);
+void	close2(int tab[2]);
+void	here_doc(t_cmd *cmd);
 #endif
