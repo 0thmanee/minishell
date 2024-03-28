@@ -23,6 +23,7 @@
 # include <fcntl.h>
 # include <readline/readline.h>
 # include <readline/history.h>
+# include <dirent.h>
 # define BUFFER_SIZE			1
 # define ANSI_COLOR_CYAN		"\x1b[36m"
 # define ANSI_COLOR_RESET	"\x1b[0m"
@@ -200,7 +201,7 @@ t_list	*env_lst(char **envp);
 void	env_init(t_list	**env);
 int		cd(char **args, t_list **env);
 int		env(t_list *list_env);
-int		pwd(void);
+int		pwd(t_list **list_env);
 int		set_valid(char *str);
 int		add_set(t_list **set, char *input);
 int		ft_execution(t_cmd **cmd, t_list **list_env, t_free **ptrs);

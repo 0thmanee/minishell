@@ -6,7 +6,7 @@
 /*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 16:39:30 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/03/27 17:28:58 by yboutsli         ###   ########.fr       */
+/*   Updated: 2024/03/28 01:03:55 by yboutsli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ int	final_cmd(t_cmd *cmd, t_list **list_env, int io_fd[2])
 		else if (!ft_strcmp(cmd->cmd, "echo"))
 			status = echo(cmd);
 		else if (!ft_strcmp(cmd->cmd, "pwd"))
-			pwd();
+			pwd(list_env);
 		else if (!ft_strcmp(cmd->cmd, "unset"))
 			unset(list_env, cmd->args);
 		else
@@ -68,7 +68,7 @@ int	child_execution(int fd[2], t_cmd *cmd, t_list **list_env)
 	else if (!ft_strcmp(cmd->cmd, "echo"))
 		status = echo(cmd);
 	else if (!ft_strcmp(cmd->cmd, "pwd"))
-		pwd();
+		pwd(list_env);
 	else if (!ft_strcmp(cmd->cmd, "unset"))
 		unset(list_env, cmd->args);
 	else

@@ -6,7 +6,7 @@
 /*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 11:49:46 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/03/27 17:25:42 by yboutsli         ###   ########.fr       */
+/*   Updated: 2024/03/28 01:03:37 by yboutsli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ int	execute_1(t_cmd *cmd, t_list **list_env, t_free **ptrs)
 	else if (!ft_strcmp(cmd->cmd, "echo"))
 		status = echo(cmd);
 	else if (!ft_strcmp(cmd->cmd, "pwd"))
-		pwd();
+		pwd(list_env);
 	else if (!ft_strcmp(cmd->cmd, "unset"))
 		unset(list_env, cmd->args);
 	else if (!ft_strcmp(cmd->cmd, "exit"))
