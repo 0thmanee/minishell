@@ -148,6 +148,7 @@ void	*ft_malloc(t_free **list_aloc, size_t size);
 void	ft_free_ptr(t_free **list_aloc, void *ptr);
 void	ft_free_all(t_free **list_aloc);
 int		ft_isdigit(int c);
+int		ft_strchr(char *str, char c);
 
 int	ft_lstsize(t_cmd *lst);
 
@@ -194,6 +195,7 @@ void	extract_args(t_token *token, char ***args, t_free **ptrs);
 void	extract_infiles(t_token *token, t_file **infiles, t_free **ptrs);
 void	extract_outfiles(t_token *token, t_file **outfiles, t_free **ptrs);
 int		syntax_error(t_token *tokens, int *here_doc);
+int		check_braces(char *value);
 void	open_heredoc(t_token *tokens, int here_doc, int *s_error);
 
  // Removable
@@ -201,7 +203,7 @@ void	print_it(t_token *tokens);
 // Execution
 char	*get_env(t_list **head, char *env_var);
 t_list	*get_env_node(t_list **list_env, char *var);
-int	var_exist(char *var, t_list *list_env);
+int		var_exist(char *var, t_list *list_env);
 int		env_update(t_list **head, char *env_var, char *new);
 t_list	*env_lst(char **envp);
 void	env_init(t_list	**env);
@@ -217,14 +219,14 @@ char	*cmd_path(char *cmd, char **npath);
 char	**execve_argv(t_cmd *cmd);
 int		export(t_cmd *cmd, t_list **list_env);
 int		echo(t_cmd *cmd);
-int unset(t_list **list_env, char **args);
-int	execute_1(t_cmd *cmd, t_list **list_env, t_free **ptrs);
+int 	unset(t_list **list_env, char **args);
+int		execute_1(t_cmd *cmd, t_list **list_env, t_free **ptrs);
 char	**list2tab(t_list *list_env);
-int	env_size(t_list *list_env);
+int		env_size(t_list *list_env);
 void	close2(int tab[2]);
 void	here_doc(t_file *infile, int mode, t_list *list_env, t_free **ptrs);
-int	new_execve(t_cmd *cmd, t_list **list_env);
-int	execute_2(t_cmd **cmd_list, t_list **list_env, t_free **ptrs, int *io_fd);
-int new_fork();
+int		new_execve(t_cmd *cmd, t_list **list_env);
+int		execute_2(t_cmd **cmd_list, t_list **list_env, t_free **ptrs, int *io_fd);
+int 	new_fork();
 void	handle_io(t_cmd *cmd, t_list *list_env, t_free **ptrs);
 #endif

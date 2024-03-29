@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 16:20:23 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/03/29 21:22:40 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/03/29 22:57:47 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,14 +22,19 @@ char	*parse_heredoc(char *input, t_list *list_env, t_free **ptrs)
 	{
 		if (result[i] == '$' && !result[i + 1])
 			return (result);
-		if (result[i] == '$' && result[i + 1])
+		if (result[i] == '$')
 		{
-			if (input[i + 1] == '\'' || input[i + 1] == '\"')
-				result = case_2(result, &i, ptrs);
-			else if (ft_isalpha(input[i + 1]) && input[i + 1] != '_')
-				result = case_3(result, &i, ptrs);
-			else if (input[i + 1] == '{')
+			if (result[i + 1] == '\"' || result[i + 1] == '\'')
+			{
+				i++;
+				continue ;
+			}
+			else if (result[i + 1] == '{')
 				result = case_4(result, &i, list_env, ptrs);
+			else if (ft_isalpha(result[i + 1]) && result[i + 1] != '_')
+			{
+				result = case_3(result, &i, ptrs);
+			}
 			else
 				result = case_1(result, &i, list_env, ptrs);
 			if (!result)
@@ -54,18 +59,16 @@ static void	here_doc_utils(int fd[2], t_file *infile, int mode, t_list *list_env
 	input = readline("> ");
 	while(input != NULL && ft_strcmp(input, infile->delimiter))
 	{
-		if
+		if (infile->delim_flag && !check_braces(input))
 			(tmp = input, input = parse_heredoc(input, list_env, ptrs), free(tmp));
-		if (mode) (infile->delim_flag)
-		{
-			write(fd[1], input, strlen(input));
-			write(fd[1], "\n", 1);
-		}
+		if (mode)
+			(write(fd[1], input, ft_strlen(input)), write(fd[1], "\n", 1));
+		if (mode && ft_strchr(input, '{') && check_braces(input))
+			write(fd[1], "minishell: bad substitution\n", 28);
 		free(input);
 		input = readline("> ");
     }
-	free(input);
-	exit(0);
+	(free(input), exit(0));
 }
 
 void	here_doc(t_file *infile, int mode, t_list *list_env, t_free **ptrs)

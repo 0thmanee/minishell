@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/15 02:58:32 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/03/28 21:18:52 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/03/29 23:09:35 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,8 +123,10 @@ void	case_4_helper(char **result, int *i, t_free **ptrs)
 	(j = 2, var = NULL, tmp = NULL);
 	while ((*result)[j + *i] && (*result)[j + *i] != '}')
 		j++;
+	if ((*result)[j + *i] == '}')
+		j++;
 	if ((*result)[j + *i] != '\0')
-		var = ft_substr(*result, j + *i, ft_strlen(*result) - j - *i - 1, ptrs);
+		var = ft_substr(*result, j + *i, ft_strlen(*result) - j - *i, ptrs);
 	tmp = *result;
 	*result = ft_substr(tmp, 0, *i, ptrs);
 	ft_free_ptr(ptrs, tmp);
