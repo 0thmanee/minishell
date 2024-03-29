@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 08:42:35 by obouchta          #+#    #+#             */
-/*   Updated: 2024/03/27 03:35:50 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/03/29 03:47:09 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,7 @@ void print_it_2(t_cmd *cmds)
 			}
 		}
 		printf("-----------\n");
+		printf("Error: :: %d ::\n", curr->io_error);
 		if (curr->infiles)
 		{
 			i = 0;
@@ -121,7 +122,8 @@ int	tokenize_input(char **input, t_token **tokens, t_free **ptrs)
 		{
 			while ((*input)[i] && is_whitespace((*input)[i]))
 				i++;
-			if (regonize_type(*input, i) != EXPRESSION && regonize_type(*input, i) != PIPE)
+			if (regonize_type(*input, i) != EXPRESSION
+				&& regonize_type(*input, i) != PIPE)
 				new_token = get_in_out(*input, &i, tokens, ptrs);
 			else if (regonize_type(*input, i) == PIPE)
 				new_token = get_pipe(*input, &i, PIPE, ptrs);
@@ -160,11 +162,10 @@ int	process_input(char *input, t_list **list_env, t_free **ptrs)
 	(join_args(&tokens, ptrs), specify_vars(&tokens, ptrs));
 	if (!remove_quotes(&tokens, ptrs))
 		return (0);
-	print_it(tokens);
 	expanding(&tokens, *list_env, ptrs);
 	if (!final_command(&tokens, &cmd, ptrs))
 		return (0);
-	print_it_2(cmd);
+	// print_it_2(cmd);
 	ft_execution(&cmd, list_env, ptrs);
 	ft_free_all(ptrs);
 	return (1);
@@ -183,7 +184,7 @@ int read_input(t_list **list_env)
 	rl_catch_signals = 0;
 	while (1)
 	{
-		input = readline("\033[1;32mMinishell $> \033[0m");
+		input = readline("\033[1;36mMinishell $> \033[0m");
 		if (!input)
 			(printf("exit\n"), exit(0));
 		if (!input[0])
@@ -215,6 +216,7 @@ int main(int ac, char **av, char **envp)
 	if (ac != 1)
 		return (printf("minishell: too many arguments\n"), 1);
 	(void)av;
+	tcgetattr(STDIN_FILENO, &original_terminos);
 	list_env = env_lst(envp);
 	if (!list_env)
 		env_init(&list_env);

@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/16 22:51:37 by obouchta          #+#    #+#             */
-/*   Updated: 2024/03/22 08:57:25 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/03/29 03:40:50 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ t_cmd	*ft_lstnew_3(t_free **ptrs)
 	new_node->args = NULL;
 	new_node->infiles = NULL;
 	new_node->outfiles = NULL;
+	new_node->io_error = 0;
 	new_node->next = NULL;
 	return (new_node);
 }

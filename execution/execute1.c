@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute1.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
+/*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 11:49:46 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/03/28 01:03:37 by yboutsli         ###   ########.fr       */
+/*   Updated: 2024/03/29 03:51:59 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,37 +16,46 @@ void	handel_io(t_cmd *cmd)
 {
 	int	i;
 
-	i = -1;
+	i = 0;
 	if (cmd->infiles)
 	{
-		while (cmd->infiles[++i].fd != 42)
+		while (cmd->infiles[i + 1].fd != -42)
 		{
-			if (cmd->infiles[i].type == 0)
-			{
-				dup2(cmd->infiles[i].fd, 0);
+			if (cmd->infiles[i].type == 0 && cmd->infiles[i].fd != -1)
 				close(cmd->infiles[i].fd);
-				break;
-			}
 			else if (cmd->infiles[i].type == 1)
-			{
-				here_doc(cmd);
-				break;
-			}
+				here_doc(cmd->infiles[i].delimiter, 0);
+			i++;
 		}
+		if (cmd->infiles[i].type == 0 && cmd->infiles[i].fd != -1)
+		{
+			if (!cmd->io_error)
+				dup2(cmd->infiles[i].fd, 0);
+			close(cmd->infiles[i].fd);
+		}
+		else if (cmd->infiles[i].type == 1 && !cmd->io_error)
+			here_doc(cmd->infiles[i].delimiter, 1);
+		else if (cmd->infiles[i].type == 1)
+			here_doc(cmd->infiles[i].delimiter, 0);
 	}
-	i = -1;
+	i = 0;
 	if (cmd->outfiles)
 	{
-		while (cmd->outfiles[++i].fd != 42)
+		while (cmd->outfiles[i + 1].fd != -42)
 		{
-			if (cmd->outfiles[i].type == 2)
-			{
-				dup2(cmd->outfiles[i].fd, 1);
+			if (cmd->outfiles[i].fd != -1)
 				close(cmd->outfiles[i].fd);
-				break;
-			}
+			i++;
+		}
+		if (cmd->outfiles[i].fd != -1)
+		{
+			if (!cmd->io_error)
+				dup2(cmd->outfiles[i].fd, 1);
+			close(cmd->outfiles[i].fd);
 		}
 	}
+	if (cmd->io_error)
+		write(2, "minishell: No such file or directory\n", 37);
 }
 
 

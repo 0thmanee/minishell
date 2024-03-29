@@ -6,11 +6,27 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 17:17:09 by obouchta          #+#    #+#             */
-/*   Updated: 2024/03/26 05:07:38 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/03/28 21:25:50 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int	set_delim_flag(t_token *curr)
+{
+	int	i;
+
+	if (curr->type != DELIMITER)
+		return (0);
+	i = 0;
+	while (curr->value[i])
+	{
+		if (curr->value[i] == '\'' || curr->value[i] == '\"')
+			return (0);
+		i++;
+	}
+	return (1);
+}
 
 int	no_quotes_len(char *cmd)
 {
@@ -71,6 +87,7 @@ int	remove_quotes(t_token **tokens, t_free **ptrs)
 	curr = *tokens;
 	while (curr)
 	{
+		curr->delim_flag = set_delim_flag(curr);
 		if (curr->type == CMD || curr->type == OUT_FILE
 			|| curr->type == IN_FILE || curr->type == DELIMITER)
 			(tmp = curr->value, curr->value = no_quoted_value(curr->value,

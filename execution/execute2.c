@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute2.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
+/*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 16:39:30 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/03/28 01:03:55 by yboutsli         ###   ########.fr       */
+/*   Updated: 2024/03/29 03:57:19 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,8 +52,6 @@ int	final_cmd(t_cmd *cmd, t_list **list_env, int io_fd[2])
 int	child_execution(int fd[2], t_cmd *cmd, t_list **list_env)
 {
 	int		status;
-
-	char	**args;
 
 	dup2(fd[1], 1);
 	close2(fd);

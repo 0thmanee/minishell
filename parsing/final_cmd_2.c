@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/17 05:22:00 by obouchta          #+#    #+#             */
-/*   Updated: 2024/03/22 08:57:26 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/03/29 03:52:54 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,9 +29,8 @@ int	infiles_len(t_token *curr)
 void	extract_infiles_helper_1(t_token *curr, t_file **infiles, int *i)
 {
 	(*infiles)[*i].fd = open(curr->value, O_RDWR);
-	if ((*infiles)[*i].fd == -1)
-		perror("minishell");
 	(*infiles)[*i].type = 0;
+	(*infiles)[*i].delim_flag = 0;
 	(*i)++;
 }
 
@@ -40,6 +39,10 @@ void	extract_infiles_helper_2(t_token *curr, t_file **infiles, int *i, t_free **
 	(*infiles)[*i].fd = -2;
 	(*infiles)[*i].type = 1;
 	(*infiles)[*i].delimiter = ft_strdup(curr->value, ptrs);
+	if (curr->delim_flag)
+		(*infiles)[*i].delim_flag = 1;
+	else
+		(*infiles)[*i].delim_flag = 0;
 	(*i)++;
 }
 

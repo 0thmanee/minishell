@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/16 03:27:56 by obouchta          #+#    #+#             */
-/*   Updated: 2024/03/20 01:24:50 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/03/29 01:29:36 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,14 @@
 
 void	handle_signals(int signum)
 {
+	if (signum == SIGQUIT)
+	{
+		if (waitpid(-1, NULL, WNOHANG) == 0)
+		{
+			tcsetattr(STDIN_FILENO, TCSANOW, &original_terminos);
+			printf("\n");
+		}
+	}
 	if (signum == SIGINT)
 	{
 		if (waitpid(-1, NULL, WNOHANG) == 0)

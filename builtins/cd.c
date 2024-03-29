@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
+/*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 09:26:13 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/03/29 01:19:40 by yboutsli         ###   ########.fr       */
+/*   Updated: 2024/03/29 03:57:11 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,7 +137,6 @@ int	cd_oldpwd(t_list **env)
 
 int	cd(char **args, t_list **env)
 {
-	char	*cwd;
 	int		status;
 	
 	status = 0;

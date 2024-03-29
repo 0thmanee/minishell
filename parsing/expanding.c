@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/15 02:58:32 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/03/27 03:47:39 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/03/28 21:18:52 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -251,6 +251,11 @@ void	expanding(t_token **tokens, t_list *list_env, t_free **ptrs)
 	while (curr)
 	{
 		tmp_val = curr->value;
+		if (curr->type == DELIMITER)
+		{
+			curr = curr->next;
+			continue ;
+		}
 		curr->value = expanding_helper1(list_env, curr, ptrs);
 		ft_free_ptr(ptrs, tmp_val);
 		i = -1;

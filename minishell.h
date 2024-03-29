@@ -21,14 +21,14 @@
 # include <errno.h>
 # include <string.h>
 # include <fcntl.h>
+# include <termios.h>
 # include <readline/readline.h>
 # include <readline/history.h>
-# include <dirent.h>
 # define BUFFER_SIZE			1
 # define ANSI_COLOR_CYAN		"\x1b[36m"
 # define ANSI_COLOR_RESET	"\x1b[0m"
 
-
+struct	termios original_terminos;
 /* in the header file */
 /*==== LEAKS FINDER ==*/
 // #include <libc.h>
@@ -51,7 +51,6 @@
 
 // #define malloc(x) __malloc(x, __LINE__, __FILE__)
 // #define free(x) __free(x, __LINE__, __FILE__)
-
 
 typedef enum
 {
@@ -85,6 +84,7 @@ typedef struct s_token
 	int		type;
 	int  vars_len;
 	int  *vars;
+	int	delim_flag;
 	struct s_token	*next;
 }	t_token;
 
@@ -93,6 +93,7 @@ typedef struct s_file
 	int fd;
 	int type;
 	char *delimiter;
+	int	delim_flag;
 }   t_file;
 
 typedef struct s_cmd
@@ -101,6 +102,7 @@ typedef struct s_cmd
 	char   **args;
 	t_file *infiles;
 	t_file *outfiles;
+	int		io_error;
 	struct s_cmd	*next;
 }   t_cmd;
 
@@ -216,7 +218,7 @@ int	execute_1(t_cmd *cmd, t_list **list_env, t_free **ptrs);
 char	**list2tab(t_list *list_env);
 int	env_size(t_list *list_env);
 void	close2(int tab[2]);
-void	here_doc(t_cmd *cmd);
+void	here_doc(char *delimiter, int mode);
 int	new_execve(t_cmd *cmd, t_list **list_env);
 int	execute_2(t_cmd **cmd_list, t_list **list_env, t_free **ptrs, int *io_fd);
 int new_fork();
