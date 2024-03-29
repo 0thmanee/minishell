@@ -6,14 +6,14 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 16:39:30 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/03/29 03:57:19 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/03/29 21:09:52 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 
-int	final_cmd(t_cmd *cmd, t_list **list_env, int io_fd[2])
+int	final_cmd(t_cmd *cmd, t_list **list_env, int io_fd[2], t_free **ptrs)
 {
 	int 	status;
 	int		pid;
@@ -25,7 +25,7 @@ int	final_cmd(t_cmd *cmd, t_list **list_env, int io_fd[2])
 	if (pid == 0)
 	{
 		status = 0;
-        handel_io(cmd);
+        handle_io(cmd, *list_env, ptrs);
 		if (!ft_strcmp(cmd->cmd, "export"))
 			status = export(cmd, list_env);
 		else if (!ft_strcmp(cmd->cmd, "env"))
@@ -49,13 +49,13 @@ int	final_cmd(t_cmd *cmd, t_list **list_env, int io_fd[2])
 	return (status);
 }
 
-int	child_execution(int fd[2], t_cmd *cmd, t_list **list_env)
+int	child_execution(int fd[2], t_cmd *cmd, t_list **list_env, t_free **ptrs)
 {
 	int		status;
 
 	dup2(fd[1], 1);
 	close2(fd);
-    handel_io(cmd);
+    handle_io(cmd, *list_env, ptrs);
 	status = 0;
 	if (!ft_strcmp(cmd->cmd, "export"))
 		status = export(cmd, list_env);
@@ -94,7 +94,7 @@ static int middle_cmds(t_cmd *cmd, t_list **list_env, t_free **ptrs)
 		exit(1);
 	}
 	if (pid == 0)
-		status = child_execution(fd, cmd, list_env);
+		status = child_execution(fd, cmd, list_env, ptrs);
 	dup2(fd[0], 0);
 	close2(fd);
 	return (status);
@@ -111,7 +111,7 @@ int	execute_2(t_cmd **cmd_list, t_list **list_env, t_free **ptrs, int *io_fd)
 		status = middle_cmds(curr, list_env, ptrs);
 		curr = curr->next;
 	}
-	status = final_cmd(curr, list_env, io_fd);
+	status = final_cmd(curr, list_env, io_fd, ptrs);
 	while (waitpid(0, 0, 0) != -1)
 		;
 	return (status);
