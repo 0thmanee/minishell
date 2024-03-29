@@ -6,43 +6,61 @@
 /*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 09:26:13 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/03/28 00:59:36 by yboutsli         ###   ########.fr       */
+/*   Updated: 2024/03/29 01:19:40 by yboutsli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+int	last_bs(char *str)
+{
+	int	i;
+
+	i = 0;
+	while (str[i])
+		i++;
+	if (i >= 1 && str[i - 1] == '/')
+		return (0);
+	return(1);
+}
 int	cd_dir(char *str, t_list **list_env)
 {
-    char	*tmp;
-    char	*tmp1;
-    int		status;
+	char	*tmp[3];
+	int		status;
+	char	*pwd;
 	char	*cwd;
-    DIR		*dir;
 
-    status = 0;
-	cwd = get_env(list_env, "PWD");
-    tmp1 = ft_strjoin_2("/", str);
-    tmp = ft_strjoin_2(cwd, tmp1);
-    dir = opendir(str);
-    if (dir)
-    {
-        chdir(str);
-        closedir(dir);
-    }
-    else
-    {
-        perror(str);
-        status = 1;
-    }
-	if (status == 0)
+	status = 0;
+	pwd = get_env(list_env, "PWD");
+	if (!last_bs(pwd))
+		tmp[0] = ft_strdup_1(str);
+	else
+		tmp[0] = ft_strjoin_2("/", str);
+	tmp[1] = ft_strjoin_2(pwd, tmp[0]);
+	if (chdir(str) == 0)
 	{
-		env_update(list_env, "PWD", str);
-		env_update(list_env, "OLDPWD", cwd);
+		cwd = getcwd(NULL, 0);
+		if (cwd)
+		{
+			env_update(list_env, "OLDPWD", pwd);
+			env_update(list_env, "PWD", cwd);
+			free(cwd);
+		}
+		else
+		{
+			perror("getcwd: ");
+			env_update(list_env, "PWD", tmp[1]);
+			env_update(list_env, "OLDPWD", pwd);
+		}
 	}
-    free(tmp);
-    free(tmp1);
-    return (status);
+	else
+	{
+		perror(str);
+		status = 1;
+	}
+	free(tmp[1]);
+	free(tmp[0]);
+	return (status);
 }
 
 int	cd_root(char *str, t_list **list_env)

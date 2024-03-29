@@ -6,7 +6,7 @@
 /*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 20:29:05 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/03/24 16:10:58 by yboutsli         ###   ########.fr       */
+/*   Updated: 2024/03/28 15:29:17 by yboutsli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,14 +35,6 @@ t_list	*env_lst(char **envp)
 		free(var);
 		free(value);
 	}
-	if (i > 6)
-	{
-		var = "OLDPWD";
-		value = get_env(&env, "PWD");
-		ft_lstadd_back_2(&env, ft_lstnew_2(var, value));
-	}
-	else
-		ft_lstadd_back_2(&env, ft_lstnew_2(var, NULL));
 	return (env);
 }
 
@@ -71,12 +63,12 @@ int	env_update(t_list **head, char *env_var, char *new)
 		{
 			free(current->value);
 			current->value = ft_strdup_1(new);
-			// printf("|%s=%s|\n", current->var,current->value);
 			return (0);
 		}
 		current = current->next;
 	}
-	ft_lstadd_back_2(head, ft_lstnew_2(env_var, new));
+	if (!current)
+		ft_lstadd_back_2(head, ft_lstnew_2(env_var, new));
 	return (1);
 }
 
