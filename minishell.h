@@ -110,6 +110,7 @@ typedef struct s_list
 {
 	char			*var;
 	char			*value;
+	int				index;
 	struct s_list	*next;
 }	t_list;
 
@@ -229,4 +230,6 @@ int		new_execve(t_cmd *cmd, t_list **list_env);
 int		execute_2(t_cmd **cmd_list, t_list **list_env, t_free **ptrs, int *io_fd);
 int 	new_fork();
 void	handle_io(t_cmd *cmd, t_list *list_env, t_free **ptrs);
+int	valid(char *str);
+void nvalid_output(char *str);
 #endif
