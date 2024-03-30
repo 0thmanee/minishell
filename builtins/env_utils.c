@@ -6,7 +6,7 @@
 /*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 20:29:05 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/03/28 15:29:17 by yboutsli         ###   ########.fr       */
+/*   Updated: 2024/03/30 01:48:05 by yboutsli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,9 +75,17 @@ int	env_update(t_list **head, char *env_var, char *new)
 void	env_init(t_list	**env)
 {
 	char	*cwd;
-
+	char	*tmp;
 	cwd = getcwd(NULL, 0);
-	ft_lstadd_back_2(env, ft_lstnew_2("PWD", cwd));
+	if (cwd != NULL)
+	{
+		ft_lstadd_back_2(env, ft_lstnew_2("PWD", cwd));
+		tmp = ft_strjoin_2(cwd, "/./minishell");
+		ft_lstadd_back_2(env, ft_lstnew_2("_", tmp));
+		ft_lstadd_back_2(env, ft_lstnew_2("OLDPWD", NULL));
+		free(tmp);
+	}
+	ft_lstadd_back_2(env, ft_lstnew_2("SHLVL", "1"));
 	free(cwd);
 }
 int	var_exist(char *var, t_list *list_env)

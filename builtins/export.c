@@ -6,25 +6,58 @@
 /*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/05 16:57:06 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/03/25 02:57:49 by yboutsli         ###   ########.fr       */
+/*   Updated: 2024/03/30 00:26:40 by yboutsli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	null_arg(t_list *list_env)
+void	alpha_indexing(t_list **list_env)
 {
-	t_list *current;
+	t_list	*curr[2];
+	int		count;
 
-	current = list_env;
-	while (current)
+	curr[0] = *list_env;
+	while (curr[0])
 	{
-		printf("declare -x %s", current->var);
-		if (current->value)
-			printf("=\"%s\"\n", current->value);
-		else
-			printf("\n");
-		current = current->next;
+		curr[1] = *list_env;
+		count = 0;
+		while (curr[1])
+		{
+			if (ft_strcmp(curr[0]->var, curr[1]->var) > 0)
+				count++;
+			curr[1] = curr[1]->next;
+		}
+		curr[0]->index = count;
+		curr[0] = curr[0]->next;
+	}
+}
+
+void	null_arg(t_list **list_env)
+{
+	t_list	*curr[2];
+	int		count;
+
+	if (!list_env)
+		return ;
+	alpha_indexing(list_env);
+	curr[0] = *list_env;
+	count = 0;
+	while (curr[0])
+	{
+		curr[1] = *list_env;
+		while (curr[1] && curr[1]->index != count)
+			curr[1] = curr[1]->next;
+		if(curr[1])
+		{
+			printf("declare -x %s", curr[1]->var);
+			if (curr[1]->value)
+				printf("=\"%s\"\n", curr[1]->value);
+			else
+				printf("\n");
+		}			
+		curr[0] = curr[0]->next;
+		count++;
 	}
 }
 
@@ -165,7 +198,7 @@ int	export(t_cmd *cmd, t_list **list_env)
 	status = 0;
 	i = 0;
 	if (cmd->args == NULL)
-		null_arg(*list_env);
+		null_arg(list_env);
 	else
 	{
 		while (cmd->args[i])
