@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute2.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 16:39:30 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/03/29 21:09:52 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/03/30 02:46:15 by yboutsli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ int	final_cmd(t_cmd *cmd, t_list **list_env, int io_fd[2], t_free **ptrs)
 		if (!ft_strcmp(cmd->cmd, "export"))
 			status = export(cmd, list_env);
 		else if (!ft_strcmp(cmd->cmd, "env"))
-			status = env(*list_env);
+			status = env(list_env, cmd);
 		else if (!ft_strcmp(cmd->cmd, "cd"))
 			status = cd(cmd->args, list_env);
 		else if (!ft_strcmp(cmd->cmd, "echo"))
@@ -60,7 +60,7 @@ int	child_execution(int fd[2], t_cmd *cmd, t_list **list_env, t_free **ptrs)
 	if (!ft_strcmp(cmd->cmd, "export"))
 		status = export(cmd, list_env);
 	else if (!ft_strcmp(cmd->cmd, "env"))
-		status = env(*list_env);
+		status = env(list_env, cmd);
 	else if (!ft_strcmp(cmd->cmd, "cd"))
 		status = cd(cmd->args, list_env);
 	else if (!ft_strcmp(cmd->cmd, "echo"))

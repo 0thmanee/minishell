@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 09:26:13 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/03/29 03:57:11 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/03/30 03:00:03 by yboutsli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,12 +111,12 @@ int	cd_home(t_list **env, char *str)
 int	cd_oldpwd(t_list **env)
 {
 	char	*oldpwd;
-	char	*cwd;
+	char	*cwd[2];
 	int		status;
 
 	status = 0;
 	oldpwd = get_env(env, "OLDPWD");
-	cwd = get_env(env, "PWD");
+	cwd[0] = get_env(env, "PWD");
 	if (!oldpwd)
 	{
 		printf("minishell: cd: OLDPWD not set\n");
@@ -129,8 +129,9 @@ int	cd_oldpwd(t_list **env)
 	}
 	else
 	{
-		env_update(env, "OLDPWD", cwd);
+		cwd[1] = ft_strdup_1(cwd[0]);
 		env_update(env, "PWD", oldpwd);
+		env_update(env, "OLDPWD", cwd[1]);
 	}
 	return (status);
 }

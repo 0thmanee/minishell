@@ -3,14 +3,44 @@
 /*                                                        :::      ::::::::   */
 /*   execute1.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 11:49:46 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/03/29 21:03:06 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/03/30 03:11:42 by yboutsli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void	env_lc_update(t_cmd *cmd, t_list **list_env)
+{
+	char	*value;
+	char	*new;
+	char	*cmd_fpath;
+	char	**npath;
+	int		i;
+
+	if (cmd->args == NULL)
+	{
+		npath = path(list_env);
+		cmd_fpath = cmd_path(cmd->cmd, npath);
+		new = cmd_fpath;
+		ft_free(npath);
+	}
+	else
+	{
+		i = 0;
+		while (cmd->args[i + 1])
+			i++;
+		new = ft_strdup_1(cmd->args[i]);
+	}
+	value = get_env(list_env, "_");
+	if (!value)
+		ft_lstadd_back_2(list_env, ft_lstnew_2("_", new));
+	else
+		env_update(list_env, "_", new);
+	free(new);
+}
 
 void	handle_io_helper1(t_cmd *cmd, t_list *list_env, t_free **ptrs)
 {
@@ -36,7 +66,6 @@ void	handle_io_helper1(t_cmd *cmd, t_list *list_env, t_free **ptrs)
 	else if (cmd->infiles[i].type == 1)
 		here_doc(cmd->infiles + i, 0, list_env, ptrs);
 }
-
 void	handle_io_helper2(t_cmd *cmd)
 {
 	int	i;
@@ -94,7 +123,7 @@ int	execute_1(t_cmd *cmd, t_list **list_env, t_free **ptrs)
 	if (!ft_strcmp(cmd->cmd, "export"))
 		status = export(cmd, list_env);
 	else if (!ft_strcmp(cmd->cmd, "env"))
-		status = env(*list_env);
+		status = env(list_env, cmd);
 	else if (!ft_strcmp(cmd->cmd, "cd"))
 		status = cd(cmd->args, list_env);
 	else if (!ft_strcmp(cmd->cmd, "echo"))
@@ -107,5 +136,7 @@ int	execute_1(t_cmd *cmd, t_list **list_env, t_free **ptrs)
 		exit(0);//to  be eddited to free before exit
 	else
 		status = child_execve(cmd, list_env);
+	if (ft_strcmp(cmd->cmd, "env"))
+		env_lc_update(cmd, list_env);//lc : last command
 	return (status);
 }

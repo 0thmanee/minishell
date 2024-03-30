@@ -209,7 +209,7 @@ int		env_update(t_list **head, char *env_var, char *new);
 t_list	*env_lst(char **envp);
 void	env_init(t_list	**env);
 int		cd(char **args, t_list **env);
-int		env(t_list *list_env);
+int		env(t_list **list_env, t_cmd *cmd);
 int		pwd(t_list **list_env);
 int		set_valid(char *str);
 int		add_set(t_list **set, char *input);
@@ -232,4 +232,5 @@ int 	new_fork();
 void	handle_io(t_cmd *cmd, t_list *list_env, t_free **ptrs);
 int	valid(char *str);
 void nvalid_output(char *str);
+void	env_lc_update(t_cmd *cmd, t_list **list_env);
 #endif
