@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/16 03:19:46 by obouchta          #+#    #+#             */
-/*   Updated: 2024/03/26 02:08:00 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/03/30 02:29:47 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,14 @@ int	calc_vars(char *str)
 {
 	int	nbr;
 	int	i;
+	int	len;
 
 	nbr = 0;
 	i = 0;
-	while (str[i])
+	if (!str || !str[0])
+		return (0);
+	len = ft_strlen(str);
+	while (i < len)
 	{
 		if (str[i] == '$')
 			nbr++;

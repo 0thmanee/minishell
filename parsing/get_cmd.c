@@ -6,13 +6,13 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 07:19:14 by obouchta          #+#    #+#             */
-/*   Updated: 2024/03/22 08:57:28 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/03/30 02:46:54 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int calc_args_len_helper(char *input, int *i, int *len)
+int calc_args_len_helper1(char *input, int *i, int *len)
 {
 	char	quote;
 	int		pass;
@@ -34,27 +34,40 @@ int calc_args_len_helper(char *input, int *i, int *len)
 	return (pass);
 }
 
+void calc_args_len_helper2(char *input, int *i, int *len)
+{
+	char	quote;
+	int		l;
+
+	l = 0;
+	while (input[*i] && !is_whitespace(input[*i]))
+	{
+		if (input[*i] == '\'' || input[*i] == '\"')
+		{
+			quote = input[(*i)++];
+			while (input[*i] != quote)
+				(*i)++;
+		}
+		((*i)++, l++);
+	}
+	if (l)
+		(*len)++;
+}
+
 int calc_args_len(char *input, int i)
 {
-	int len = 0;
-	int l = 0;
+	int 	len;
 
+	len = 0;
 	while (input[i])
 	{
 		while (input[i] && is_whitespace(input[i]))
 			i++;
-		if (calc_args_len_helper(input, &i, &len))
-			continue ;
 		if (regonize_type(input, i))
-			break;
-		while (input[i] && !is_whitespace(input[i]))
-		{
-			i++;
-			l++;
-		}
-		if (l)
-			len++;
-		l = 0;
+			break ;
+		if (calc_args_len_helper1(input, &i, &len))
+			continue ;
+		calc_args_len_helper2(input, &i, &len);
 	}
 	return (len);
 }
