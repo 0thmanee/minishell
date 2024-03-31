@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
+/*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 16:20:23 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/03/31 05:33:44 by yboutsli         ###   ########.fr       */
+/*   Updated: 2024/03/31 19:50:06 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ static void	here_doc_utils(int fd[2], t_file *infile, int mode, t_list *list_env
 	char	*tmp;
 
 	signal(SIGINT, SIG_DFL);
-	rl_catch_signals = 0;
+	rl_catch_signals = 1;
 	close(fd[0]);
 	input = readline("> ");
 	while(input != NULL && ft_strcmp(input, infile->delimiter))
