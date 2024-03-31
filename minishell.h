@@ -90,6 +90,7 @@ typedef struct s_token
 
 typedef struct s_file
 {
+	char *file;
 	int fd;
 	int type;
 	char *delimiter;
@@ -225,12 +226,12 @@ int		execute_1(t_cmd *cmd, t_list **list_env, t_free **ptrs);
 char	**list2tab(t_list *list_env);
 int		env_size(t_list *list_env);
 void	close2(int tab[2]);
-void	here_doc(t_file *infile, int mode, t_list *list_env, t_free **ptrs);
+int		here_doc(t_file *infile, int mode, t_list *list_env, t_free **ptrs);
 int		new_execve(t_cmd *cmd, t_list **list_env);
 int		execute_2(t_cmd **cmd_list, t_list **list_env, t_free **ptrs, int *io_fd);
 int 	new_fork();
-void	handle_io(t_cmd *cmd, t_list *list_env, t_free **ptrs);
-int	valid(char *str);
-void nvalid_output(char *str);
+int		handle_io(t_cmd *cmd, t_list *list_env, t_free **ptrs);
+int		valid(char *str);
+void 	nvalid_output(char *str);
 void	env_lc_update(t_cmd *cmd, t_list **list_env);
 #endif

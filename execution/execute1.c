@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute1.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
+/*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 11:49:46 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/03/30 03:11:42 by yboutsli         ###   ########.fr       */
+/*   Updated: 2024/03/31 03:19:24 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,7 @@ void	env_lc_update(t_cmd *cmd, t_list **list_env)
 
 	if (cmd->args == NULL)
 	{
-		npath = path(list_env);
-		cmd_fpath = cmd_path(cmd->cmd, npath);
+		(npath = path(list_env), cmd_fpath = cmd_path(cmd->cmd, npath));
 		new = cmd_fpath;
 		ft_free(npath);
 	}
@@ -42,30 +41,49 @@ void	env_lc_update(t_cmd *cmd, t_list **list_env)
 	free(new);
 }
 
-void	handle_io_helper1(t_cmd *cmd, t_list *list_env, t_free **ptrs)
+int	handle_io_helper1_2(t_cmd *cmd, t_list *list_env, int *i, t_free **ptrs)
+{
+	while (cmd->infiles[*i + 1].fd != -42)
+	{
+		if (cmd->infiles[*i].type == 0)
+		{
+			cmd->infiles[*i].fd = open(cmd->infiles[*i].file, O_RDONLY);
+			if (cmd->infiles[*i].fd == -1)
+				cmd->io_error = 1;
+			(cmd->infiles[*i].fd != -1 && close(cmd->infiles[*i].fd));
+		}
+		else if (cmd->infiles[*i].type == 1
+			&& here_doc(cmd->infiles + *i, 0, list_env, ptrs))
+			return (1);
+		(*i)++;
+	}
+	return (0);
+}
+
+int	handle_io_helper1(t_cmd *cmd, t_list *list_env, t_free **ptrs)
 {
 	int	i;
 
 	i = 0;
-	while (cmd->infiles[i + 1].fd != -42)
+	if (handle_io_helper1_2(cmd, list_env, &i, ptrs))
+		return (1);
+	if (cmd->infiles[i].type == 0)
 	{
-		if (cmd->infiles[i].type == 0 && cmd->infiles[i].fd != -1)
+		cmd->infiles[i].fd = open(cmd->infiles[i].file, O_RDONLY);
+		if (cmd->infiles[i].fd == -1)
+				cmd->io_error = 1;
+		if (cmd->infiles[i].fd != -1)
+		{
+			(!(cmd->io_error) && dup2(cmd->infiles[i].fd, 0));
 			close(cmd->infiles[i].fd);
-		else if (cmd->infiles[i].type == 1)
-			here_doc(cmd->infiles + i, 0, list_env, ptrs);
-		i++;
+		}
 	}
-	if (cmd->infiles[i].type == 0 && cmd->infiles[i].fd != -1)
-	{
-		if (!cmd->io_error)
-			dup2(cmd->infiles[i].fd, 0);
-		close(cmd->infiles[i].fd);
-	}
-	else if (cmd->infiles[i].type == 1 && !cmd->io_error)
-		here_doc(cmd->infiles + i, 1, list_env, ptrs);
-	else if (cmd->infiles[i].type == 1)
-		here_doc(cmd->infiles + i, 0, list_env, ptrs);
+	else if (cmd->infiles[i].type == 1
+		&& here_doc(cmd->infiles + i, !(cmd->io_error), list_env, ptrs))
+		return (1);
+	return (0);
 }
+
 void	handle_io_helper2(t_cmd *cmd)
 {
 	int	i;
@@ -73,26 +91,35 @@ void	handle_io_helper2(t_cmd *cmd)
 	i = 0;
 	while (cmd->outfiles[i + 1].fd != -42)
 	{
-		if (cmd->outfiles[i].fd != -1)
-			close(cmd->outfiles[i].fd);
+		if (cmd->outfiles[i].type == 2)
+			cmd->outfiles[i].fd = open(cmd->outfiles[i].file, O_CREAT | O_RDWR, 0644);
+		else if (cmd->outfiles[i].type == 3)
+			cmd->outfiles[i].fd = open(cmd->outfiles[i].file, O_CREAT | O_APPEND, 0644);
+		if (cmd->outfiles[i].fd == -1)
+			cmd->io_error = 1;
+		(cmd->outfiles[i].fd != -1 && close(cmd->outfiles[i].fd));
 		i++;
 	}
+	if (cmd->outfiles[i].type == 2)
+		cmd->outfiles[i].fd = open(cmd->outfiles[i].file, O_CREAT | O_RDWR, 0644);
+	else if (cmd->outfiles[i].type == 3)
+		cmd->outfiles[i].fd = open(cmd->outfiles[i].file, O_CREAT | O_APPEND, 0644);
 	if (cmd->outfiles[i].fd != -1)
 	{
-		if (!cmd->io_error)
-			dup2(cmd->outfiles[i].fd, 1);
+		(!(cmd->io_error) && dup2(cmd->outfiles[i].fd, 1));
 		close(cmd->outfiles[i].fd);
 	}
 }
 
-void	handle_io(t_cmd *cmd, t_list *list_env, t_free **ptrs)
+int	handle_io(t_cmd *cmd, t_list *list_env, t_free **ptrs)
 {
-	if (cmd->infiles)
-		handle_io_helper1(cmd, list_env, ptrs);
+	if (cmd->infiles && handle_io_helper1(cmd, list_env, ptrs))
+		return (1);
 	if (cmd->outfiles)
 		handle_io_helper2(cmd);
 	if (cmd->io_error)
 		write(2, "minishell: No such file or directory\n", 37);
+	return (0);
 }
 
 
@@ -117,8 +144,9 @@ int	execute_1(t_cmd *cmd, t_list **list_env, t_free **ptrs)
 	int		status;
 
 	status = 0;
-	handle_io(cmd, *list_env, ptrs);
-	if (cmd->cmd == NULL)
+	if (handle_io(cmd, *list_env, ptrs))
+		return (1);
+	if (cmd->cmd == NULL || cmd->io_error)
 		return (0);
 	if (!ft_strcmp(cmd->cmd, "export"))
 		status = export(cmd, list_env);

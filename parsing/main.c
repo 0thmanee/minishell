@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 08:42:35 by obouchta          #+#    #+#             */
-/*   Updated: 2024/03/30 02:47:36 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/03/31 02:38:10 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ void print_it_2(t_cmd *cmds)
 			while (curr->infiles[i].fd != -42)
 			{
 				printf("type: %s\n", curr->infiles[i].type == 0 ? "infile" : "here doc");
-				curr->infiles[i].type == 0 ? printf("fd:[ %d ]\n", curr->infiles[i].fd) : printf("");
+				curr->infiles[i].type == 0 ? printf("File name:[ %s ]\n", curr->infiles[i].file) : printf("");
 				if (curr->infiles[i].type == 1)
 					printf("Delimiter: [ %s ]\n", curr->infiles[i].delimiter);
 				printf("\n");
@@ -165,6 +165,8 @@ int	process_input(char *input, t_list **list_env, t_free **ptrs)
 	expanding(&tokens, *list_env, ptrs);
 	if (!final_command(&tokens, &cmd, ptrs))
 		return (0);
+	// print_it(tokens);
+	// print_it_2(cmd);
 	ft_execution(&cmd, list_env, ptrs);
 	ft_free_all(ptrs);
 	return (1);
@@ -183,7 +185,7 @@ int read_input(t_list **list_env)
 	rl_catch_signals = 0;
 	while (1)
 	{
-		input = readline("\033[1;36mMinishell $> \033[0m");
+		input = readline("Minishell $> ");
 		if (!input)
 			(printf("exit\n"), exit(0));
 		if (!input[0])

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute2.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
+/*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 16:39:30 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/03/30 02:46:15 by yboutsli         ###   ########.fr       */
+/*   Updated: 2024/03/30 20:51:56 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,8 @@ int	final_cmd(t_cmd *cmd, t_list **list_env, int io_fd[2], t_free **ptrs)
 	if (pid == 0)
 	{
 		status = 0;
-        handle_io(cmd, *list_env, ptrs);
+        if (handle_io(cmd, *list_env, ptrs))
+			return (1);
 		if (!ft_strcmp(cmd->cmd, "export"))
 			status = export(cmd, list_env);
 		else if (!ft_strcmp(cmd->cmd, "env"))
@@ -55,7 +56,8 @@ int	child_execution(int fd[2], t_cmd *cmd, t_list **list_env, t_free **ptrs)
 
 	dup2(fd[1], 1);
 	close2(fd);
-    handle_io(cmd, *list_env, ptrs);
+    if (handle_io(cmd, *list_env, ptrs))
+		return (1);
 	status = 0;
 	if (!ft_strcmp(cmd->cmd, "export"))
 		status = export(cmd, list_env);

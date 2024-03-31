@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
+/*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 16:20:23 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/03/30 02:58:00 by yboutsli         ###   ########.fr       */
+/*   Updated: 2024/03/31 03:17:59 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,8 +54,9 @@ static void	here_doc_utils(int fd[2], t_file *infile, int mode, t_list *list_env
 	char	*input;
 	char	*tmp;
 
-	if (mode)
-		close(fd[0]);
+	signal(SIGINT, SIG_DFL);
+	rl_catch_signals = 0;
+	close(fd[0]);
 	input = readline("> ");
 	while(input != NULL && ft_strcmp(input, infile->delimiter))
 	{
@@ -71,11 +72,12 @@ static void	here_doc_utils(int fd[2], t_file *infile, int mode, t_list *list_env
 	(free(input), exit(0));
 }
 
-void	here_doc(t_file *infile, int mode, t_list *list_env, t_free **ptrs)
+int	here_doc(t_file *infile, int mode, t_list *list_env, t_free **ptrs)
 {
 	int	pid;
 	int	fd[2];
-
+	int	status;
+	
 	if (mode && pipe(fd) == -1)
 	{
 		perror("pipe");
@@ -94,5 +96,8 @@ void	here_doc(t_file *infile, int mode, t_list *list_env, t_free **ptrs)
 		dup2(fd[0], 0);
 		close2(fd);
 	}
-	waitpid(pid, NULL, 0);
+	waitpid(pid, &status, 0);
+	if (WIFSIGNALED(status) && WTERMSIG(status) == SIGINT)
+		return (1);
+	return (0);
 }

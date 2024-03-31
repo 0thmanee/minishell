@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/17 05:22:00 by obouchta          #+#    #+#             */
-/*   Updated: 2024/03/29 03:52:54 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/03/31 01:17:36 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,9 +26,10 @@ int	infiles_len(t_token *curr)
 	return (len);
 }
 
-void	extract_infiles_helper_1(t_token *curr, t_file **infiles, int *i)
+void	extract_infiles_helper_1(t_token *curr, t_file **infiles, int *i, t_free **ptrs)
 {
-	(*infiles)[*i].fd = open(curr->value, O_RDWR);
+	(*infiles)[*i].file = ft_strdup(curr->value, ptrs);
+	(*infiles)[*i].fd = -1;
 	(*infiles)[*i].type = 0;
 	(*infiles)[*i].delim_flag = 0;
 	(*i)++;
@@ -36,7 +37,8 @@ void	extract_infiles_helper_1(t_token *curr, t_file **infiles, int *i)
 
 void	extract_infiles_helper_2(t_token *curr, t_file **infiles, int *i, t_free **ptrs)
 {
-	(*infiles)[*i].fd = -2;
+	(*infiles)[*i].file = NULL;
+	(*infiles)[*i].fd = -1;
 	(*infiles)[*i].type = 1;
 	(*infiles)[*i].delimiter = ft_strdup(curr->value, ptrs);
 	if (curr->delim_flag)
@@ -63,7 +65,7 @@ void	extract_infiles(t_token *token, t_file **infiles, t_free **ptrs)
 	while (curr && curr->type != PIPE)
 	{
 		if (curr->type == IN_FILE)
-			extract_infiles_helper_1(curr, infiles, &i);
+			extract_infiles_helper_1(curr, infiles, &i, ptrs);
 		if (curr->type == DELIMITER)
 			extract_infiles_helper_2(curr, infiles, &i, ptrs);
 		curr = curr->next;

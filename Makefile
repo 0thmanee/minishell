@@ -39,7 +39,7 @@ object_files/libft/%.o: libft/%.c minishell.h
 
 object_files/execution/%.o: execution/%.c minishell.h
 	@mkdir -p object_files/execution
-	@cc $(CFLAGS) -c $< -I . -o $@
+	@cc $(CFLAGS) -c $< -I . -o $@ -I$(READLINEDIR)/include
 
 
 clean:
