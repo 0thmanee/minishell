@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute2.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 16:39:30 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/03/30 20:51:56 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/03/31 04:14:10 by yboutsli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,9 +41,9 @@ int	final_cmd(t_cmd *cmd, t_list **list_env, int io_fd[2], t_free **ptrs)
 			unset(list_env, cmd->args);
 		else
 			status = new_execve(cmd, list_env);
-        exit(0);
+		exit(0);
 	}
-    dup2(io_fd[1], 1);
+	dup2(io_fd[1], 1);
 	close(io_fd[1]);
 	dup2(io_fd[0], 0);
 	close(io_fd[0]);
@@ -97,6 +97,20 @@ static int middle_cmds(t_cmd *cmd, t_list **list_env, t_free **ptrs)
 	}
 	if (pid == 0)
 		status = child_execution(fd, cmd, list_env, ptrs);
+	//if heredoc wait
+	if (cmd->infiles)
+	{
+		int i = 0;
+		while (cmd->infiles[i].fd != -42)
+		{
+			if (cmd->infiles[i].type == 1)
+			{
+				waitpid(pid, NULL, 0);
+				break ;
+			}
+			i++;
+		}
+	}
 	dup2(fd[0], 0);
 	close2(fd);
 	return (status);
