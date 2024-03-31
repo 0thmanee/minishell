@@ -6,7 +6,7 @@
 /*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 20:29:05 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/03/30 01:48:05 by yboutsli         ###   ########.fr       */
+/*   Updated: 2024/03/31 05:53:14 by yboutsli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,8 @@ char	*get_env(t_list **head, char *env_var)
 {
 	t_list	*current;
 
+	if (!head)
+		return (NULL);
 	current = *head;
 	while (current)
 	{

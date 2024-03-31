@@ -6,7 +6,7 @@
 /*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 11:49:46 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/03/31 04:01:46 by yboutsli         ###   ########.fr       */
+/*   Updated: 2024/03/31 05:47:32 by yboutsli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,8 @@ void	env_lc_update(t_cmd *cmd, t_list **list_env)
 
 	if (cmd->args == NULL)
 	{
-		(npath = path(list_env), cmd_fpath = cmd_path(cmd->cmd, npath));
+		npath = path(list_env);
+		cmd_fpath = cmd_path(cmd->cmd, npath);
 		new = cmd_fpath;
 		ft_free(npath);
 	}

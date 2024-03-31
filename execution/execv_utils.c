@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execv_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 16:03:22 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/03/31 02:31:53 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/03/31 05:49:46 by yboutsli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ char	*cmd_path(char *cmd, char **npath)
 	if (cmd[0] == '/')
 		return (cmd);
 	i = 0;
-	while (npath[i])
+	while (npath && npath[i])
 	{
 		tmp = ft_strjoin_2(npath[i], "/");
 		tmp1 = ft_strjoin_2(tmp, cmd);
