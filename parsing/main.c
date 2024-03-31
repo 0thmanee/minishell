@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 08:42:35 by obouchta          #+#    #+#             */
-/*   Updated: 2024/03/31 02:38:10 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/03/31 20:03:14 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -160,9 +160,9 @@ int	process_input(char *input, t_list **list_env, t_free **ptrs)
 		return (2);
 	}
 	(join_args(&tokens, ptrs), specify_vars(&tokens, ptrs));
+	expanding(&tokens, *list_env, ptrs);
 	if (!remove_quotes(&tokens, ptrs))
 		return (0);
-	expanding(&tokens, *list_env, ptrs);
 	if (!final_command(&tokens, &cmd, ptrs))
 		return (0);
 	// print_it(tokens);

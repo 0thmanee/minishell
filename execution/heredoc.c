@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 16:20:23 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/03/31 19:50:06 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/03/31 20:12:41 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,17 +24,17 @@ char	*parse_heredoc(char *input, t_list *list_env, t_free **ptrs)
 			return (result);
 		if (result[i] == '$')
 		{
-			if (result[i + 1] == '\"' || result[i + 1] == '\'')
+			if (result[i + 1] == '\"' || result[i + 1] == '\''
+				|| (ft_isalpha(result[i + 1]) && result[i + 1] != '_'
+				&& ft_isdigit(result[i + 1])))
 			{
 				i++;
 				continue ;
 			}
 			else if (result[i + 1] == '{')
 				result = case_4(result, &i, list_env, ptrs);
-			else if (ft_isalpha(result[i + 1]) && result[i + 1] != '_')
-			{
+			else if (!ft_isdigit(result[i + 1]))
 				result = case_3(result, &i, ptrs);
-			}
 			else
 				result = case_1(result, &i, list_env, ptrs);
 			if (!result)
