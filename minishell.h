@@ -14,7 +14,8 @@
 
 # define MINISHELL_H
 
-#include <signal.h>
+# include <signal.h>
+# include <limits.h>
 # include <stdlib.h>
 # include <unistd.h>
 # include <stdio.h>
@@ -151,11 +152,12 @@ void	ft_free_ptr(t_free **list_aloc, void *ptr);
 void	ft_free_all(t_free **list_aloc);
 int		ft_isdigit(int c);
 int		ft_strchr(char *str, char c);
+void	ft_putstr_fd(char *s, int fd);
 
-int	ft_lstsize(t_cmd *lst);
+int		ft_lstsize(t_cmd *lst);
 
 char	*ft_strdup_1(char *str);
-char	*ft_substr_2(char const *s, int start, int len);
+char		*ft_substr_2(char const *s, int start, int len);
 char	*ft_strjoin_2(char *s1, char *s2);
 
 
@@ -234,4 +236,6 @@ int		handle_io(t_cmd *cmd, t_list *list_env, t_free **ptrs);
 int		valid(char *str);
 void 	nvalid_output(char *str);
 void	env_lc_update(t_cmd *cmd, t_list **list_env);
+int		ft_exit(t_cmd *cmd);
+int		args_size(t_cmd *cmd);
 #endif

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_str_1.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/03 02:36:31 by obouchta          #+#    #+#             */
-/*   Updated: 2024/03/22 08:57:25 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/03/31 04:00:59 by yboutsli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,4 +84,19 @@ int	ft_strcmp(const char *s1, const char *s2)
 	while (s1[i] && s2[i] && s1[i] == s2[i])
 		i++;
 	return ((unsigned char)s1[i] - (unsigned char)s2[i]);
+}
+void	ft_putstr_fd(char *s, int fd)
+{
+	int		i;
+	char	c;
+
+	i = 0;
+	if (!s)
+		return ;
+	while (s[i])
+	{
+		c = s[i];
+		write(fd, &c, 1);
+		i++;
+	}
 }
