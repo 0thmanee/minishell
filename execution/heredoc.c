@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 16:20:23 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/03/31 03:17:59 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/03/31 05:33:44 by yboutsli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,8 @@ static void	here_doc_utils(int fd[2], t_file *infile, int mode, t_list *list_env
 			write(fd[1], "minishell: bad substitution\n", 28);
 		free(input);
 		input = readline("> ");
-    }
+	}
+	close (fd[1]);
 	(free(input), exit(0));
 }
 

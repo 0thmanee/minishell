@@ -6,7 +6,7 @@
 /*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 16:39:30 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/03/31 04:14:10 by yboutsli         ###   ########.fr       */
+/*   Updated: 2024/03/31 05:37:40 by yboutsli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,10 +54,9 @@ int	child_execution(int fd[2], t_cmd *cmd, t_list **list_env, t_free **ptrs)
 {
 	int		status;
 
+	(void)ptrs;
 	dup2(fd[1], 1);
 	close2(fd);
-    if (handle_io(cmd, *list_env, ptrs))
-		return (1);
 	status = 0;
 	if (!ft_strcmp(cmd->cmd, "export"))
 		status = export(cmd, list_env);
@@ -83,6 +82,8 @@ static int middle_cmds(t_cmd *cmd, t_list **list_env, t_free **ptrs)
 	int	pid;
 	(void)ptrs;
 
+	if (handle_io(cmd, *list_env, ptrs))
+		return (1);
 	status = 0;
 	if (pipe(fd) == -1)
 	{
@@ -98,19 +99,19 @@ static int middle_cmds(t_cmd *cmd, t_list **list_env, t_free **ptrs)
 	if (pid == 0)
 		status = child_execution(fd, cmd, list_env, ptrs);
 	//if heredoc wait
-	if (cmd->infiles)
-	{
-		int i = 0;
-		while (cmd->infiles[i].fd != -42)
-		{
-			if (cmd->infiles[i].type == 1)
-			{
-				waitpid(pid, NULL, 0);
-				break ;
-			}
-			i++;
-		}
-	}
+	// if (cmd->infiles)
+	// {
+	// 	int i = 0;
+	// 	while (cmd->infiles[i].fd != -42)
+	// 	{
+	// 		if (cmd->infiles[i].type == 1)
+	// 		{
+	// 			waitpid(pid, NULL, 0);
+	// 			break ;
+	// 		}
+	// 		i++;
+	// 	}
+	// }
 	dup2(fd[0], 0);
 	close2(fd);
 	return (status);
