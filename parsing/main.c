@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 08:42:35 by obouchta          #+#    #+#             */
-/*   Updated: 2024/03/31 20:03:14 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/03/31 21:54:51 by yboutsli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -160,12 +160,12 @@ int	process_input(char *input, t_list **list_env, t_free **ptrs)
 		return (2);
 	}
 	(join_args(&tokens, ptrs), specify_vars(&tokens, ptrs));
+	// print_it(tokens);
 	expanding(&tokens, *list_env, ptrs);
 	if (!remove_quotes(&tokens, ptrs))
 		return (0);
 	if (!final_command(&tokens, &cmd, ptrs))
 		return (0);
-	// print_it(tokens);
 	// print_it_2(cmd);
 	ft_execution(&cmd, list_env, ptrs);
 	ft_free_all(ptrs);
@@ -221,6 +221,7 @@ int main(int ac, char **av, char **envp)
 	list_env = env_lst(envp);
 	if (!list_env)
 		env_init(&list_env);
+	ft_lstadd_back_2(&list_env, ft_lstnew_2("?", "0", 1));
 	if (!isatty(STDIN_FILENO))
 		exit(1);
 	if (!read_input(&list_env))

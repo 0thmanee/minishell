@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expanding_init_2.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/16 03:21:04 by obouchta          #+#    #+#             */
-/*   Updated: 2024/03/31 20:08:54 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/03/31 21:45:45 by yboutsli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,10 +36,8 @@ void	check_for_var_helper_2(char *value, int *vars, int *i, int *j)
 				vars[(*j)++] = 0;
 			else if (value[(*i) + 1] && value[*i + 1] == '{')
 				vars[(*j)++] = 4;
-			else if (value[(*i) + 1] && value[*i + 1] == '?')
-				vars[(*j)++] = 5;
 			else if (ft_isalpha(value[*i + 1]) && value[*i + 1] != '_'
-				&& ft_isdigit(value[*i + 1]))
+				&& value[*i + 1] != '?' && ft_isdigit(value[*i + 1]))
 				vars[(*j)++] = 0;
 			else if (!ft_isdigit(value[*i + 1]))
 				vars[(*j)++] = 3;
@@ -57,12 +55,10 @@ void	check_for_var_helper_3(char *value, int *vars, int *i, int *j)
 {
 	if (value[(*i) + 1] == '\"' || value[(*i) + 1] == '\'')
 		vars[(*j)++] = 2;
-	else if (value[(*i) + 1] == '?')
-		vars[(*j)++] = 5;
 	else if (value[(*i) + 1] && value[*i + 1] == '{')
 		vars[(*j)++] = 4;
 	else if (ft_isalpha(value[*i + 1]) && value[*i + 1] != '_'
-		&& ft_isdigit(value[*i + 1]))
+		&& value[*i + 1] != '?' && ft_isdigit(value[*i + 1]))
 		vars[(*j)++] = 0;
 	else if (!ft_isdigit(value[*i + 1]))
 		vars[(*j)++] = 3;

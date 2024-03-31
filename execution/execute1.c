@@ -6,7 +6,7 @@
 /*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 11:49:46 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/03/31 05:55:30 by yboutsli         ###   ########.fr       */
+/*   Updated: 2024/03/31 22:12:28 by yboutsli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ void	env_lc_update(t_cmd *cmd, t_list **list_env)
 	}
 	value = get_env(list_env, "_");
 	if (!value)
-		ft_lstadd_back_2(list_env, ft_lstnew_2("_", new));
+		ft_lstadd_back_2(list_env, ft_lstnew_2("_", new, 0));
 	else
 		env_update(list_env, "_", new);
 }
@@ -133,8 +133,10 @@ int	child_execve(t_cmd *cmd, t_list **list_env)
 		return (0);
 	pid = fork();
 	if (pid == 0)
-		status = new_execve(cmd, list_env);
-	waitpid(pid, NULL, 0);
+		new_execve(cmd, list_env);
+	waitpid(pid, &status, 0);
+	if (WIFEXITED(status))
+		return (WEXITSTATUS(status));//more study
 	return(status);
 }
 

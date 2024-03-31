@@ -6,7 +6,7 @@
 /*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 16:03:22 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/03/31 05:49:46 by yboutsli         ###   ########.fr       */
+/*   Updated: 2024/03/31 22:03:41 by yboutsli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,8 +81,8 @@ int	new_execve(t_cmd *cmd, t_list **list_env)
 	env_tab = list2tab(*list_env);
 	if (!cmd_fpath)
 	{
-		printf("command not found: %s\n", cmd->cmd);//write instead
-		exit (1);
+		printf("command not found: %s\n", cmd->cmd);
+		exit (127);
 	}
 	if (execve(cmd_fpath, args, env_tab) == -1)
 	{

@@ -6,7 +6,7 @@
 /*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 20:29:05 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/03/31 05:53:14 by yboutsli         ###   ########.fr       */
+/*   Updated: 2024/03/31 21:48:21 by yboutsli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ t_list	*env_lst(char **envp)
 			j++;
 		var = ft_substr_2(envp[i], 0, j);
 		value = ft_substr_2(envp[i], j + 1, ft_strlen(envp[i]));
-		ft_lstadd_back_2(&env, ft_lstnew_2(var, value));
+		ft_lstadd_back_2(&env, ft_lstnew_2(var, value, 0));
 		free(var);
 		free(value);
 	}
@@ -61,7 +61,7 @@ int	env_update(t_list **head, char *env_var, char *new)
 	current = *head;
 	while (current)
 	{
-		if (!ft_strcmp(current->var, env_var))
+		if (!ft_strcmp(current->var, env_var) && current->type == 0)
 		{
 			free(current->value);
 			current->value = ft_strdup_1(new);
@@ -70,7 +70,7 @@ int	env_update(t_list **head, char *env_var, char *new)
 		current = current->next;
 	}
 	if (!current)
-		ft_lstadd_back_2(head, ft_lstnew_2(env_var, new));
+		ft_lstadd_back_2(head, ft_lstnew_2(env_var, new, 0));
 	return (1);
 }
 
@@ -81,39 +81,39 @@ void	env_init(t_list	**env)
 	cwd = getcwd(NULL, 0);
 	if (cwd != NULL)
 	{
-		ft_lstadd_back_2(env, ft_lstnew_2("PWD", cwd));
+		ft_lstadd_back_2(env, ft_lstnew_2("PWD", cwd, 0));
 		tmp = ft_strjoin_2(cwd, "/./minishell");
-		ft_lstadd_back_2(env, ft_lstnew_2("_", tmp));
-		ft_lstadd_back_2(env, ft_lstnew_2("OLDPWD", NULL));
+		ft_lstadd_back_2(env, ft_lstnew_2("_", tmp, 0));
+		ft_lstadd_back_2(env, ft_lstnew_2("OLDPWD", NULL, 0));
 		free(tmp);
 	}
-	ft_lstadd_back_2(env, ft_lstnew_2("SHLVL", "1"));
+	ft_lstadd_back_2(env, ft_lstnew_2("SHLVL", "1", 0));
 	free(cwd);
 }
 int	var_exist(char *var, t_list *list_env)
 {
-	t_list	*current;
+	t_list	*curr;
 
-	current = list_env;
-	while (current)
+	curr = list_env;
+	while (curr)
 	{
-		if (!ft_strcmp(current->var, var))
+		if (!ft_strcmp(curr->var, var) && curr->type == 0)
 			return (0);
-		current = current->next;
+		curr = curr->next;
 	}
 	return (1);
 }
 
 t_list *get_env_node(t_list **list_env, char *var)
 {
-	t_list	*current;
+	t_list	*curr;
 
-	current = *list_env;
-	while (current)
+	curr = *list_env;
+	while (curr)
 	{
-		if (!ft_strcmp(current->var, var))
-			return (current);
-		current = current->next;
+		if (!ft_strcmp(curr->var, var) && curr->type == 0)
+			return (curr);
+		curr = curr->next;
 	}
 	return (NULL);	
 }

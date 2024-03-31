@@ -6,7 +6,7 @@
 /*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/05 16:57:06 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/03/30 00:26:40 by yboutsli         ###   ########.fr       */
+/*   Updated: 2024/03/31 21:56:37 by yboutsli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,7 @@ void	case0(char *str, t_list **list_env)
 
 	if (!var_exist(str, *list_env))
 		return ;
-	new = ft_lstnew_2(str, NULL);
+	new = ft_lstnew_2(str, NULL, 0);
 	if (!new)
 		exit(1);
 	ft_lstadd_back_2(list_env, new);
@@ -121,7 +121,7 @@ void	case1(char *str, t_list **list_env, int append)
 		free(var);
 		return ;
 	}
-	new = ft_lstnew_2(var, "\0");
+	new = ft_lstnew_2(var, "\0", 0);
 	if (!new)
 		exit(1);
 	ft_lstadd_back_2(list_env, new);
@@ -161,7 +161,7 @@ void	case2(char *str, t_list **list_env, int append)
 		free(var);
 		return ;
 	}
-	new = ft_lstnew_2(var, value);
+	new = ft_lstnew_2(var, value, 0);
 	free(var);
 	free(value);
 	if(!new)
@@ -204,7 +204,10 @@ int	export(t_cmd *cmd, t_list **list_env)
 		while (cmd->args[i])
 		{
 			if (valid(cmd->args[i]))
+			{
 				nvalid_output(cmd->args[i]);
+				status = 1;
+			}
 			else
 				valid_arg(cmd->args[i], list_env);
 			i++;

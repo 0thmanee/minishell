@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_lst_1.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 21:41:01 by obouchta          #+#    #+#             */
-/*   Updated: 2024/03/22 08:57:25 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/03/31 21:03:14 by yboutsli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ void	ft_lstadd_back_1(t_token **lst, t_token *new_node)
 	curr->next = new_node;
 }
 
-t_list	*ft_lstnew_2(void *content1, void *content2)
+t_list	*ft_lstnew_2(void *content1, void *content2, int exit)
 {
 	t_list	*new;
 
@@ -53,6 +53,7 @@ t_list	*ft_lstnew_2(void *content1, void *content2)
 		return (NULL);
 	new->var = ft_strdup_1(content1);
 	new->value = ft_strdup_1(content2);
+	new->type = exit;
 	new->next = NULL;
 	return (new);
 }
