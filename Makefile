@@ -3,7 +3,7 @@ parsing_files = main.c new_len.c trim_input.c add_spaces.c type_check.c get_cmd.
 remove_quotes.c join_args.c expanding.c expanding_init_1.c expanding_init_2.c signals.c \
 final_cmd.c final_cmd_1.c final_cmd_2.c final_cmd_3.c syntax_error.c ft_malloc.c
 
-libft_files = ft_str_1.c ft_str_2.c ft_lst_1.c ft_lst_2.c ft_char.c ft_split.c 
+libft_files = ft_str_1.c ft_str_2.c ft_lst_1.c ft_lst_2.c ft_char.c ft_split.c ft_atoi.c
 execution_files = execution_1.c execution_utils_1.c execv_utils.c execute1.c execute2.c heredoc.c
 
 builtins_srcs = $(addprefix builtins/,$(builtins_files))

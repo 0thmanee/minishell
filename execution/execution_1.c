@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution_1.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
+/*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/12 03:41:21 by yasser03          #+#    #+#             */
-/*   Updated: 2024/03/31 21:54:35 by yboutsli         ###   ########.fr       */
+/*   Updated: 2024/03/31 22:33:39 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,7 +146,6 @@ int	ft_execution(t_cmd **cmd, t_list **list_env, t_free **ptrs)
 		status = execute_1(*cmd, list_env, ptrs);
 	else
 		status = execute_2(cmd, list_env, ptrs, fd);
-	printf("status = %d\n", status);
 	update_exit_status(list_env, status);
 	fd2(fd);
 	free(fd);

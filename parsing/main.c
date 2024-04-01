@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
+/*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 08:42:35 by obouchta          #+#    #+#             */
-/*   Updated: 2024/03/31 21:54:51 by yboutsli         ###   ########.fr       */
+/*   Updated: 2024/03/31 22:46:51 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -153,6 +153,7 @@ int	process_input(char *input, t_list **list_env, t_free **ptrs)
 		return (0);
 	if (syntax_error(tokens, &here_doc))
 	{
+		update_exit_status(list_env, 258);
 		if (here_doc)
 			open_heredoc(tokens, here_doc, &s_error);
 		if (!s_error)
@@ -160,16 +161,10 @@ int	process_input(char *input, t_list **list_env, t_free **ptrs)
 		return (2);
 	}
 	(join_args(&tokens, ptrs), specify_vars(&tokens, ptrs));
-	// print_it(tokens);
 	expanding(&tokens, *list_env, ptrs);
-	if (!remove_quotes(&tokens, ptrs))
+	if (!remove_quotes(&tokens, ptrs) || !final_command(&tokens, &cmd, ptrs))
 		return (0);
-	if (!final_command(&tokens, &cmd, ptrs))
-		return (0);
-	// print_it_2(cmd);
-	ft_execution(&cmd, list_env, ptrs);
-	ft_free_all(ptrs);
-	return (1);
+	return (ft_execution(&cmd, list_env, ptrs), ft_free_all(ptrs), 1);
 }
 
 int read_input(t_list **list_env)
@@ -187,7 +182,7 @@ int read_input(t_list **list_env)
 	{
 		input = readline("Minishell $> ");
 		if (!input)
-			(printf("exit\n"), exit(0));
+			(printf("exit\n"), exit(ft_atoi(get_env(list_env, "?"))));
 		if (!input[0])
 		{
 			free(input);

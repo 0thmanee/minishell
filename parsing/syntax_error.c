@@ -3,15 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   syntax_error.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
+/*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/20 03:10:42 by obouchta          #+#    #+#             */
-/*   Updated: 2024/03/31 22:15:02 by yboutsli         ###   ########.fr       */
+/*   Updated: 2024/03/31 22:36:22 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-//update_exit_status(list_env, status);
+
 int	check_braces(char *value)
 {
 	int	i;

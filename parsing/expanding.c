@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expanding.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
+/*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/15 02:58:32 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/03/31 21:53:00 by yboutsli         ###   ########.fr       */
+/*   Updated: 2024/03/31 22:27:20 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,10 +81,14 @@ char	*case_1(char *result, int *i, t_list *list_env, t_free **ptrs)
 	char	*tmp;
 	char	*var;
 	char	*value;
+	int		is_exit;
 
-	j = 1;
-	while (!char_is_valid(result[j + *i]))
-		j++;
+	(j = 1, is_exit = 0);
+	if (result[j + *i] == '?')
+		(is_exit = 1, j++);
+	else
+		while (!char_is_valid(result[j + *i]))
+			j++;
 	var = ft_substr(result, *i + 1, j - 1, ptrs);
 	value = get_env(&list_env, var);
 	(ft_free_ptr(ptrs, var), var = NULL);
@@ -94,7 +98,7 @@ char	*case_1(char *result, int *i, t_list *list_env, t_free **ptrs)
 		result = replace_mini_str(tmp, *i,  *i + j, value, ptrs);
 		(*i += ft_strlen(value), ft_free_ptr(ptrs, tmp));
 	}
-	else
+	else if (!is_exit)
 		case_1_helper(&result, i, ptrs);
 	return (result);
 }

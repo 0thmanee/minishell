@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute1.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
+/*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 11:49:46 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/03/31 22:12:28 by yboutsli         ###   ########.fr       */
+/*   Updated: 2024/04/01 01:16:35 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -163,7 +163,7 @@ int	execute_1(t_cmd *cmd, t_list **list_env, t_free **ptrs)
 	else if (!ft_strcmp(cmd->cmd, "unset"))
 		unset(list_env, cmd->args);
 	else if (!ft_strcmp(cmd->cmd, "exit"))
-		ft_exit(cmd);
+		ft_exit(cmd, list_env);
 	else
 		status = child_execve(cmd, list_env);
 	if (ft_strcmp(cmd->cmd, "env"))

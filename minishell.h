@@ -154,7 +154,7 @@ void	ft_free_all(t_free **list_aloc);
 int		ft_isdigit(int c);
 int		ft_strchr(char *str, char c);
 void	ft_putstr_fd(char *s, int fd);
-
+int		ft_atoi(const char *str);
 int		ft_lstsize(t_cmd *lst);
 
 char	*ft_strdup_1(char *str);
@@ -237,6 +237,7 @@ int		handle_io(t_cmd *cmd, t_list *list_env, t_free **ptrs);
 int		valid(char *str);
 void 	nvalid_output(char *str);
 void	env_lc_update(t_cmd *cmd, t_list **list_env);
-int		ft_exit(t_cmd *cmd);
+int		ft_exit(t_cmd *cmd, t_list **list_env);
 int		args_size(t_cmd *cmd);
+void	update_exit_status(t_list **list_env, int status);
 #endif
