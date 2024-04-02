@@ -100,13 +100,14 @@ typedef struct s_file
 
 typedef struct s_cmd
 {
-	char   *cmd;
-	char   **args;
+	char	*cmd;
+	char	**args;
 	t_file *infiles;
 	t_file *outfiles;
 	int		io_error;
+	char	*file_error;
 	struct s_cmd	*next;
-}   t_cmd;
+}	t_cmd;
 
 typedef struct s_list
 {

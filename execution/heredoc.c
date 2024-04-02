@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 16:20:23 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/03/31 20:12:41 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/04/02 01:51:36 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,8 @@ static void	here_doc_utils(int fd[2], t_file *infile, int mode, t_list *list_env
 
 	signal(SIGINT, SIG_DFL);
 	rl_catch_signals = 1;
-	close(fd[0]);
+	if (mode)
+		close(fd[0]);
 	input = readline("> ");
 	while(input != NULL && ft_strcmp(input, infile->delimiter))
 	{
@@ -69,7 +70,8 @@ static void	here_doc_utils(int fd[2], t_file *infile, int mode, t_list *list_env
 		free(input);
 		input = readline("> ");
 	}
-	close (fd[1]);
+	if (mode)
+		close (fd[1]);
 	(free(input), exit(0));
 }
 
