@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 07:21:28 by obouchta          #+#    #+#             */
-/*   Updated: 2024/03/22 08:57:28 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/04/02 03:57:43 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,8 @@ t_token	*get_in_out_helper(char *input, int *i, t_token **tokens, t_free **ptrs)
 			(ft_free_all(ptrs), exit(1));
 		arg->args_len = 0;
 	}
+	else if (regonize_type(input, *i) != EXPRESSION)
+		(*i)--;
 	return (arg);
 }
 

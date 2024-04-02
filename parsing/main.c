@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 08:42:35 by obouchta          #+#    #+#             */
-/*   Updated: 2024/04/02 00:54:31 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/04/02 06:24:31 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -164,6 +164,7 @@ int	process_input(char *input, t_list **list_env, t_free **ptrs)
 	expanding(&tokens, *list_env, ptrs);
 	if (!remove_quotes(&tokens, ptrs) || !final_command(&tokens, &cmd, ptrs))
 		return (0);
+	// print_it_2(cmd);
 	return (ft_execution(&cmd, list_env, ptrs), ft_free_all(ptrs), 1);
 }
 
@@ -177,6 +178,7 @@ int read_input(t_list **list_env)
 	using_history();
 	signal(SIGINT, handle_signals);
 	signal(SIGQUIT, handle_signals);
+	// how to pass env to signal handler !!!!!
 	rl_catch_signals = 0;
 	while (1)
 	{
@@ -193,7 +195,7 @@ int read_input(t_list **list_env)
 		else if (history_length > 0)
 				ft_strcpy(input, history_get(history_length)->line);
 		if (process_input(input, list_env, &ptrs) == 2)
-			(ft_free_all(&ptrs), printf("minishell: syntax error\n"));
+			(ft_free_all(&ptrs), write(2, "minishell: syntax error\n", 24));
 	}
 	return (1);
 }
@@ -209,16 +211,18 @@ int read_input(t_list **list_env)
 int main(int ac, char **av, char **envp)
 {
 	t_list		*list_env;
+
 	if (ac != 1)
-		return (printf("minishell: too many arguments\n"), 1);
+		return (write(2, "minishell: too many arguments\n", 30), 1);
 	(void)av;
-	tcgetattr(STDIN_FILENO, &original_terminos);
 	list_env = env_lst(envp);
 	if (!list_env)
 		env_init(&list_env);
 	ft_lstadd_back_2(&list_env, ft_lstnew_2("?", "0", 1));
 	if (!isatty(STDIN_FILENO))
 		exit(1);
+	tcgetattr(STDIN_FILENO, &g_signal.original_terminos);
+	g_signal.env_lst = &list_env;
 	if (!read_input(&list_env))
 		return (1);
 }

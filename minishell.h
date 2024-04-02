@@ -29,7 +29,6 @@
 # define ANSI_COLOR_CYAN		"\x1b[36m"
 # define ANSI_COLOR_RESET	"\x1b[0m"
 
-struct	termios original_terminos;
 /* in the header file */
 /*==== LEAKS FINDER ==*/
 // #include <libc.h>
@@ -129,6 +128,17 @@ typedef struct s_get_line
 	char	*total_str;
 	int		end_file;
 }	t_get_line;
+
+typedef struct t_signal
+{
+	struct	termios original_terminos;
+	t_list	**env_lst;
+}	s_signal;
+
+// Global Variable to handle the state of the terminal when Entering SIGQUIT
+// and to Set The Exit Status When Entering SIGINT
+
+s_signal	g_signal;
 
 // libft
 char	*ft_strcpy(char *dest, const char *src);

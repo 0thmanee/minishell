@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/31 00:17:09 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/04/01 01:16:08 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/04/02 05:49:06 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,24 +40,24 @@ long	atoi_long(char *str)
 	}
 	return (nb * sign);	
 }
-int	long_nb(char *s)
-{
-	long long	nb;
-	int		sign;
-	int		i;
 
-	nb = 0;
-	sign = 1;
-	i = 0;
-	if (s[i] == '-')
+long long	long_nb(char *s)
+{
+	unsigned long long	nb;
+	int					sign;
+	int					i;
+
+	(nb = 0, sign = 1, i = 0);
+	if (s[i] == '-' || s[i] == '+')
 	{
-		sign = -1;
+		if (s[i] == '-')
+			sign = -1;
 		i++;
 	}
 	while (s[i])
 	{
 		nb = (nb * 10) + (s[i] - 48);
-		if ((nb * sign) > LONG_MAX || (nb * sign) < LONG_MIN)
+		if ((sign == 1 && nb > LLONG_MAX) || (sign == -1 && nb > (unsigned long long)LLONG_MAX))
 			return (1);
 		i++;
 	}
@@ -79,7 +79,7 @@ int	valid_args(char **args)
 			return (1);
 		}
 		j = -1;
-		if (args[i][0] == '-' && args[i][1] != '\0')
+		if ((args[i][0] == '-' || args[i][0] == '+') && args[i][1] != '\0')
 			j++;
 		while (args[i][++j])		
 		{
@@ -97,12 +97,13 @@ void	ft_exit_utils(char *arg)
 
 	nb = atoi_long(arg);
 	//ft_free
-	exit(nb);
+	(printf("exit\n"), exit(nb));
 }
+
 int	ft_exit(t_cmd *cmd, t_list **list_env)
 {
 	if (!cmd->args)
-		exit(ft_atoi(get_env(list_env, "?")));//free
+		(printf("exit\n"), exit(ft_atoi(get_env(list_env, "?"))));//free
 	else if (valid_args(cmd->args))
 		return (1);
 	else
