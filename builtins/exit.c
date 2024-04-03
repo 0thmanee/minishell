@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/31 00:17:09 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/04/02 05:49:06 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/04/03 00:28:49 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	error_msg(char *str)
 	exit (255);
 }
 
-long	atoi_long(char *str)
+long long	atoi_long(char *str)
 {
 	long long	nb;
 	int		sign;
@@ -28,9 +28,10 @@ long	atoi_long(char *str)
 	nb = 0;
 	sign = 1;
 	i = 0;
-	if (str[i] == '-')
+	if (str[i] == '-' || str[i] == '+')
 	{
-		sign = -1;
+		if (str[i] == '-')
+			sign = -1;
 		i++;
 	}
 	while (str[i])
@@ -38,10 +39,10 @@ long	atoi_long(char *str)
 		nb = (nb * 10) + (str[i] - 48);
 		i++;
 	}
-	return (nb * sign);	
+	return (nb * sign);
 }
 
-long long	long_nb(char *s)
+int	long_nb(char *s)
 {
 	unsigned long long	nb;
 	int					sign;
@@ -57,7 +58,7 @@ long long	long_nb(char *s)
 	while (s[i])
 	{
 		nb = (nb * 10) + (s[i] - 48);
-		if ((sign == 1 && nb > LLONG_MAX) || (sign == -1 && nb > (unsigned long long)LLONG_MAX))
+		if ((sign == 1 && nb > LLONG_MAX) || (sign == -1 && nb > (unsigned long long)LLONG_MAX + 1))
 			return (1);
 		i++;
 	}
