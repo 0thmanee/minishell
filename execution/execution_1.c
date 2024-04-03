@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution_1.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/12 03:41:21 by yasser03          #+#    #+#             */
-/*   Updated: 2024/03/31 22:33:39 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/04/03 03:53:57 by yboutsli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,48 +64,6 @@ int new_fork()
 	return (pid);
 }
 
-
-
-
-// char *join_args_y(char **args)
-// {
-// 	int	i;
-// 	char	*tmp1;
-// 	char	*tmp2;
-// 	char	*result;
-
-// 	if (!args || !args[0])
-// 		return (NULL);
-// 	i = 1;
-// 	result = ft_strdup(args[0]);
-// 	while (args[i])
-// 	{
-// 		tmp1 = ft_strjoin(result, " ");
-// 		tmp2 = ft_strjoin(tmp1, args[i]);
-// 		free(tmp1);
-// 		free(result);
-// 		result = tmp2;
-// 		i++;
-// 	}
-// 	return (result);
-// }
-// int	execute(t_token  *token, t_list **list_env, t_list **list_set, char **npath)
-// {
-// 	char	*str;
-// 	char	*expanded;
-
-// 	str = join_args_y(token->args);
-// 	expanded = expanding(str, *list_env);
-// 	else
-// 		execute_execve(token, *list_env, npath);
-// 	free(str);
-// 	free(expanded);
-// 	return (0);
-// }
-
-
-
-
 int *fd1(void)
 {
 	int *tab;
@@ -143,7 +101,7 @@ int	ft_execution(t_cmd **cmd, t_list **list_env, t_free **ptrs)
 	fd = fd1();	
 	status = 0;
 	if (ft_lstsize(*cmd) == 1)
-		status = execute_1(*cmd, list_env, ptrs);
+		status = execute_1(*cmd, list_env, ptrs, fd);
 	else
 		status = execute_2(cmd, list_env, ptrs, fd);
 	update_exit_status(list_env, status);

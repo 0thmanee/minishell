@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_lst_1.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
+/*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 21:41:01 by obouchta          #+#    #+#             */
-/*   Updated: 2024/03/31 21:03:14 by yboutsli         ###   ########.fr       */
+/*   Updated: 2024/04/03 05:25:30 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ t_token	*ft_lstnew_1(char *value, int type, t_value *args, t_free **ptrs)
 	new_node->value = value;
 	new_node->args = args;
 	new_node->type = type;
+	new_node->is_var = 0;
 	new_node->next = NULL;
 	return (new_node);
 }

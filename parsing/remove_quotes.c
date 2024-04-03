@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 17:17:09 by obouchta          #+#    #+#             */
-/*   Updated: 2024/03/28 21:25:50 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/04/03 05:39:30 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,8 @@ int	no_quotes_len(char *cmd)
 	
 	len = ft_strlen(cmd);
 	i = 0;
+	if (!cmd)
+		return (0);
 	while (cmd[i])
 	{
 		if (cmd[i] == '\'' || cmd[i] == '\"')

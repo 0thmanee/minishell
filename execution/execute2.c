@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute2.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 16:39:30 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/04/02 06:33:18 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/04/03 03:54:55 by yboutsli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@ int	final_cmd(t_cmd *cmd, t_list **list_env, int io_fd[2], t_free **ptrs)
 	int 	status;
 	int		pid;
 
+	if (handle_io(cmd, *list_env, ptrs, io_fd))
+		return (1);
 	status = 0;
 	dup2(io_fd[1], 1);
 	close(io_fd[1]);
@@ -25,8 +27,8 @@ int	final_cmd(t_cmd *cmd, t_list **list_env, int io_fd[2], t_free **ptrs)
 	if (pid == 0)
 	{
 		status = 0;
-        if (handle_io(cmd, *list_env, ptrs))
-			return (1);
+		if (cmd->cmd == NULL)
+			exit (0);
 		if (!ft_strcmp(cmd->cmd, "export"))
 			status = export(cmd, list_env);
 		else if (!ft_strcmp(cmd->cmd, "env"))
@@ -50,6 +52,21 @@ int	final_cmd(t_cmd *cmd, t_list **list_env, int io_fd[2], t_free **ptrs)
 	return (status);
 }
 
+int	has_heredoc(t_cmd *cmd)
+{
+	int	i;
+	
+	i = 0;
+	if (!cmd || !cmd->infiles)
+		return (1);
+	while (cmd->infiles[i].fd != -42)
+	{
+		if (cmd->infiles[i].type == 1)
+			return (0);
+		i++;
+	}
+	return (1);
+}
 int	child_execution(int fd[2], t_cmd *cmd, t_list **list_env, t_free **ptrs)
 {
 	int		status;
@@ -58,6 +75,8 @@ int	child_execution(int fd[2], t_cmd *cmd, t_list **list_env, t_free **ptrs)
 	dup2(fd[1], 1);
 	close2(fd);
 	status = 0;
+	if (cmd->cmd == NULL)
+		exit(0);
 	if (!ft_strcmp(cmd->cmd, "export"))
 		status = export(cmd, list_env);
 	else if (!ft_strcmp(cmd->cmd, "env"))
@@ -67,22 +86,22 @@ int	child_execution(int fd[2], t_cmd *cmd, t_list **list_env, t_free **ptrs)
 	else if (!ft_strcmp(cmd->cmd, "echo"))
 		status = echo(cmd);
 	else if (!ft_strcmp(cmd->cmd, "pwd"))
-		pwd(list_env);
+		status = pwd(list_env);
 	else if (!ft_strcmp(cmd->cmd, "unset"))
-		unset(list_env, cmd->args);
+		status = unset(list_env, cmd->args);
 	else
 		status = new_execve(cmd, list_env);
-	exit(0);		
+	exit(status);		
 }
 
-static int middle_cmds(t_cmd *cmd, t_list **list_env, t_free **ptrs)
+static int middle_cmds(t_cmd *cmd, t_list **list_env, t_free **ptrs, int *io_fd)
 {
 	int status;
 	int	fd[2];
 	int	pid;
 	(void)ptrs;
 
-	if (handle_io(cmd, *list_env, ptrs))
+	if (handle_io(cmd, *list_env, ptrs, io_fd))
 		return (1);
 	status = 0;
 	if (pipe(fd) == -1)
@@ -125,11 +144,13 @@ int	execute_2(t_cmd **cmd_list, t_list **list_env, t_free **ptrs, int *io_fd)
 	curr = *cmd_list;
 	while (curr->next)
 	{
-		status = middle_cmds(curr, list_env, ptrs);
+		status = middle_cmds(curr, list_env, ptrs, io_fd);
+		if (status == 1)
+			return(status);
 		curr = curr->next;
 	}
 	status = final_cmd(curr, list_env, io_fd, ptrs);
-	while (waitpid(0, 0, 0) != -1)
+	while (waitpid(0, &status, 0) != -1)
 		;
-	return (status);
+	return (WEXITSTATUS(status));
 }

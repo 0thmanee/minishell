@@ -13,7 +13,8 @@
 #ifndef MINISHELL_H
 
 # define MINISHELL_H
-
+# include <sys/ioctl.h>
+# include <termios.h>
 # include <signal.h>
 # include <limits.h>
 # include <stdlib.h>
@@ -25,6 +26,8 @@
 # include <termios.h>
 # include <readline/readline.h>
 # include <readline/history.h>
+#include <termios.h>
+#include <sys/ioctl.h>
 # define BUFFER_SIZE			1
 # define ANSI_COLOR_CYAN		"\x1b[36m"
 # define ANSI_COLOR_RESET	"\x1b[0m"
@@ -85,6 +88,7 @@ typedef struct s_token
 	int  vars_len;
 	int  *vars;
 	int	delim_flag;
+	int		is_var;
 	struct s_token	*next;
 }	t_token;
 
@@ -95,6 +99,7 @@ typedef struct s_file
 	int type;
 	char *delimiter;
 	int	delim_flag;
+	int	is_var;
 }   t_file;
 
 typedef struct s_cmd
@@ -122,12 +127,6 @@ typedef	struct s_free
 	void	*ptr;
 	struct s_free	*next;
 }	t_free;
-
-typedef struct s_get_line
-{
-	char	*total_str;
-	int		end_file;
-}	t_get_line;
 
 typedef struct t_signal
 {
@@ -167,6 +166,7 @@ int		ft_strchr(char *str, char c);
 void	ft_putstr_fd(char *s, int fd);
 int		ft_atoi(const char *str);
 int		ft_lstsize(t_cmd *lst);
+int		is_ambig(char *value);
 
 char	*ft_strdup_1(char *str);
 char		*ft_substr_2(char const *s, int start, int len);
@@ -236,7 +236,7 @@ char	**execve_argv(t_cmd *cmd);
 int		export(t_cmd *cmd, t_list **list_env);
 int		echo(t_cmd *cmd);
 int 	unset(t_list **list_env, char **args);
-int		execute_1(t_cmd *cmd, t_list **list_env, t_free **ptrs);
+// int		execute_1(t_cmd *cmd, t_list **list_env, t_free **ptrs);
 char	**list2tab(t_list *list_env);
 int		env_size(t_list *list_env);
 void	close2(int tab[2]);
@@ -244,11 +244,15 @@ int		here_doc(t_file *infile, int mode, t_list *list_env, t_free **ptrs);
 int		new_execve(t_cmd *cmd, t_list **list_env);
 int		execute_2(t_cmd **cmd_list, t_list **list_env, t_free **ptrs, int *io_fd);
 int 	new_fork();
-int		handle_io(t_cmd *cmd, t_list *list_env, t_free **ptrs);
+// int		handle_io(t_cmd *cmd, t_list *list_env, t_free **ptrs);
 int		valid(char *str);
 void 	nvalid_output(char *str);
 void	env_lc_update(t_cmd *cmd, t_list **list_env);
 int		ft_exit(t_cmd *cmd, t_list **list_env);
 int		args_size(t_cmd *cmd);
 void	update_exit_status(t_list **list_env, int status);
+
+//
+int	handle_io(t_cmd *cmd, t_list *list_env, t_free **ptrs, int *io_fd);
+int	execute_1(t_cmd *cmd, t_list **list_env, t_free **ptrs,  int *io_fd);
 #endif

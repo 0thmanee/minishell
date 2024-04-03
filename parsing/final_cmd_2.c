@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/17 05:22:00 by obouchta          #+#    #+#             */
-/*   Updated: 2024/03/31 01:17:36 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/04/03 05:27:06 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ void	extract_infiles_helper_1(t_token *curr, t_file **infiles, int *i, t_free **
 	(*infiles)[*i].fd = -1;
 	(*infiles)[*i].type = 0;
 	(*infiles)[*i].delim_flag = 0;
+	(*infiles)[*i].is_var = curr->is_var;
 	(*i)++;
 }
 
@@ -41,10 +42,8 @@ void	extract_infiles_helper_2(t_token *curr, t_file **infiles, int *i, t_free **
 	(*infiles)[*i].fd = -1;
 	(*infiles)[*i].type = 1;
 	(*infiles)[*i].delimiter = ft_strdup(curr->value, ptrs);
-	if (curr->delim_flag)
-		(*infiles)[*i].delim_flag = 1;
-	else
-		(*infiles)[*i].delim_flag = 0;
+	(*infiles)[*i].delim_flag = curr->delim_flag;
+	(*infiles)[*i].is_var = curr->is_var;
 	(*i)++;
 }
 

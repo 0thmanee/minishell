@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 16:20:23 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/04/02 06:28:16 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/04/03 03:47:23 by yboutsli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ static void	here_doc_utils(int fd[2], t_file *infile, int mode, t_list *list_env
 	signal(SIGINT, SIG_DFL);
 	rl_catch_signals = 1;
 	if (mode)
-		close(fd[0]);
+		close(fd[0]);	
 	input = readline("> ");
 	while(input != NULL && ft_strcmp(input, infile->delimiter))
 	{
@@ -80,7 +80,8 @@ int	here_doc(t_file *infile, int mode, t_list *list_env, t_free **ptrs)
 	int	pid;
 	int	fd[2];
 	int	status;
-	
+
+
 	if (mode && pipe(fd) == -1)
 	{
 		perror("pipe");

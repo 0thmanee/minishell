@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_str_2.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
+/*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 16:47:50 by obouchta          #+#    #+#             */
-/*   Updated: 2024/03/25 03:08:51 by yboutsli         ###   ########.fr       */
+/*   Updated: 2024/04/03 05:54:58 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -157,4 +157,28 @@ char	*ft_strjoin_2(char *s1, char *s2)
 	}
 	p[j + i] = '\0';
 	return (p);
+}
+
+int	is_ambig(char *value)
+{
+	int	i;
+
+	if (!value || !value[0])
+		return (1);
+	i = 0;
+	while (value[i] && is_whitespace(value[i]))
+		i++;
+	if (!value[i])
+		return (1);
+	while (value[i])
+	{
+		if (is_whitespace(value[i]))
+			break ;
+		i++;
+	}
+	while (value[i] && is_whitespace(value[i]))
+		i++;
+	if (value[i])
+		return (1);
+	return (0);
 }
