@@ -6,39 +6,39 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 11:49:46 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/04/03 06:04:17 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/04/04 02:32:51 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	env_lc_update(t_cmd *cmd, t_list **list_env)
+void	env_lc_update(t_cmd *cmd, t_list **list_env, t_free **ptrs)
 {
 	char	*value;
-	char	*new;
+	char	*new_var;
 	char	*cmd_fpath;
 	char	**npath;
 	int		i;
 
+	(i = 0, value = NULL);
 	if (cmd->args == NULL)
 	{
-		npath = path(list_env);
-		cmd_fpath = cmd_path(cmd->cmd, npath);
-		new = cmd_fpath;
-		ft_free(npath);
+		npath = path(list_env, ptrs);
+		cmd_fpath = cmd_path(cmd->cmd, npath, ptrs);
+		new_var = cmd_fpath;
+		ft_free(npath, ptrs);
 	}
 	else
 	{
-		i = 0;
 		while (cmd->args[i + 1])
 			i++;
-		new = ft_strdup_1(cmd->args[i]);
+		new_var = ft_strdup(cmd->args[i], ptrs);
 	}
 	value = get_env(list_env, "_");
 	if (!value)
-		ft_lstadd_back_2(list_env, ft_lstnew_2("_", new, 0));
+		ft_lstadd_back_2(list_env, ft_lstnew_2("_", new_var, 0, ptrs));
 	else
-		env_update(list_env, "_", new);
+		env_update(list_env, "_", new_var, ptrs);
 }
 
 int	handle_io_helper1_2(t_cmd *cmd, t_list *list_env, t_free **ptrs, int *io_fd)
@@ -75,6 +75,8 @@ int	handle_io_helper1(t_cmd *cmd, t_list *list_env, t_free **ptrs, int *io_fd)
 	{
 		if (cmd->infiles[i].type == 0)
 		{
+			if (cmd->infiles[i].is_var && is_ambig(cmd->infiles[i].file))
+				return (write(2, "minishell: ambiguous redirect\n", 30), 1);
 			cmd->infiles[i].fd = open(cmd->infiles[i].file, O_RDONLY);
 			if (cmd->infiles[i].fd == -1)
 				return (write(2, "minishell: ", 11),
@@ -145,7 +147,7 @@ int	handle_io(t_cmd *cmd, t_list *list_env, t_free **ptrs, int *io_fd)
 	return (0);
 }
 
-int	child_execve(t_cmd *cmd, t_list **list_env)
+int	child_execve(t_cmd *cmd, t_list **list_env, t_free **ptrs)
 {
 	int		pid;
 	int		status;
@@ -155,7 +157,7 @@ int	child_execve(t_cmd *cmd, t_list **list_env)
 		return (0);
 	pid = fork();
 	if (pid == 0)
-		new_execve(cmd, list_env);
+		new_execve(cmd, list_env, ptrs);
 	waitpid(pid, &status, 0);
 	if (WIFSIGNALED(status) && WTERMSIG(status) == SIGQUIT)
 	 	return (131);
@@ -167,7 +169,6 @@ int	child_execve(t_cmd *cmd, t_list **list_env)
 
 int	execute_1(t_cmd *cmd, t_list **list_env, t_free **ptrs,  int *io_fd)
 {
-	(void)ptrs;
 	int		status;
 
 	status = 0;
@@ -176,22 +177,22 @@ int	execute_1(t_cmd *cmd, t_list **list_env, t_free **ptrs,  int *io_fd)
 	if (cmd->cmd == NULL || cmd->io_error)
 		return (0);
 	if (!ft_strcmp(cmd->cmd, "export"))
-		status = export(cmd, list_env);
+		status = export(cmd, list_env, ptrs);
 	else if (!ft_strcmp(cmd->cmd, "env"))
-		status = env(list_env, cmd);
+		status = env(list_env, cmd, ptrs);
 	else if (!ft_strcmp(cmd->cmd, "cd"))
-		status = cd(cmd->args, list_env);
+		status = cd(cmd->args, list_env, ptrs);
 	else if (!ft_strcmp(cmd->cmd, "echo"))
 		status = echo(cmd);
 	else if (!ft_strcmp(cmd->cmd, "pwd"))
 		pwd(list_env);
 	else if (!ft_strcmp(cmd->cmd, "unset"))
-		unset(list_env, cmd->args);
+		unset(list_env, cmd->args, ptrs);
 	else if (!ft_strcmp(cmd->cmd, "exit"))
-		ft_exit(cmd, list_env);
+		ft_exit(cmd, list_env, ptrs);
 	else
-		status = child_execve(cmd, list_env);
+		status = child_execve(cmd, list_env, ptrs);
 	if (ft_strcmp(cmd->cmd, "env"))
-		env_lc_update(cmd, list_env);//lc : last command
+		env_lc_update(cmd, list_env, ptrs);//lc : last command
 	return (status);
 }

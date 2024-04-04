@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 17:17:09 by obouchta          #+#    #+#             */
-/*   Updated: 2024/04/03 05:39:30 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/04/04 00:41:55 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,9 +61,9 @@ char	*no_quoted_value(char *cmd, int len, t_free **ptrs)
 	int		j;
 	char	quote;
 
+	if (!cmd)
+		return (NULL);
 	(i = 0, j = 0, new_cmd = ft_malloc(ptrs, len + 1));
-	if (!new_cmd)
-		(ft_free_all(ptrs), exit(1));
 	while (cmd[i])
 	{
 		if (cmd[i] == '\'' || cmd[i] == '\"')

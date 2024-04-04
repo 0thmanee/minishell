@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 07:19:14 by obouchta          #+#    #+#             */
-/*   Updated: 2024/03/30 02:46:54 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/04/04 00:41:06 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -158,8 +158,7 @@ void	get_values_helper(char *input, int *i, t_value *args, t_free **ptrs)
 		}
 		else
 		{
-			if (!extract_expr_2(input, args + j, i, ptrs))
-				(ft_free_all(ptrs), exit(1));
+			extract_expr_2(input, args + j, i, ptrs);
 			j++;
 		}
 	}
@@ -175,8 +174,6 @@ t_value *get_values(char *input, int *i, int *args_len, t_free **ptrs)
 	if (!*args_len)
 		return (NULL);
 	args = ft_malloc(ptrs, (*args_len + 1) * sizeof(t_value));
-	if (!args)
-		(ft_free_all(ptrs), exit(1));
 	get_values_helper(input, i, args, ptrs);
 	return (args);
 }
@@ -188,12 +185,9 @@ t_token	*get_cmd(char *input, int *i, int prev_type, t_free **ptrs)
 	int		args_len;
 
 	cmd = NULL;
-	if (!extract_expr(input, &cmd, i, ptrs))
-		(ft_free_all(ptrs), exit(1));
+	extract_expr(input, &cmd, i, ptrs);
 	new_token = ft_lstnew_1(cmd, regonize_type_2(prev_type),
 		get_values(input, i, &args_len, ptrs), ptrs);
-	if (!new_token)
-		(ft_free_all(ptrs), exit(1));
 	new_token->args_len = args_len;
 	if (input[*i])
 		(*i)--;

@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/17 04:30:01 by obouchta          #+#    #+#             */
-/*   Updated: 2024/03/22 08:57:26 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/04/04 00:40:00 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,8 +67,6 @@ void	extract_args(t_token *token, char ***args, t_free **ptrs)
 		if (curr->type == CMD && curr->args_len)
 		{
 			*args = ft_malloc(ptrs, (curr->args_len + 1) * sizeof(char *));
-			if (!*args)
-				(ft_free_all(ptrs), exit(1));
 			extract_args_helper(curr, args, ptrs);
 		}
 		curr = curr->next;

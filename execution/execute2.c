@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute2.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
+/*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 16:39:30 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/04/03 03:54:55 by yboutsli         ###   ########.fr       */
+/*   Updated: 2024/04/04 01:47:10 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,19 +30,19 @@ int	final_cmd(t_cmd *cmd, t_list **list_env, int io_fd[2], t_free **ptrs)
 		if (cmd->cmd == NULL)
 			exit (0);
 		if (!ft_strcmp(cmd->cmd, "export"))
-			status = export(cmd, list_env);
+			status = export(cmd, list_env, ptrs);
 		else if (!ft_strcmp(cmd->cmd, "env"))
-			status = env(list_env, cmd);
+			status = env(list_env, cmd, ptrs);
 		else if (!ft_strcmp(cmd->cmd, "cd"))
-			status = cd(cmd->args, list_env);
+			status = cd(cmd->args, list_env, ptrs);
 		else if (!ft_strcmp(cmd->cmd, "echo"))
 			status = echo(cmd);
 		else if (!ft_strcmp(cmd->cmd, "pwd"))
 			pwd(list_env);
 		else if (!ft_strcmp(cmd->cmd, "unset"))
-			unset(list_env, cmd->args);
+			unset(list_env, cmd->args, ptrs);
 		else
-			status = new_execve(cmd, list_env);
+			status = new_execve(cmd, list_env, ptrs);
 		exit(0);
 	}
 	dup2(io_fd[1], 1);
@@ -78,19 +78,19 @@ int	child_execution(int fd[2], t_cmd *cmd, t_list **list_env, t_free **ptrs)
 	if (cmd->cmd == NULL)
 		exit(0);
 	if (!ft_strcmp(cmd->cmd, "export"))
-		status = export(cmd, list_env);
+		status = export(cmd, list_env, ptrs);
 	else if (!ft_strcmp(cmd->cmd, "env"))
-		status = env(list_env, cmd);
+		status = env(list_env, cmd, ptrs);
 	else if (!ft_strcmp(cmd->cmd, "cd"))
-		status = cd(cmd->args, list_env);
+		status = cd(cmd->args, list_env, ptrs);
 	else if (!ft_strcmp(cmd->cmd, "echo"))
 		status = echo(cmd);
 	else if (!ft_strcmp(cmd->cmd, "pwd"))
 		status = pwd(list_env);
 	else if (!ft_strcmp(cmd->cmd, "unset"))
-		status = unset(list_env, cmd->args);
+		status = unset(list_env, cmd->args, ptrs);
 	else
-		status = new_execve(cmd, list_env);
+		status = new_execve(cmd, list_env, ptrs);
 	exit(status);		
 }
 

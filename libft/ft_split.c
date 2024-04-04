@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/03 19:22:06 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/03/22 09:01:04 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/04/04 01:25:01 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ static size_t	next_len(char const *s, char c)
 	return (count);
 }
 
-static char	*next_word(char const **s, char c)
+static char	*next_word(char const **s, char c, t_free **ptrs)
 {
 	size_t	i;
 	char	*p;
@@ -61,9 +61,7 @@ static char	*next_word(char const **s, char c)
 	while (**s == c && **s)
 		(*s)++;
 	next_lens = next_len(*s, c);
-	p = (char *) malloc (sizeof (char) * (next_lens + 1));
-	if (!p)
-		return (NULL);
+	p = ft_malloc(ptrs, next_lens + 1);
 	i = 0;
 	while (i < next_lens)
 	{
@@ -75,7 +73,7 @@ static char	*next_word(char const **s, char c)
 	return (p);
 }
 
-char	**ft_split(char const *s, char c)
+char	**ft_split(char const *s, char c, t_free **ptrs)
 {
 	size_t	n_words;
 	char	**p;
@@ -85,17 +83,15 @@ char	**ft_split(char const *s, char c)
 	if (!s)
 		return (NULL);
 	n_words = words_counts(s, c);
-	p = (char **) malloc (sizeof(char *) * (n_words + 1));
-	if (!p)
-		return (NULL);
+	p = ft_malloc(ptrs, sizeof(char *) * (n_words + 1));
 	while (i < n_words)
 	{
-		*(p + i) = next_word(&s, c);
+		*(p + i) = next_word(&s, c, ptrs);
 		if (!p[i])
 		{
 			while (i > 0)
-				free(p[--i]);
-			free (p);
+				ft_free_ptr(ptrs, p[--i]);
+			ft_free_ptr(ptrs, p);
 			return (NULL);
 		}
 		i++;

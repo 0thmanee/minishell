@@ -132,6 +132,7 @@ typedef struct t_signal
 {
 	struct	termios original_terminos;
 	t_list	**env_lst;
+	t_free	**ptrs;
 }	s_signal;
 
 // Global Variable to handle the state of the terminal when Entering SIGQUIT
@@ -150,13 +151,13 @@ char	*ft_substr(char const *s, int start, int len, t_free **ptrs);
 char	*ft_strdup(char *str, t_free **ptrs);
 t_token	*ft_lstnew_1(char *value, int type, t_value *args, t_free **ptrs);
 void	ft_lstadd_back_1(t_token **lst, t_token *new_node);
-t_list	*ft_lstnew_2(void *content1, void *content2, int exit);
+t_list	*ft_lstnew_2(void *content1, void *content2, int exit, t_free **ptrs);
 void	ft_lstadd_back_2(t_list **lst, t_list *new_node);
 t_cmd	*ft_lstnew_3(t_free **ptrs);
 void	ft_lstadd_back_3(t_cmd **lst, t_cmd *new_node);
 t_list	*ft_lstlast(t_list *lst);
 int		ft_isalpha(int c);
-char	**ft_split(char const *s, char c);
+char	**ft_split(char const *s, char c, t_free **ptrs);
 int		is_whitespace(char c);
 void	*ft_malloc(t_free **list_aloc, size_t size);
 void	ft_free_ptr(t_free **list_aloc, void *ptr);
@@ -168,13 +169,9 @@ int		ft_atoi(const char *str);
 int		ft_lstsize(t_cmd *lst);
 int		is_ambig(char *value);
 
-char	*ft_strdup_1(char *str);
-char		*ft_substr_2(char const *s, int start, int len);
-char	*ft_strjoin_2(char *s1, char *s2);
-
 
 // Parsing
-int char_is_valid(char c);
+int 	char_is_valid(char c);
 int		is_whitespace(char c);
 void	handle_signals(int signum);
 int		ft_new_len(char *input);
@@ -214,45 +211,39 @@ int		syntax_error(t_token *tokens, int *here_doc);
 int		check_braces(char *value);
 void	open_heredoc(t_token *tokens, int here_doc, int *s_error);
 
- // Removable
-void	print_it(t_token *tokens);
 // Execution
 char	*get_env(t_list **head, char *env_var);
 t_list	*get_env_node(t_list **list_env, char *var);
 int		var_exist(char *var, t_list *list_env);
-int		env_update(t_list **head, char *env_var, char *new);
-t_list	*env_lst(char **envp);
-void	env_init(t_list	**env);
-int		cd(char **args, t_list **env);
-int		env(t_list **list_env, t_cmd *cmd);
+int		env_update(t_list **head, char *env_var, char *new, t_free **ptrs);
+t_list	*env_lst(char **envp, t_free **ptrs);
+void	env_init(t_list	**env, t_free **ptrs);
+int		cd(char **args, t_list **env, t_free **ptrs);
+int		env(t_list **list_env, t_cmd *cmd, t_free **ptrs);
 int		pwd(t_list **list_env);
 int		set_valid(char *str);
 int		add_set(t_list **set, char *input);
 int		ft_execution(t_cmd **cmd, t_list **list_env, t_free **ptrs);
-char	**path(t_list **envp);
-void	ft_free(char **tab);
-char	*cmd_path(char *cmd, char **npath);
-char	**execve_argv(t_cmd *cmd);
-int		export(t_cmd *cmd, t_list **list_env);
+char	**path(t_list **envp, t_free **ptrs);
+void	ft_free(char **tab, t_free **ptrs);
+char	*cmd_path(char *cmd, char **npath, t_free **ptrs);
+char	**execve_argv(t_cmd *cmd, t_free **ptrs);
+int		export(t_cmd *cmd, t_list **list_env, t_free **ptrs);
 int		echo(t_cmd *cmd);
-int 	unset(t_list **list_env, char **args);
-// int		execute_1(t_cmd *cmd, t_list **list_env, t_free **ptrs);
-char	**list2tab(t_list *list_env);
+int 	unset(t_list **list_env, char **args, t_free **ptrs);
+char	**list2tab(t_list *list_env, t_free **ptrs);
 int		env_size(t_list *list_env);
 void	close2(int tab[2]);
 int		here_doc(t_file *infile, int mode, t_list *list_env, t_free **ptrs);
-int		new_execve(t_cmd *cmd, t_list **list_env);
+int		new_execve(t_cmd *cmd, t_list **list_env, t_free **ptrs);
 int		execute_2(t_cmd **cmd_list, t_list **list_env, t_free **ptrs, int *io_fd);
 int 	new_fork();
-// int		handle_io(t_cmd *cmd, t_list *list_env, t_free **ptrs);
 int		valid(char *str);
-void 	nvalid_output(char *str);
-void	env_lc_update(t_cmd *cmd, t_list **list_env);
-int		ft_exit(t_cmd *cmd, t_list **list_env);
+void 	nvalid_output(char *str, t_free **ptrs);
+void	env_lc_update(t_cmd *cmd, t_list **list_env, t_free **ptrs);
+int		ft_exit(t_cmd *cmd, t_list **list_env, t_free **ptrs);
 int		args_size(t_cmd *cmd);
-void	update_exit_status(t_list **list_env, int status);
-
-//
-int	handle_io(t_cmd *cmd, t_list *list_env, t_free **ptrs, int *io_fd);
-int	execute_1(t_cmd *cmd, t_list **list_env, t_free **ptrs,  int *io_fd);
+void	update_exit_status(t_list **list_env, int status, t_free **ptrs);
+int		handle_io(t_cmd *cmd, t_list *list_env, t_free **ptrs, int *io_fd);
+int		execute_1(t_cmd *cmd, t_list **list_env, t_free **ptrs,  int *io_fd);
 #endif

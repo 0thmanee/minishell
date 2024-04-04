@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/15 02:58:32 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/03/31 22:27:20 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/04/04 00:32:41 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ char *remove_char(char *str, int char_index, t_free **ptrs)
 		return (tmp2);
 	else if (!tmp2)
 		return (tmp1);
-	str = ft_strjoin_2(tmp1, tmp2);
+	str = ft_strjoin(tmp1, tmp2, ptrs);
 	ft_free_ptr(ptrs, tmp1);
 	ft_free_ptr(ptrs, tmp2);
 	return (str);
@@ -41,14 +41,14 @@ char	*replace_mini_str(char *str, int start, int end, char *mini_str, t_free **p
 		tmp2 = ft_strdup(mini_str, ptrs);
 	else
 	{
-		tmp2 = ft_strjoin_2(tmp1, mini_str);
+		tmp2 = ft_strjoin(tmp1, mini_str, ptrs);
 		ft_free_ptr(ptrs, tmp1);
 	}
 	tmp3 = ft_substr(str, end, ft_strlen(str) - end + 1, ptrs);
 	if (!tmp3)
 		return (tmp2);
 	else
-		tmp1 = ft_strjoin_2(tmp2, tmp3);
+		tmp1 = ft_strjoin(tmp2, tmp3, ptrs);
 	ft_free_ptr(ptrs, tmp3);
 	ft_free_ptr(ptrs, tmp2);
 	return (tmp1);
@@ -70,7 +70,7 @@ void	case_1_helper(char **result, int *i, t_free **ptrs)
 	ft_free_ptr(ptrs, tmp);
 	if (var)
 	{
-		(tmp = *result, *result = ft_strjoin_2(tmp, var));
+		(tmp = *result, *result = ft_strjoin(tmp, var, ptrs));
 		(ft_free_ptr(ptrs, tmp), ft_free_ptr(ptrs, var));
 	}
 }
@@ -136,7 +136,7 @@ void	case_4_helper(char **result, int *i, t_free **ptrs)
 	ft_free_ptr(ptrs, tmp);
 	if (var)
 	{
-		(tmp = *result, *result = ft_strjoin_2(tmp, var));
+		(tmp = *result, *result = ft_strjoin(tmp, var, ptrs));
 		(ft_free_ptr(ptrs, tmp), ft_free_ptr(ptrs, var));
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/17 05:23:00 by obouchta          #+#    #+#             */
-/*   Updated: 2024/04/03 05:40:40 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/04/04 00:40:07 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,8 +76,6 @@ void	extract_outfiles(t_token *token, t_file **outfiles, t_free **ptrs)
 	if (!outfiles_len(curr))
 		return ;
 	*outfiles = ft_malloc(ptrs, (outfiles_len(curr) + 1) * sizeof(t_file));
-	if (!(*outfiles))
-		(ft_free_all(ptrs), exit(1));
 	while (curr && curr->type != PIPE)
 	{
 		if (curr->type == OUTPUT)

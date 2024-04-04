@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/16 01:46:06 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/03/27 02:28:23 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/04/04 02:50:16 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,13 +29,13 @@ void	ft_lstadd_back_aloc(t_free **list_aloc, t_free *new)
 	curr->next = new;
 }
 
-t_free	*ft_lstnew_aloc(void *ptr)
+t_free	*ft_lstnew_aloc(void *ptr, t_free **list_aloc)
 {
 	t_free	*new;
 
 	new = malloc(sizeof(t_free));
 	if (!new)
-		return(NULL);
+		(ft_free_all(list_aloc), exit(1));
 	new->ptr = ptr;
 	new->next = NULL;
 	return (new);
@@ -48,8 +48,8 @@ void	*ft_malloc(t_free **list_aloc, size_t size)
 
 	ptr = malloc(size);
 	if (!ptr)
-		return (NULL);
-	new = ft_lstnew_aloc(ptr);
+		(ft_free_all(list_aloc), exit(1));
+	new = ft_lstnew_aloc(ptr, list_aloc);
 	ft_lstadd_back_aloc(list_aloc, new);
 	return (ptr);
 }
@@ -90,6 +90,7 @@ void ft_free_all(t_free **list_aloc)
 	{
 		next = current->next;
 		free(current->ptr);
+		current->ptr = NULL;
 		free(current);
 		current = next;
 	}

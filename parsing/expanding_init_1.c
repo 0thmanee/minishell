@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/16 03:19:46 by obouchta          #+#    #+#             */
-/*   Updated: 2024/04/03 05:40:26 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/04/04 00:39:55 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,8 +69,6 @@ void	specify_vars_helper(t_token *curr, t_free **ptrs)
 		if (curr->args[i].vars_len)
 		{
 			curr->args[i].vars = ft_malloc(ptrs, curr->args[i].vars_len * sizeof(int));
-			if (!(curr->args[i].vars))
-				(ft_free_all(ptrs), exit(1));
 			check_for_var(curr->args[i].value,
 				curr->args[i].vars, curr->args[i].vars_len);	
 		}
@@ -89,11 +87,9 @@ void	specify_vars(t_token **tokens, t_free **ptrs)
 		curr->vars_len = calc_vars(curr->value);
 		if (curr->vars_len > 0)
 		{
-			if (curr->type == OUT_FILE)
+			if (curr->type == OUT_FILE || curr->type == IN_FILE)
 				curr->is_var = 1;
 			curr->vars = ft_malloc(ptrs, curr->vars_len * sizeof(int));
-			if (!curr->vars)
-				(ft_free_all(ptrs), exit(1));
 			check_for_var(curr->value, curr->vars, curr->vars_len);
 		}
 		if (curr->args_len)

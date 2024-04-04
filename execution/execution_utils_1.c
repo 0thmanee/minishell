@@ -3,29 +3,29 @@
 /*                                                        :::      ::::::::   */
 /*   execution_utils_1.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
+/*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 14:59:37 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/03/31 05:50:49 by yboutsli         ###   ########.fr       */
+/*   Updated: 2024/04/04 01:48:25 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	ft_free(char **tab)
+void	ft_free(char **tab, t_free **ptrs)
 {
 	int	i;
 
 	i = 0;
 	while (tab && tab[i])
 	{
-		free(tab[i]);
+		ft_free_ptr(ptrs, tab[i]);
 		i++;
 	}
-	free(tab);
+	ft_free_ptr(ptrs, tab);
 }
 
-char	**path(t_list **envp)
+char	**path(t_list **envp, t_free **ptrs)
 {
 	char	**npath;
 	t_list	*current;
@@ -35,7 +35,7 @@ char	**path(t_list **envp)
 	{
 		if (!ft_strcmp(current->var, "PATH"))
 		{
-			npath = ft_split(current->value, ':');
+			npath = ft_split(current->value, ':', ptrs);
 			return (npath);
 		}
 		current = current->next;
@@ -47,7 +47,7 @@ void	close2(int tab[2])
 	close(tab[0]);
 	close(tab[1]);
 }
-char	**list2tab(t_list *list_env)
+char	**list2tab(t_list *list_env, t_free **ptrs)
 {
 	char 	**tab;
 	t_list *current;
@@ -55,21 +55,17 @@ char	**list2tab(t_list *list_env)
 	int		i;
 	char	*tmp1;
 
-	tab = malloc((env_size(list_env) + 1) * sizeof(char *));
-	if (!tab)
-		return (NULL);
+	tab = ft_malloc(ptrs, (env_size(list_env) + 1) * sizeof(char *));
 	current = list_env;
 	i = 0;
 	while (current)
 	{
 		if (current->var && current->value)
 		{
-			tmp1 = ft_strjoin_2(current->var, "=");
-			tmp2 = ft_strjoin_2(tmp1, current->value);
-			free(tmp1);
-			tab[i] = malloc((ft_strlen(tmp2) + 1));
-			if (!tab[i])
-				return (NULL);
+			tmp1 = ft_strjoin(current->var, "=", ptrs);
+			tmp2 = ft_strjoin(tmp1, current->value, ptrs);
+			ft_free_ptr(ptrs, tmp1);
+			tab[i] = ft_malloc(ptrs, (ft_strlen(tmp2) + 1));
 			ft_strcpy(tab[i], tmp2);
 			i++;
 		}

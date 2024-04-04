@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
+/*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/05 16:57:06 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/03/31 21:56:37 by yboutsli         ###   ########.fr       */
+/*   Updated: 2024/04/04 03:10:57 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,54 +79,44 @@ int	valid(char *str)
 	return (0);
 }
 
-void nvalid_output(char *str)
+void nvalid_output(char *str, t_free **ptrs)
 {
 	char	*tmp1;
 	char	*tmp2;
 
-	tmp1 = ft_strjoin_2("minishell: export: `", str);
-	tmp2 = ft_strjoin_2(tmp1, "': not a valid identifier");
+	tmp1 = ft_strjoin("minishell: export: `", str, ptrs);
+	tmp2 = ft_strjoin(tmp1, "': not a valid identifier", ptrs);
 	write(2, tmp2, ft_strlen(tmp2));
 	write(2, "\n", 1);
-	free(tmp1);
-	free(tmp2);
+	ft_free_ptr(ptrs, tmp1);
+	ft_free_ptr(ptrs, tmp2);
 }
-void	case0(char *str, t_list **list_env)
+void	case0(char *str, t_list **list_env, t_free **ptrs)
 {
-	t_list	*new;
-
 	if (!var_exist(str, *list_env))
 		return ;
-	new = ft_lstnew_2(str, NULL, 0);
-	if (!new)
-		exit(1);
-	ft_lstadd_back_2(list_env, new);
+	ft_lstadd_back_2(list_env, ft_lstnew_2(str, NULL, 0, ptrs));
 }
-void	case1(char *str, t_list **list_env, int append)
+void	case1(char *str, t_list **list_env, int append, t_free **ptrs)
 {
-	t_list	*new;
 	char	*var;
+	t_list	*new_node;
 	
-	var = ft_substr_2(str, 0, ft_strlen(str) - 1 - append);
-	if (!var)
-		exit(1);
+	var = ft_substr(str, 0, ft_strlen(str) - 1 - append, ptrs);
 	if (!var_exist(var, *list_env))
 	{
 		if (append == 1)
 			return ;
-		new = get_env_node(list_env, var);
-		if (new->value)
-			free(new->value);
-		new->value = ft_strdup_1("\0");
-		free(var);
+		new_node = get_env_node(list_env, var);
+		if (new_node->value)
+			ft_free_ptr(ptrs, new_node->value);
+		new_node->value = ft_strdup("\0", ptrs);
+		ft_free_ptr(ptrs, var);
 		return ;
 	}
-	new = ft_lstnew_2(var, "\0", 0);
-	if (!new)
-		exit(1);
-	ft_lstadd_back_2(list_env, new);
+	ft_lstadd_back_2(list_env, ft_lstnew_2(var, "\0", 0, ptrs));
 }
-void	case2_helper(t_list *new, char *value, int append)
+void	case2_helper(t_list *new, char *value, int append, t_free **ptrs)
 {
 	char	*tmp;
 
@@ -135,41 +125,36 @@ void	case2_helper(t_list *new, char *value, int append)
 		if (append == 1)
 		{
 			tmp = value;
-			value = ft_strjoin_2(new->value, value);
-			free(tmp);
+			value = ft_strjoin(new->value, value, ptrs);
+			ft_free_ptr(ptrs, tmp);
 		}
-		free(new->value);
+		ft_free_ptr(ptrs, new->value);
 	}
 	new->value = value;
 }
-void	case2(char *str, t_list **list_env, int append)
+void	case2(char *str, t_list **list_env, int append, t_free **ptrs)
 {
 	int	i;
 	char	*var;
 	char	*value;
-	t_list	*new;
+	t_list	*new_node;
 
 	i = 0;
 	while (str[i] && str[i] != '=' && str[i] != '+')
 		i++;
-	var = ft_substr_2(str, 0, i);
-	value = ft_substr_2(str, i + 1 + append, ft_strlen(str) - i - 1);
+	var = ft_substr(str, 0, i, ptrs);
+	value = ft_substr(str, i + 1 + append, ft_strlen(str) - i - 1, ptrs);
 	if (!var_exist(var, *list_env))
 	{
-		new = get_env_node(list_env, var);
-		case2_helper(new, value, append);
-		free(var);
+		new_node = get_env_node(list_env, var);
+		case2_helper(new_node, value, append, ptrs);
+		ft_free_ptr(ptrs, var);
 		return ;
 	}
-	new = ft_lstnew_2(var, value, 0);
-	free(var);
-	free(value);
-	if(!new)
-		exit(1);
-	ft_lstadd_back_2(list_env, new);
+	ft_lstadd_back_2(list_env, ft_lstnew_2(var, value, 0, ptrs));
 }
 
-void	valid_arg(char *str, t_list **list_env)
+void	valid_arg(char *str, t_list **list_env, t_free **ptrs)
 {
 	int	i;
 	int	append;
@@ -184,13 +169,13 @@ void	valid_arg(char *str, t_list **list_env)
 		i++;
 	}
 	if (!str[i])
-		case0(str, list_env);
+		case0(str, list_env, ptrs);
 	else if (str[i] == '=' && str[i + 1] == '\0')
-		case1(str, list_env, append);
+		case1(str, list_env, append, ptrs);
 	else
-		case2(str, list_env, append);
+		case2(str, list_env, append, ptrs);
 }
-int	export(t_cmd *cmd, t_list **list_env)
+int	export(t_cmd *cmd, t_list **list_env, t_free **ptrs)
 {
 	int	i;
 	int	status;
@@ -205,11 +190,11 @@ int	export(t_cmd *cmd, t_list **list_env)
 		{
 			if (valid(cmd->args[i]))
 			{
-				nvalid_output(cmd->args[i]);
+				nvalid_output(cmd->args[i], ptrs);
 				status = 1;
 			}
 			else
-				valid_arg(cmd->args[i], list_env);
+				valid_arg(cmd->args[i], list_env, ptrs);
 			i++;
 		}
 	}

@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
+/*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/10 21:19:24 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/03/30 01:59:08 by yboutsli         ###   ########.fr       */
+/*   Updated: 2024/04/04 01:14:21 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int unset(t_list **list_env, char **args)
+int unset(t_list **list_env, char **args, t_free **ptrs)
 {
 	t_list *current;
 	t_list *prev;
@@ -32,7 +32,7 @@ int unset(t_list **list_env, char **args)
 		{
 			if (valid(args[i]))
 			{
-				nvalid_output(args[i++]);
+				nvalid_output(args[i++], ptrs);
 				status = 1;
 			}
 			else if(!ft_strcmp(current->var, args[i]))
@@ -41,8 +41,8 @@ int unset(t_list **list_env, char **args)
 					prev->next = current->next;
 				else
 					*list_env = current->next;
-				free(current->value);
-				free(current->var);
+				ft_free_ptr(ptrs, current->value);
+				ft_free_ptr(ptrs, current->var);
 			}
 			i++;
 		}

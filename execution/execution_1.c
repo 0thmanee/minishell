@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   execution_1.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
+/*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/12 03:41:21 by yasser03          #+#    #+#             */
-/*   Updated: 2024/04/03 03:53:57 by yboutsli         ###   ########.fr       */
+/*   Updated: 2024/04/04 02:26:26 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	*int_to_str(int num) 
+char	*int_to_str(int num, t_free **ptrs) 
 {
 	int len;
     int tmp;
@@ -27,7 +27,7 @@ char	*int_to_str(int num)
     }
     if (num == 0)
         len = 2;
-    str = malloc(len + 1);
+    str = ft_malloc(ptrs, len + 1);
 	str[--len] = '\0';
     while (len)
 	{
@@ -64,11 +64,11 @@ int new_fork()
 	return (pid);
 }
 
-int *fd1(void)
+int *fd1(t_free **ptrs)
 {
 	int *tab;
 
-	tab = malloc (sizeof(int) * 2);
+	tab = ft_malloc(ptrs, sizeof(int) * 2);
 	tab[0] = dup(0);
 	tab[1] = dup(1);
 	return (tab);
@@ -80,7 +80,7 @@ void	fd2(int tab[2])
 	dup2(tab[1], 1);
 	close2(tab);
 }
-void	update_exit_status(t_list **list_env, int status)
+void	update_exit_status(t_list **list_env, int status, t_free **ptrs)
 {
 	t_list	*curr;
 
@@ -89,8 +89,8 @@ void	update_exit_status(t_list **list_env, int status)
 	curr = *list_env;
 	while (curr && ft_strcmp(curr->var, "?"))
 		curr = curr->next;
-	free(curr->value);
-	curr->value = int_to_str(status);
+	ft_free_ptr(ptrs, curr->value);
+	curr->value = int_to_str(status, ptrs);
 }
 
 int	ft_execution(t_cmd **cmd, t_list **list_env, t_free **ptrs)
@@ -98,14 +98,14 @@ int	ft_execution(t_cmd **cmd, t_list **list_env, t_free **ptrs)
 	int	status;
 	int	*fd;
 
-	fd = fd1();	
+	fd = fd1(ptrs);	
 	status = 0;
 	if (ft_lstsize(*cmd) == 1)
 		status = execute_1(*cmd, list_env, ptrs, fd);
 	else
 		status = execute_2(cmd, list_env, ptrs, fd);
-	update_exit_status(list_env, status);
+	update_exit_status(list_env, status, ptrs);
 	fd2(fd);
-	free(fd);
+	ft_free_ptr(ptrs, fd);
 	return (status);
 }

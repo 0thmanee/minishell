@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 07:21:28 by obouchta          #+#    #+#             */
-/*   Updated: 2024/04/02 03:57:43 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/04/04 00:41:47 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,8 +50,6 @@ char	*quoted_cmd(char *input, int *i, t_free **ptrs)
 	while (input[j] && !is_whitespace(input[j]))
 		j++;
 	value = ft_malloc(ptrs, j - *i + 2);
-	if (!value)
-		(ft_free_all(ptrs), exit(1));
 	j = 0;
 	value[j++] = input[(*i)++];
 	while (input[*i] && input[*i] != quote)
@@ -73,12 +71,9 @@ t_token	*get_in_out_helper(char *input, int *i, t_token **tokens, t_free **ptrs)
 		(*i)++;
 	if (input[*i] && regonize_type(input, *i) == EXPRESSION)
 	{
-		if (!extract_expr(input, &arg_value, i, ptrs))
-			(ft_free_all(ptrs), exit(1));
+		extract_expr(input, &arg_value, i, ptrs);
 		arg = ft_lstnew_1(arg_value,
 			regonize_type_2(get_last_type(*tokens)), NULL, ptrs);
-		if (!arg)
-			(ft_free_all(ptrs), exit(1));
 		arg->args_len = 0;
 	}
 	else if (regonize_type(input, *i) != EXPRESSION)
@@ -98,14 +93,10 @@ t_token	*get_in_out(char *input, int *i, t_token **tokens, t_free **ptrs)
 	if (type == APPEND || type == HERE_DOC)
 		len = 2;
 	tok_value = ft_malloc(ptrs, len + 1);
-	if (!tok_value)
-		(ft_free_all(ptrs), exit(1));
 	while (input[*i] && !is_whitespace(input[*i]))
 		tok_value[j++] = input[(*i)++];
 	tok_value[j] = '\0';
 	new_token = ft_lstnew_1(tok_value, type, NULL, ptrs);
-	if (!new_token)
-		(ft_free_all(ptrs), exit(1));
 	new_token->args_len = 0;
 	ft_lstadd_back_1(tokens, new_token);
 	return (get_in_out_helper(input, i, tokens, ptrs));
@@ -121,14 +112,10 @@ t_token	*get_pipe(char *input, int *i, int type, t_free **ptrs)
 	j = 0;
 	len = 1;
 	tok_value = ft_malloc(ptrs, len + 1);
-	if (!tok_value)
-		(ft_free_all(ptrs), exit(1));
 	while (input[*i] && !is_whitespace(input[*i]))
 		tok_value[j++] = input[(*i)++];
 	tok_value[j] = '\0';
 	new_token = ft_lstnew_1(tok_value, type, NULL, ptrs);
-	if (!new_token)
-		(ft_free_all(ptrs), exit(1));
 	new_token->args_len = 0;
 	return (new_token);
 }

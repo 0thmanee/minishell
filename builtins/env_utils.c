@@ -3,16 +3,24 @@
 /*                                                        :::      ::::::::   */
 /*   env_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
+/*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 20:29:05 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/03/31 21:48:21 by yboutsli         ###   ########.fr       */
+/*   Updated: 2024/04/04 02:21:54 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_list	*env_lst(char **envp)
+void	env_lst_helper(t_list **env, char *var, char *value, t_free **ptrs)
+{
+	t_list	*new_node;
+	
+	new_node = ft_lstnew_2(var, value, 0, ptrs);
+	ft_lstadd_back_2(env, new_node);
+	(ft_free_ptr(ptrs, var), ft_free_ptr(ptrs, value));
+}
+t_list	*env_lst(char **envp, t_free **ptrs)
 {
 	int		i;
 	int		j;
@@ -20,8 +28,7 @@ t_list	*env_lst(char **envp)
 	char	*value;
 	t_list	*env;
 
-	env = NULL;
-	i = -1;
+	(env = NULL, i = -1);
 	while (envp[++i])
 	{
 		if (!ft_strncmp(envp[i], "OLDPWD", 6))
@@ -29,11 +36,9 @@ t_list	*env_lst(char **envp)
 		j = 0;
 		while (envp[i][j] && envp[i][j] != '=')	
 			j++;
-		var = ft_substr_2(envp[i], 0, j);
-		value = ft_substr_2(envp[i], j + 1, ft_strlen(envp[i]));
-		ft_lstadd_back_2(&env, ft_lstnew_2(var, value, 0));
-		free(var);
-		free(value);
+		var = ft_substr(envp[i], 0, j, ptrs);
+		value = ft_substr(envp[i], j + 1, ft_strlen(envp[i]), ptrs);
+		env_lst_helper(&env, var, value, ptrs);
 	}
 	return (env);
 }
@@ -54,7 +59,7 @@ char	*get_env(t_list **head, char *env_var)
 	return (NULL);
 }
 
-int	env_update(t_list **head, char *env_var, char *new)
+int	env_update(t_list **head, char *env_var, char *new, t_free **ptrs)
 {
 	t_list	*current;
 
@@ -63,32 +68,35 @@ int	env_update(t_list **head, char *env_var, char *new)
 	{
 		if (!ft_strcmp(current->var, env_var) && current->type == 0)
 		{
-			free(current->value);
-			current->value = ft_strdup_1(new);
+			ft_free_ptr(ptrs, current->value);
+			current->value = ft_strdup(new, ptrs);
 			return (0);
 		}
 		current = current->next;
 	}
 	if (!current)
-		ft_lstadd_back_2(head, ft_lstnew_2(env_var, new, 0));
+		ft_lstadd_back_2(head, ft_lstnew_2(env_var, new, 0, ptrs));
 	return (1);
 }
 
-void	env_init(t_list	**env)
+void	env_init(t_list	**env, t_free **ptrs)
 {
 	char	*cwd;
 	char	*tmp;
+	t_list	*new_node;
+
 	cwd = getcwd(NULL, 0);
 	if (cwd != NULL)
 	{
-		ft_lstadd_back_2(env, ft_lstnew_2("PWD", cwd, 0));
-		tmp = ft_strjoin_2(cwd, "/./minishell");
-		ft_lstadd_back_2(env, ft_lstnew_2("_", tmp, 0));
-		ft_lstadd_back_2(env, ft_lstnew_2("OLDPWD", NULL, 0));
-		free(tmp);
+		new_node = ft_lstnew_2("PWD", cwd, 0, ptrs);
+		ft_lstadd_back_2(env, new_node);
+		tmp = ft_strjoin(cwd, "/./minishell", ptrs);
+		ft_lstadd_back_2(env, ft_lstnew_2("_", tmp, 0, ptrs));
+		ft_lstadd_back_2(env, ft_lstnew_2("OLDPWD", NULL, 0, ptrs));
+		ft_free_ptr(ptrs, tmp);
 	}
-	ft_lstadd_back_2(env, ft_lstnew_2("SHLVL", "1", 0));
-	free(cwd);
+	ft_lstadd_back_2(env, ft_lstnew_2("SHLVL", "1", 0, ptrs));
+	ft_free_ptr(ptrs, cwd);
 }
 int	var_exist(char *var, t_list *list_env)
 {

@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 21:41:01 by obouchta          #+#    #+#             */
-/*   Updated: 2024/04/03 05:25:30 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/04/04 00:20:27 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,18 +45,18 @@ void	ft_lstadd_back_1(t_token **lst, t_token *new_node)
 	curr->next = new_node;
 }
 
-t_list	*ft_lstnew_2(void *content1, void *content2, int exit)
+t_list	*ft_lstnew_2(void *content1, void *content2, int exit, t_free **ptrs)
 {
-	t_list	*new;
+	t_list	*new_node;
 
-	new = malloc(sizeof(t_list));
-	if (!new)
+	new_node = ft_malloc(ptrs, sizeof(t_list));
+	if (!new_node)
 		return (NULL);
-	new->var = ft_strdup_1(content1);
-	new->value = ft_strdup_1(content2);
-	new->type = exit;
-	new->next = NULL;
-	return (new);
+	new_node->var = ft_strdup(content1, ptrs);
+	new_node->value = ft_strdup(content2, ptrs);
+	new_node->type = exit;
+	new_node->next = NULL;
+	return (new_node);
 }
 
 t_list	*ft_lstlast(t_list *lst)
@@ -78,7 +78,7 @@ void	ft_lstadd_back_2(t_list **lst, t_list *new_node)
 	p = NULL;
 	if (!lst || !new_node)
 		return ;
-	if (! *lst)
+	if (!(*lst))
 		*lst = new_node;
 	else
 	{
