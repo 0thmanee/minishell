@@ -204,7 +204,7 @@ void	check_for_var_helper_3(char *value, int *vars, int *i, int *j);
 void	specify_vars(t_token **tokens, t_free **ptrs);
 int		tokens_len(t_token *tokens);
 void	extract_command(t_token *token, char **cmd, t_free **ptrs);
-void	extract_args(t_token *token, char ***args, t_free **ptrs);
+void	extract_args(t_token *token, char ***args, char **cmd, t_free **ptrs);
 void	extract_infiles(t_token *token, t_file **infiles, t_free **ptrs);
 void	extract_outfiles(t_token *token, t_file **outfiles, t_free **ptrs);
 int		syntax_error(t_token *tokens, int *here_doc);

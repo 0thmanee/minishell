@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/17 02:23:24 by obouchta          #+#    #+#             */
-/*   Updated: 2024/03/31 01:06:14 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/04/04 20:14:57 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int	final_command(t_token **tokens, t_cmd **command, t_free **ptrs)
 		{
 			new_cmd = ft_lstnew_3(ptrs);
 			extract_command(curr, &(new_cmd->cmd), ptrs);
-			extract_args(curr, &(new_cmd->args), ptrs);
+			extract_args(curr, &(new_cmd->args), &(new_cmd->cmd), ptrs);
 			extract_infiles(curr, &(new_cmd->infiles), ptrs);
 			extract_outfiles(curr, &(new_cmd->outfiles), ptrs);
 			ft_lstadd_back_3(command, new_cmd);
