@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/12 03:41:21 by yasser03          #+#    #+#             */
-/*   Updated: 2024/04/04 02:26:26 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/04/04 21:57:50 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,10 +57,7 @@ int new_fork()
 	int	pid;
 	pid = fork();
 	if (pid < 0)
-	{
-		perror("Fork: ");
-		exit(1);
-	}
+		(write(2, "minishell: ", 11), perror("Fork"), exit(1));
 	return (pid);
 }
 

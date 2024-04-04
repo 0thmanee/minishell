@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 11:49:46 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/04/04 02:32:51 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/04/04 21:52:02 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -153,7 +153,7 @@ int	child_execve(t_cmd *cmd, t_list **list_env, t_free **ptrs)
 	int		status;
 
 	status = 0;
-	if (!(cmd->cmd) || !(cmd->cmd[0]) || cmd->io_error)
+	if (!(cmd->cmd) || cmd->io_error)
 		return (0);
 	pid = fork();
 	if (pid == 0)

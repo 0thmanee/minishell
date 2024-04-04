@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 16:20:23 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/04/03 21:52:51 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/04/04 21:59:03 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,16 +83,10 @@ int	here_doc(t_file *infile, int mode, t_list *list_env, t_free **ptrs)
 
 
 	if (mode && pipe(fd) == -1)
-	{
-		perror("pipe");
-		exit(1);
-	}
+		(write(2, "minishell: ", 11), perror("pipe"), exit(1));
 	pid = fork();
 	if (pid < 0)
-	{
-		perror("Fork: ");
-		exit(1);
-	}
+		(write(2, "minishell: ", 11), perror("Fork: "), exit(1));
 	if (pid == 0)
 		here_doc_utils(fd, infile, mode, list_env, ptrs);
 	if (mode)

@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 16:39:30 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/04/04 01:47:10 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/04/04 21:57:33 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,16 +105,10 @@ static int middle_cmds(t_cmd *cmd, t_list **list_env, t_free **ptrs, int *io_fd)
 		return (1);
 	status = 0;
 	if (pipe(fd) == -1)
-	{
-		perror("pipe");
-		exit(1);
-	}
+		(write(2, "minishell: ", 11), perror("pipe"), exit(1));
 	pid = fork();
 	if (pid < 0)
-	{
-		perror("Fork: ");
-		exit(1);
-	}
+		(write(2, "minishell: ", 11), perror("Fork"), exit(1));
 	if (pid == 0)
 		status = child_execution(fd, cmd, list_env, ptrs);
 	//if heredoc wait

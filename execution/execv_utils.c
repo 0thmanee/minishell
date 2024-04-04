@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 16:03:22 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/04/04 01:49:00 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/04/04 22:04:48 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,13 +79,11 @@ int	new_execve(t_cmd *cmd, t_list **list_env, t_free **ptrs)
 	env_tab = list2tab(*list_env, ptrs);
 	if (!cmd_fpath)
 	{
-		printf("command not found: %s\n", cmd->cmd);
-		exit (127);
+		write(2, "minishell: ", 11);
+		write(2, cmd->cmd, ft_strlen(cmd->cmd));
+		(write(2, ": command not found\n", 20), exit (127));
 	}
 	if (execve(cmd_fpath, args, env_tab) == -1)
-	{
-		perror(cmd->cmd);
-		exit (1);
-	}
+		(write(2, "minishell: ", 11), perror(cmd->cmd), exit (1));
 	return (0);
 }

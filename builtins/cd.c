@@ -6,13 +6,14 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 09:26:13 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/04/04 01:08:07 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/04/04 21:55:06 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 int	new_perror(char *str)
 {
+	write(2, "minishell: ", 11);
 	perror(str);
 	return (1);
 }
@@ -40,6 +41,7 @@ void	cd_dir_utils(t_list **list_env, char *pwd, char *tmp[2], t_free **ptrs)
 	}
 	else
 	{
+		write(2, "minishell: ", 11);
 		perror("getcwd: ");
 		env_update(list_env, "PWD", tmp[1], ptrs);
 		env_update(list_env, "OLDPWD", pwd, ptrs);
@@ -100,10 +102,7 @@ int	cd_home(t_list **env, char *str, t_free **ptrs)
 		return (1);
 	}
 	else if (chdir(home) == -1)
-	{
-		perror(str);
-		return (1);
-	}
+		return (write(2, "minishell: ", 11), perror(str), 1);
 	else
 	{
 		env_update(env, "OLDPWD", cwd, ptrs);
@@ -127,10 +126,7 @@ int	cd_oldpwd(t_list **env, t_free **ptrs)
 		return (1);
 	}
 	else if (chdir(oldpwd) == -1)
-	{
-		perror("cd :");
-		return (1);
-	}
+		return (write(2, "minishell: ", 11), perror("cd :"), 1);
 	else
 	{
 		cwd[1] = ft_strdup(cwd[0], ptrs);
