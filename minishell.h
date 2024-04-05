@@ -262,6 +262,8 @@ int	last_bs(char *str);
 char	*parse_heredoc(char *input, t_list *list_env, t_free **ptrs);
 int	*fd1(t_free **ptrs);
 void	fd2(int tab[2]);
+int	child_execution(int fd[2], t_cmd *cmd, t_list **list_env, t_free **ptrs);
+int child_utils(t_cmd *cmd, t_list **list_env, t_free **ptrs);
 // print
 void	print_it(t_token *tokens);
 void 	print_it_2(t_cmd *cmds);
