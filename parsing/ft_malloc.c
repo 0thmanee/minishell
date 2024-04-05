@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/16 01:46:06 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/04/04 02:50:16 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/04/05 03:48:28 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,8 +56,8 @@ void	*ft_malloc(t_free **list_aloc, size_t size)
 
 void	ft_free_ptr(t_free **list_aloc, void *ptr)
 {
-	t_free *current;
-	t_free *prev;
+	t_free	*current;
+	t_free	*prev;
 
 	current = *list_aloc;
 	prev = NULL;
@@ -80,10 +80,10 @@ void	ft_free_ptr(t_free **list_aloc, void *ptr)
 	}
 }
 
-void ft_free_all(t_free **list_aloc)
+void	ft_free_all(t_free **list_aloc)
 {
-	t_free *current;
-	t_free *next;
+	t_free	*current;
+	t_free	*next;
 
 	current = *list_aloc;
 	while (current)

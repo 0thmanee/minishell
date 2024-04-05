@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/17 05:22:00 by obouchta          #+#    #+#             */
-/*   Updated: 2024/04/04 00:40:03 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/04/05 03:45:30 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,8 @@ int	infiles_len(t_token *curr)
 	return (len);
 }
 
-void	extract_infiles_helper_1(t_token *curr, t_file **infiles, int *i, t_free **ptrs)
+void	extract_infiles_helper_1(t_token *curr, t_file **infiles,
+	int *i, t_free **ptrs)
 {
 	(*infiles)[*i].file = ft_strdup(curr->value, ptrs);
 	(*infiles)[*i].fd = -1;
@@ -36,7 +37,8 @@ void	extract_infiles_helper_1(t_token *curr, t_file **infiles, int *i, t_free **
 	(*i)++;
 }
 
-void	extract_infiles_helper_2(t_token *curr, t_file **infiles, int *i, t_free **ptrs)
+void	extract_infiles_helper_2(t_token *curr, t_file **infiles,
+	int *i, t_free **ptrs)
 {
 	(*infiles)[*i].file = NULL;
 	(*infiles)[*i].fd = -1;

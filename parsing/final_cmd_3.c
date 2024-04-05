@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/17 05:23:00 by obouchta          #+#    #+#             */
-/*   Updated: 2024/04/04 00:40:07 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/04/05 03:47:33 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,8 @@ int	outfiles_len(t_token *curr)
 	return (len);
 }
 
-int	extract_outfiles_helper_1(t_token *curr, t_file **outfiles, int *i, t_free **ptrs)
+int	extract_outfiles_helper_1(t_token *curr, t_file **outfiles,
+	int *i, t_free **ptrs)
 {
 	(*outfiles)[*i].file = ft_strdup(curr->value, ptrs);
 	(*outfiles)[*i].fd = -1;
@@ -37,7 +38,8 @@ int	extract_outfiles_helper_1(t_token *curr, t_file **outfiles, int *i, t_free *
 	return (1);
 }
 
-int	extract_outfiles_helper_2(t_token *curr, t_file **outfiles, int *i, t_free **ptrs)
+int	extract_outfiles_helper_2(t_token *curr, t_file **outfiles,
+	int *i, t_free **ptrs)
 {
 	(*outfiles)[*i].file = ft_strdup(curr->value, ptrs);
 	(*outfiles)[*i].fd = -1;
@@ -48,29 +50,13 @@ int	extract_outfiles_helper_2(t_token *curr, t_file **outfiles, int *i, t_free *
 	return (1);
 }
 
-// int	extract_outfiles_helper(t_token **curr, t_file **outfiles, int *i)
-// {
-// 	if ((*curr)->type == OUTPUT)
-// 	{
-// 		(*curr) = (*curr)->next;
-// 		if (!extract_outfiles_helper_1((*curr), outfiles, i))
-// 			return (0);
-// 	}
-// 	if ((*curr)->type == APPEND)
-// 	{
-// 		(*curr) = (*curr)->next;
-// 		if (!extract_outfiles_helper_2((*curr), outfiles, i))
-// 			return (0);
-// 	}
-// 	return (1);
-// }
-
 void	extract_outfiles(t_token *token, t_file **outfiles, t_free **ptrs)
 {
 	t_token	*curr;
 	int		i;
 
-	(curr = token, i = 0);
+	curr = token;
+	i = 0;
 	if (curr && curr->type == PIPE)
 		curr = curr->next;
 	if (!outfiles_len(curr))
@@ -79,11 +65,16 @@ void	extract_outfiles(t_token *token, t_file **outfiles, t_free **ptrs)
 	while (curr && curr->type != PIPE)
 	{
 		if (curr->type == OUTPUT)
-			(curr = curr->next, extract_outfiles_helper_1(curr, outfiles, &i, ptrs));
+		{
+			curr = curr->next;
+			extract_outfiles_helper_1(curr, outfiles, &i, ptrs);
+		}
 		if (curr->type == APPEND)
-			(curr = curr->next, extract_outfiles_helper_2(curr, outfiles, &i, ptrs));
+		{
+			curr = curr->next;
+			extract_outfiles_helper_2(curr, outfiles, &i, ptrs);
+		}
 		curr = curr->next;
 	}
 	(*outfiles)[i].fd = -42;
 }
-

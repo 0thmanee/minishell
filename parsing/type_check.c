@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 07:16:43 by obouchta          #+#    #+#             */
-/*   Updated: 2024/03/08 06:36:44 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/04/05 04:55:06 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,9 +38,9 @@ int	regonize_type_2(int prev_type)
 	return (CMD);
 }
 
-int get_last_type(t_token *tokens)
+int	get_last_type(t_token *tokens)
 {
-	t_token *curr;
+	t_token	*curr;
 
 	curr = tokens;
 	if (!curr)
