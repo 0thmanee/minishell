@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pwd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/05 13:59:00 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/04/04 02:22:17 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/04/05 14:53:37 by yboutsli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,12 @@ int	pwd(t_list **list_env)
 	if (!cwd)
 	{
 		cwd = getcwd(NULL, 0);
-		printf("%s\n", cwd);
-		return (0); // wtf
+		if (cwd)
+		{
+			printf("%s\n", cwd);
+			free(cwd);
+			return (0);
+		}
 	}
 	printf("%s\n", cwd);
 	return (0);

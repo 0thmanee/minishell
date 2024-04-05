@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 09:26:13 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/04/04 21:55:06 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/04/05 14:52:15 by yboutsli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,19 +37,18 @@ void	cd_dir_utils(t_list **list_env, char *pwd, char *tmp[2], t_free **ptrs)
 	{
 		env_update(list_env, "OLDPWD", pwd, ptrs);
 		env_update(list_env, "PWD", cwd, ptrs);
-		ft_free_ptr(ptrs, cwd);
+		free(cwd);
 	}
 	else
 	{
-		write(2, "minishell: ", 11);
-		perror("getcwd: ");
-		env_update(list_env, "PWD", tmp[1], ptrs);
+		ft_putstr_fd("cd: error retrieving current directory: getcwd: cannot access parent directories: No such file or directory\n", 2);
 		env_update(list_env, "OLDPWD", pwd, ptrs);
+		env_update(list_env, "PWD", tmp[1], ptrs);
 	}
 }
 int	cd_dir(char *str, t_list **list_env, t_free **ptrs)
 {
-	char	*tmp[3];
+	char	*tmp[2];
 	int		status;
 	char	*pwd;
 
@@ -71,6 +70,7 @@ int	cd_root(char *str, t_list **list_env, t_free **ptrs)
 {
 	int		status;
 	char	*cwd;
+	char	*tmp;
 
 	cwd = get_env(list_env, "PWD");
 	status = 0;
@@ -83,8 +83,13 @@ int	cd_root(char *str, t_list **list_env, t_free **ptrs)
 	}
 	else
 	{
-		env_update(list_env, "OLDPWD", cwd, ptrs);
-		env_update(list_env, "PWD", str, ptrs);
+		tmp = getcwd(NULL, 0);
+		if (tmp)
+		{	
+			env_update(list_env, "OLDPWD", cwd, ptrs);
+			env_update(list_env, "PWD", tmp, ptrs);
+			free(tmp);
+		}
 	}
 	return (status);
 }
@@ -111,30 +116,6 @@ int	cd_home(t_list **env, char *str, t_free **ptrs)
 	return (0);
 }
 
-int	cd_oldpwd(t_list **env, t_free **ptrs)
-{
-	char	*oldpwd;
-	char	*cwd[2];
-	int		status;
-
-	status = 0;
-	oldpwd = get_env(env, "OLDPWD");
-	cwd[0] = get_env(env, "PWD");
-	if (!oldpwd)
-	{
-		printf("minishell: cd: OLDPWD not set\n");
-		return (1);
-	}
-	else if (chdir(oldpwd) == -1)
-		return (write(2, "minishell: ", 11), perror("cd :"), 1);
-	else
-	{
-		cwd[1] = ft_strdup(cwd[0], ptrs);
-		env_update(env, "PWD", oldpwd, ptrs);
-		env_update(env, "OLDPWD", cwd[1], ptrs);
-	}
-	return (status);
-}
 
 int	cd(char **args, t_list **env, t_free **ptrs)
 {
@@ -145,8 +126,6 @@ int	cd(char **args, t_list **env, t_free **ptrs)
 		status = cd_home(env, NULL, ptrs);
 	else if (args[0][0] == '/')
 		status = cd_root(args[0], env, ptrs);
-	else if (args[0][0] == '-' && args[0][1] == '\0')
-		status = cd_oldpwd(env, ptrs);
 	else
 		status = cd_dir(args[0], env, ptrs);
 	return (status);

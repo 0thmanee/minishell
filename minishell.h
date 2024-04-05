@@ -248,6 +248,8 @@ int		args_size(t_cmd *cmd);
 void	update_exit_status(t_list **list_env, int status, t_free **ptrs);
 int		handle_io(t_cmd *cmd, t_list *list_env, t_free **ptrs, int *io_fd);
 int		execute_1(t_cmd *cmd, t_list **list_env, t_free **ptrs,  int *io_fd);
+int	handle_io_helper1(t_cmd *cmd, t_list *list_env, t_free **ptrs, int *io_fd);
+int	handle_io_helper2(t_cmd *cmd, t_free **ptrs);
 
 // print
 void	print_it(t_token *tokens);

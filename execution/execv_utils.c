@@ -6,7 +6,7 @@
 /*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 16:03:22 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/04/05 01:54:46 by yboutsli         ###   ########.fr       */
+/*   Updated: 2024/04/05 14:54:24 by yboutsli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ char	*shear_in_cwd(char *cmd, t_free **ptrs, int *type)
 	tmp[1] = ft_strjoin(pwd, tmp[2], ptrs);
 	if (!access(tmp[1], F_OK))
 	{
-		ft_free_ptr(ptrs, pwd);
+		free(pwd);
 		ft_free_ptr(ptrs, tmp[2]);
 		return (tmp[1]);
 	}

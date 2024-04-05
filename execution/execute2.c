@@ -6,7 +6,7 @@
 /*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 16:39:30 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/04/05 03:01:18 by yboutsli         ###   ########.fr       */
+/*   Updated: 2024/04/05 14:10:15 by yboutsli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,8 +70,9 @@ int	child_execution(int fd[2], t_cmd *cmd, t_list **list_env, t_free **ptrs)
 {
 	int		status;
 
-	(void)ptrs;
 	dup2(fd[1], 1);
+	if (cmd->outfiles && handle_io_helper2(cmd, ptrs))
+		return (1);
 	close2(fd);
 	status = 0;
 	if (cmd->cmd == NULL)
@@ -98,9 +99,8 @@ static int middle_cmds(t_cmd *cmd, t_list **list_env, t_free **ptrs, int *io_fd)
 	int status;
 	int	fd[2];
 	int	pid;
-	(void)ptrs;
 
-	if (handle_io(cmd, *list_env, ptrs, io_fd))
+	if (cmd->infiles && handle_io_helper1(cmd, *list_env, ptrs, io_fd))
 		return (1);
 	status = 0;
 	if (pipe(fd) == -1)

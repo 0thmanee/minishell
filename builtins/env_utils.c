@@ -6,7 +6,7 @@
 /*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 20:29:05 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/04/05 01:12:59 by yboutsli         ###   ########.fr       */
+/*   Updated: 2024/04/05 14:52:38 by yboutsli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,7 @@ void	env_init(t_list	**env, t_free **ptrs)
 		ft_free_ptr(ptrs, tmp);
 	}
 	ft_lstadd_back_2(env, ft_lstnew_2("SHLVL", "1", 0, ptrs));
-	ft_free_ptr(ptrs, cwd);
+	free(cwd);
 }
 int	var_exist(char *var, t_list *list_env)
 {
