@@ -184,6 +184,7 @@ int		get_last_type(t_token *tokens);
 int		calc_args_len_helper(char *input, int *i, int *len);
 int		calc_args_len(char *input, int i);
 t_token	*get_cmd(char *input, int *i, int prev_type, t_free **ptrs);
+int		calc_cmd_len(char *input, int *i);
 t_value *get_values(char *input, int *i, int *args_len, t_free **ptrs);
 int		valid_quotes(char *input);
 char	*quoted_cmd(char *input, int *i, t_free **ptrs);
@@ -207,8 +208,9 @@ void	extract_command(t_token *token, char **cmd, t_free **ptrs);
 void	extract_args(t_token *token, char ***args, char **cmd, t_free **ptrs);
 void	extract_infiles(t_token *token, t_file **infiles, t_free **ptrs);
 void	extract_outfiles(t_token *token, t_file **outfiles, t_free **ptrs);
-int		syntax_error(t_token *tokens, int *here_doc);
+int		syntax_error(t_token *token, int *here_doc);
 int		check_braces(char *value);
+int		invalid_braces(t_token *curr);
 void	open_heredoc(t_token *tokens, int here_doc, int *s_error);
 
 // Execution
@@ -246,4 +248,8 @@ int		args_size(t_cmd *cmd);
 void	update_exit_status(t_list **list_env, int status, t_free **ptrs);
 int		handle_io(t_cmd *cmd, t_list *list_env, t_free **ptrs, int *io_fd);
 int		execute_1(t_cmd *cmd, t_list **list_env, t_free **ptrs,  int *io_fd);
+
+// print
+void	print_it(t_token *tokens);
+void 	print_it_2(t_cmd *cmds);
 #endif

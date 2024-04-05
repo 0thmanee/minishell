@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 10:58:53 by obouchta          #+#    #+#             */
-/*   Updated: 2024/03/13 17:04:21 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/04/05 04:56:13 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,8 @@ void	ft_new_len_helper(char *input, int i, int *new_len)
 {
 	if (input[i] == '<' || input[i] == '>')
 	{
-		if ((input[i] == '<' && input[i + 1] == '<') ||
-			(input[i] == '>' && input[i + 1] == '>'))
+		if ((input[i] == '<' && input[i + 1] == '<')
+			|| (input[i] == '>' && input[i + 1] == '>'))
 		{
 			if (i > 0 && !is_whitespace(input[i - 1]))
 				(*new_len)++;
@@ -34,26 +34,6 @@ void	ft_new_len_helper(char *input, int i, int *new_len)
 		}
 	}
 }
-
-// void new_len_helper_2(char *input, int i, int *new_len)
-// {
-// 	char	quote;
-
-// 	quote = input[i];
-// 	if (i > 0 && !is_whitespace(input[i - 1]))
-// 		(*new_len)++;
-// 	(*new_len)++;
-// 	i++;
-// 	while (input[i] && input[i] != quote)
-// 	{
-// 		(*new_len)++;
-// 		i++;
-// 	}
-// 	if (input[i])
-// 		(*new_len)++;
-// 	if (input[i] && !is_whitespace(input[i]))
-// 		(*new_len)++;
-// }
 
 int	quoted(char *input, int i)
 {

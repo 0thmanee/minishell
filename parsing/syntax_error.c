@@ -6,87 +6,35 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/20 03:10:42 by obouchta          #+#    #+#             */
-/*   Updated: 2024/04/03 21:52:51 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/04/05 04:50:44 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	check_braces(char *value)
+int	syntax_error(t_token *token, int *here_doc)
 {
-	int	i;
-
-	i = 0;
-	while (value[i])
-	{
-		if ((quoted(value, i) == '\"' || !quoted(value, i))
-			&& value[i] == '$' && value[i + 1] && value[i + 1] == '{')
-		{
-			i += 2;
-			if (!value[i] || value[i] == '{' || value[i] == '}'
-				|| value[i] == '\"')
-				return (1);
-			else
-			{
-				while (value[i] && value[i] != '}' && value[i] != '\"')
-				{
-					if (is_whitespace(value[i]) || char_is_valid(value[i])
-						|| value[i] == '{' || value[i++] == '$')
-						return (1);
-				}
-				if (value[i] != '}')
-					return (1);
-			}
-			continue ;
-		}
-		i++;
-	}
-	return (0);
-}
-
-int	invalid_braces(t_token *curr)
-{
-	int	i;
-
-	i = 0;
-	if (curr->value && ft_strchr(curr->value, '{') && check_braces(curr->value))
+	if (token->type == PIPE)
 		return (1);
-	if (curr->args_len)
+	while (token)
 	{
-		while (i < curr->args_len)
-		{
-			if (ft_strchr(curr->value, '{') && check_braces(curr->args[i].value))
-				return (1);
-			i++;
-		}
-	}
-	return (0);
-}
-
-int	syntax_error(t_token *tokens, int *here_doc)
-{
-	t_token *curr;
-	int		type;
-
-	curr = tokens;
-	if (curr->type == PIPE)
-		return (1);
-	while (curr)
-	{
-		if (curr->type == HERE_DOC && curr->next && curr->next->type == DELIMITER)
+		if (token->type == HERE_DOC && token->next
+			&& token->next->type == DELIMITER)
 			(*here_doc)++;
-		type = curr->type;
-		if (type == INPUT || type == OUTPUT || type == APPEND || type == HERE_DOC)
+		if (token->type == INPUT || token->type == OUTPUT
+			|| token->type == APPEND || token->type == HERE_DOC)
 		{
-			if (!curr->next || curr->next->type == INPUT || curr->next->type == OUTPUT
-				|| curr->next->type == APPEND || curr->next->type == PIPE || curr->next->type == HERE_DOC)
+			if (!token->next || token->next->type == INPUT
+				|| token->next->type == OUTPUT || token->next->type == APPEND
+				|| token->next->type == PIPE || token->next->type == HERE_DOC)
 				return (1);
 		}
-		else if (type == PIPE && (!curr->next || curr->next->type == PIPE))
+		else if (token->type == PIPE
+			&& (!token->next || token->next->type == PIPE))
 			return (1);
-		else if (invalid_braces(curr))
+		else if (invalid_braces(token))
 			return (1);
-		curr = curr->next;
+		token = token->next;
 	}
 	return (0);
 }
@@ -95,7 +43,7 @@ void	read_from_heredoc(t_token *curr, int *pid, int *here_doc)
 {
 	char	*line;
 	int		id;
-	
+
 	if (curr->type == HERE_DOC && *here_doc > 0)
 	{
 		id = fork();
@@ -107,7 +55,7 @@ void	read_from_heredoc(t_token *curr, int *pid, int *here_doc)
 			{
 				line = readline("> ");
 				if (!line || (curr->next && !strcmp(line, curr->next->value)))
-					break;
+					break ;
 				free(line);
 			}
 			(free(line), exit(EXIT_SUCCESS));
@@ -120,14 +68,14 @@ void	read_from_heredoc(t_token *curr, int *pid, int *here_doc)
 	}
 }
 
-void open_heredoc(t_token *tokens, int here_doc, int *s_error)
+void	open_heredoc(t_token *tokens, int here_doc, int *s_error)
 {
-    t_token *curr;
-	int	pid;
-	int	status;
+	t_token	*curr;
+	int		pid;
+	int		status;
 
-    curr = tokens;
-    while (curr && here_doc)
+	curr = tokens;
+	while (curr && here_doc)
 	{
 		read_from_heredoc(curr, &pid, &here_doc);
 		curr = curr->next;

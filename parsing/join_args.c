@@ -6,17 +6,16 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 20:15:35 by obouchta          #+#    #+#             */
-/*   Updated: 2024/04/04 00:41:51 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/04/05 04:03:11 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-
-void remove_token(t_token **head, t_token *node_to_remove, t_free **ptrs)
+void	remove_token(t_token **head, t_token *node_to_remove, t_free **ptrs)
 {
-	t_token *prev;
-	
+	t_token	*prev;
+
 	prev = *head;
 	if (!(*head) || !node_to_remove)
 		return ;
@@ -25,7 +24,7 @@ void remove_token(t_token **head, t_token *node_to_remove, t_free **ptrs)
 		*head = node_to_remove->next;
 		ft_free_ptr(ptrs, node_to_remove->value);
 		ft_free_ptr(ptrs, node_to_remove);
-		return;
+		return ;
 	}
 	while (prev->next && prev->next != node_to_remove)
 		prev = prev->next;
@@ -46,12 +45,13 @@ void	fill_args(t_token *cmd, t_value *new_args, int *i, t_free **ptrs)
 			new_args[(*i)++].value = ft_strdup(cmd->args[j++].value, ptrs);
 }
 
-t_value	*join_args_helper(t_token *cmd, t_token *curr, int *len, t_free **ptrs)
+t_value	*collect_args(t_token *cmd, t_token *curr, int *len, t_free **ptrs)
 {
 	t_value	*new_args;
 	int		args_nbr;
-	int		i = 0;
-	
+	int		i;
+
+	i = 0;
 	args_nbr = cmd->args_len + curr->args_len;
 	if (curr->type == CMD)
 		args_nbr++;
@@ -66,28 +66,37 @@ t_value	*join_args_helper(t_token *cmd, t_token *curr, int *len, t_free **ptrs)
 	return (new_args);
 }
 
+void	join_args_helper(t_token **tokens, t_token **curr,
+	t_token **cmd, t_free **ptrs)
+{
+	t_token	*tmp;
+
+	while (*curr && (*curr)->type != PIPE)
+	{
+		tmp = *curr;
+		(*cmd)->args = collect_args(*cmd, (*curr), &((*cmd)->args_len), ptrs);
+		(*curr)->args_len = 0;
+		(*curr) = (*curr)->next;
+		if (tmp->type == CMD)
+			remove_token(tokens, tmp, ptrs);
+		else
+			ft_free_ptr(ptrs, tmp->args);
+	}
+}
+
 void	join_args(t_token **tokens, t_free **ptrs)
 {
 	t_token	*curr;
 	t_token	*cmd;
-	t_token	*tmp;
 
 	curr = *tokens;
 	while (curr)
 	{
 		if (curr->type == CMD)
 		{
-			(cmd = curr, curr = curr->next);
-			while (curr && curr->type != PIPE)
-			{
-				tmp = curr;
-				cmd->args = join_args_helper(cmd, curr, &cmd->args_len, ptrs);
-				(curr->args_len = 0, curr = curr->next);
-				if (tmp->type == CMD)
-					remove_token(tokens, tmp, ptrs);
-				else
-					ft_free_ptr(ptrs, tmp->args);
-			}
+			cmd = curr;
+			curr = curr->next;
+			join_args_helper(tokens, &curr, &cmd, ptrs);
 		}
 		else
 			curr = curr->next;

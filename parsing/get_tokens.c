@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 07:21:28 by obouchta          #+#    #+#             */
-/*   Updated: 2024/04/04 00:41:47 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/04/05 03:54:46 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,9 +62,9 @@ char	*quoted_cmd(char *input, int *i, t_free **ptrs)
 
 t_token	*get_in_out_helper(char *input, int *i, t_token **tokens, t_free **ptrs)
 {
-	t_token *arg;
+	t_token	*arg;
 	char	*arg_value;
-	
+
 	arg_value = NULL;
 	arg = NULL;
 	while (input[*i] && is_whitespace(input[*i]))
@@ -73,7 +73,7 @@ t_token	*get_in_out_helper(char *input, int *i, t_token **tokens, t_free **ptrs)
 	{
 		extract_expr(input, &arg_value, i, ptrs);
 		arg = ft_lstnew_1(arg_value,
-			regonize_type_2(get_last_type(*tokens)), NULL, ptrs);
+				regonize_type_2(get_last_type(*tokens)), NULL, ptrs);
 		arg->args_len = 0;
 	}
 	else if (regonize_type(input, *i) != EXPRESSION)
@@ -89,7 +89,9 @@ t_token	*get_in_out(char *input, int *i, t_token **tokens, t_free **ptrs)
 	int		len;
 	int		type;
 
-	(j = 0, len = 1, type = regonize_type(input, *i));
+	j = 0;
+	len = 1;
+	type = regonize_type(input, *i);
 	if (type == APPEND || type == HERE_DOC)
 		len = 2;
 	tok_value = ft_malloc(ptrs, len + 1);

@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 10:57:02 by obouchta          #+#    #+#             */
-/*   Updated: 2024/04/04 02:23:37 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/04/05 03:43:29 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 void	add_spaces_helper_1(char *input, char *new_input, int *i, int *j)
 {
-	if ((input[*i] == '<' && input[*i + 1] == '<') ||
-	(input[*i] == '>' && input[*i + 1] == '>'))
+	if ((input[*i] == '<' && input[*i + 1] == '<')
+		|| (input[*i] == '>' && input[*i + 1] == '>'))
 	{
 		if (*i > 0 && !is_whitespace(input[*i - 1]))
 			new_input[(*j)++] = ' ';

@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/17 04:30:01 by obouchta          #+#    #+#             */
-/*   Updated: 2024/04/04 21:10:23 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/04/05 03:45:01 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,21 +23,6 @@ int	tokens_len(t_token *tokens)
 		tokens = tokens->next;
 	}
 	return (len);
-}
-
-void	extract_command(t_token *token, char **cmd, t_free **ptrs)
-{
-	t_token	*curr;
-
-	curr = token;
-	if (curr && curr->type == PIPE)
-		curr = curr->next;
-	while (curr && curr->type != PIPE)
-	{
-		if (curr->type == CMD)
-			*cmd = ft_strdup(curr->value, ptrs);
-		curr = curr->next;
-	}
 }
 
 void	get_cmd_from_args(t_token *curr, char **cmd, int *start, t_free **ptrs)
@@ -95,9 +80,10 @@ void	extract_args(t_token *token, char ***args, char **cmd, t_free **ptrs)
 	t_token	*curr;
 	int		i;
 	int		start;
-	
 
-	(curr = token, start = 0, i = 0);
+	curr = token;
+	start = 0;
+	i = 0;
 	if (curr && curr->type == PIPE)
 		curr = curr->next;
 	while (curr && curr->type != PIPE)

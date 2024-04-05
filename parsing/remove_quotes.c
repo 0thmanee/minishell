@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 17:17:09 by obouchta          #+#    #+#             */
-/*   Updated: 2024/04/04 00:41:55 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/04/05 04:36:35 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,10 +30,10 @@ int	set_delim_flag(t_token *curr)
 
 int	no_quotes_len(char *cmd)
 {
-	int	len;
-	int	i;
+	int		len;
+	int		i;
 	char	quote;
-	
+
 	len = ft_strlen(cmd);
 	i = 0;
 	if (!cmd)
@@ -63,7 +63,9 @@ char	*no_quoted_value(char *cmd, int len, t_free **ptrs)
 
 	if (!cmd)
 		return (NULL);
-	(i = 0, j = 0, new_cmd = ft_malloc(ptrs, len + 1));
+	i = 0;
+	j = 0;
+	new_cmd = ft_malloc(ptrs, len + 1);
 	while (cmd[i])
 	{
 		if (cmd[i] == '\'' || cmd[i] == '\"')
@@ -80,11 +82,25 @@ char	*no_quoted_value(char *cmd, int len, t_free **ptrs)
 	return (new_cmd);
 }
 
+void	remove_quotes_helper(t_token *curr, t_free **ptrs)
+{
+	int		i;
+	char	*tmp;
+
+	i = -1;
+	while (++i < curr->args_len)
+	{
+		tmp = curr->args[i].value;
+		curr->args[i].value = no_quoted_value(curr->args[i].value,
+				no_quotes_len(curr->args[i].value), ptrs);
+		ft_free_ptr(ptrs, tmp);
+	}
+}
+
 int	remove_quotes(t_token **tokens, t_free **ptrs)
 {
 	t_token	*curr;
 	char	*tmp;
-	int		i;
 
 	curr = *tokens;
 	while (curr)
@@ -92,17 +108,14 @@ int	remove_quotes(t_token **tokens, t_free **ptrs)
 		curr->delim_flag = set_delim_flag(curr);
 		if (curr->type == CMD || curr->type == OUT_FILE
 			|| curr->type == IN_FILE || curr->type == DELIMITER)
-			(tmp = curr->value, curr->value = no_quoted_value(curr->value,
-				no_quotes_len(curr->value), ptrs), ft_free_ptr(ptrs, tmp));
-		if (curr->args)
 		{
-			i = -1;
-			while (++i < curr->args_len)
-				(tmp = curr->args[i].value, 
-				curr->args[i].value = no_quoted_value(curr->args[i].value,
-					no_quotes_len(curr->args[i].value), ptrs),
-					ft_free_ptr(ptrs, tmp));
+			tmp = curr->value;
+			curr->value = no_quoted_value(curr->value,
+					no_quotes_len(curr->value), ptrs);
+			ft_free_ptr(ptrs, tmp);
 		}
+		if (curr->args)
+			remove_quotes_helper(curr, ptrs);
 		curr = curr->next;
 	}
 	return (1);
