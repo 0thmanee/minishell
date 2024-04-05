@@ -1,4 +1,5 @@
-builtins_files =  env_utils.c env.c export.c cd.c echo.c pwd.c unset.c  exit.c
+builtins_files =  env_utils.c env.c export.c export_utils.c cd.c cd_utils.c echo.c pwd.c unset.c  exit.c exit_utils.c \
+env_utils1.c
 parsing_files = main.c new_len.c trim_input.c add_spaces.c type_check.c get_cmd_1.c get_cmd_2.c get_tokens.c \
 remove_quotes.c join_args.c expanding.c expanding_init_1.c expanding_init_2.c signals.c \
 final_cmd.c final_cmd_1.c final_cmd_2.c final_cmd_3.c syntax_error.c check_braces.c ft_malloc.c

@@ -241,7 +241,7 @@ int		new_execve(t_cmd *cmd, t_list **list_env, t_free **ptrs);
 int		execute_2(t_cmd **cmd_list, t_list **list_env, t_free **ptrs, int *io_fd);
 int 	new_fork();
 int		valid(char *str);
-void 	nvalid_output(char *str1, char *str2);
+int 	nvalid_output(char *str1, char *str2);
 void	env_lc_update(t_cmd *cmd, t_list **list_env, t_free **ptrs);
 int		ft_exit(t_cmd *cmd, t_list **list_env, t_free **ptrs);
 int		args_size(t_cmd *cmd);
@@ -249,7 +249,12 @@ void	update_exit_status(t_list **list_env, int status, t_free **ptrs);
 int		handle_io(t_cmd *cmd, t_list *list_env, t_free **ptrs, int *io_fd);
 int		execute_1(t_cmd *cmd, t_list **list_env, t_free **ptrs,  int *io_fd);
 int	handle_io_helper1(t_cmd *cmd, t_list *list_env, t_free **ptrs, int *io_fd);
+void	null_arg(t_list **list_env);
 int	handle_io_helper2(t_cmd *cmd, t_free **ptrs);
+void	case0(char *str, t_list **list_env, t_free **ptrs);
+int	valid_args(char **args, t_free **ptrs);
+int	new_perror(char *str);
+int	last_bs(char *str);
 
 // print
 void	print_it(t_token *tokens);
