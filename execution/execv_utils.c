@@ -3,36 +3,67 @@
 /*                                                        :::      ::::::::   */
 /*   execv_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 16:03:22 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/04/04 22:04:48 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/04/05 01:54:46 by yboutsli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+char	*shear_in_cwd(char *cmd, t_free **ptrs, int *type)
+{
+	char	*tmp[3];
+	char	*pwd;
 
-char	*cmd_path(char *cmd, char **npath, t_free **ptrs)
+	tmp[0] = ft_substr(cmd, 2, ft_strlen(cmd), ptrs);
+	tmp[2] = ft_strjoin("/", tmp[0], ptrs);
+	ft_free_ptr(ptrs, tmp[0]);
+	pwd = getcwd(NULL, 0);
+	if (!pwd)
+		return (NULL);
+	tmp[1] = ft_strjoin(pwd, tmp[2], ptrs);
+	if (!access(tmp[1], F_OK))
+	{
+		ft_free_ptr(ptrs, pwd);
+		ft_free_ptr(ptrs, tmp[2]);
+		return (tmp[1]);
+	}
+	else
+	{
+		ft_free_ptr(ptrs, tmp[1]);
+		ft_free_ptr(ptrs, tmp[2]);
+		if (type != 0)
+			*type = 1;
+		return (NULL);
+	}
+}
+
+char	*cmd_path(char *cmd, char **npath, t_free **ptrs, int *type)
 {
 	int		i;
 	char	*tmp;
 	char	*tmp1;
 
-	if (!cmd || *cmd == '\0')
+	if (!cmd || *cmd == '\0' || !npath)
 		return (NULL);
 	if (cmd[0] == '/')
 		return (cmd);
+	else if (!ft_strncmp(cmd, "./", 2))
+		return (shear_in_cwd(cmd, ptrs, type));
 	i = 0;
 	while (npath && npath[i])
 	{
 		tmp = ft_strjoin(npath[i], "/", ptrs);
 		tmp1 = ft_strjoin(tmp, cmd, ptrs);
 		ft_free_ptr(ptrs, tmp);
-		if (!access(tmp1, F_OK | X_OK))
+		if (!access(tmp1, F_OK & X_OK))
 			return (tmp1);
 		ft_free_ptr(ptrs, tmp1);
 		i++;
 	}
+	if (type != 0)
+		*type = 0;
 	return (NULL);
 }
 int	args_size(t_cmd *cmd)
@@ -72,16 +103,21 @@ int	new_execve(t_cmd *cmd, t_list **list_env, t_free **ptrs)
 	char	**args;
 	char	**npath;
 	char	*cmd_fpath;
+	int		type;
 
 	args = execve_argv(cmd, ptrs);
 	npath = path(list_env, ptrs);
-	cmd_fpath = cmd_path(cmd->cmd, npath, ptrs);
+	cmd_fpath = cmd_path(cmd->cmd, npath, ptrs, &type);
 	env_tab = list2tab(*list_env, ptrs);
 	if (!cmd_fpath)
 	{
-		write(2, "minishell: ", 11);
-		write(2, cmd->cmd, ft_strlen(cmd->cmd));
-		(write(2, ": command not found\n", 20), exit (127));
+		ft_putstr_fd("minishell: ", 2);
+		ft_putstr_fd(cmd->cmd, 2);
+		if (type == 1)
+			ft_putstr_fd(": No such file or directory\n", 2);
+		else if (type == 0)
+			ft_putstr_fd(": command not found\n", 2);
+		exit (127);
 	}
 	if (execve(cmd_fpath, args, env_tab) == -1)
 		(write(2, "minishell: ", 11), perror(cmd->cmd), exit (1));

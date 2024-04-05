@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 20:29:05 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/04/04 02:21:54 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/04/05 01:12:59 by yboutsli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,7 @@ void	env_init(t_list	**env, t_free **ptrs)
 	cwd = getcwd(NULL, 0);
 	if (cwd != NULL)
 	{
+		ft_lstadd_back_2(env, ft_lstnew_2("PATH", "/usr/gnu/bin:/usr/local/bin:/bin:/usr/bin:.", 1, ptrs));
 		new_node = ft_lstnew_2("PWD", cwd, 0, ptrs);
 		ft_lstadd_back_2(env, new_node);
 		tmp = ft_strjoin(cwd, "/./minishell", ptrs);

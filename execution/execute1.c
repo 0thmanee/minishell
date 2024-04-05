@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute1.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 11:49:46 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/04/04 21:52:02 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/04/05 02:01:08 by yboutsli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,18 +16,11 @@ void	env_lc_update(t_cmd *cmd, t_list **list_env, t_free **ptrs)
 {
 	char	*value;
 	char	*new_var;
-	char	*cmd_fpath;
-	char	**npath;
 	int		i;
 
 	(i = 0, value = NULL);
 	if (cmd->args == NULL)
-	{
-		npath = path(list_env, ptrs);
-		cmd_fpath = cmd_path(cmd->cmd, npath, ptrs);
-		new_var = cmd_fpath;
-		ft_free(npath, ptrs);
-	}
+		new_var = cmd->cmd;
 	else
 	{
 		while (cmd->args[i + 1])
@@ -193,6 +186,6 @@ int	execute_1(t_cmd *cmd, t_list **list_env, t_free **ptrs,  int *io_fd)
 	else
 		status = child_execve(cmd, list_env, ptrs);
 	if (ft_strcmp(cmd->cmd, "env"))
-		env_lc_update(cmd, list_env, ptrs);//lc : last command
+		env_lc_update(cmd, list_env, ptrs);
 	return (status);
 }

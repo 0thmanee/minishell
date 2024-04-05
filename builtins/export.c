@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/05 16:57:06 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/04/04 03:10:57 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/04/05 02:10:16 by yboutsli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ void	null_arg(t_list **list_env)
 		curr[1] = *list_env;
 		while (curr[1] && curr[1]->index != count)
 			curr[1] = curr[1]->next;
-		if(curr[1])
+		if(curr[1] && curr[1]->type == 0 && ft_strcmp(curr[1]->value, "_"))
 		{
 			printf("declare -x %s", curr[1]->var);
 			if (curr[1]->value)
@@ -79,17 +79,13 @@ int	valid(char *str)
 	return (0);
 }
 
-void nvalid_output(char *str, t_free **ptrs)
+void nvalid_output(char *str1, char *str2)
 {
-	char	*tmp1;
-	char	*tmp2;
-
-	tmp1 = ft_strjoin("minishell: export: `", str, ptrs);
-	tmp2 = ft_strjoin(tmp1, "': not a valid identifier", ptrs);
-	write(2, tmp2, ft_strlen(tmp2));
-	write(2, "\n", 1);
-	ft_free_ptr(ptrs, tmp1);
-	ft_free_ptr(ptrs, tmp2);
+	ft_putstr_fd("minishell: ", 2);
+	ft_putstr_fd(str2, 2);
+	ft_putstr_fd(": `", 2);
+	ft_putstr_fd(str1, 2);
+	ft_putstr_fd("': not a valid identifier\n", 2);
 }
 void	case0(char *str, t_list **list_env, t_free **ptrs)
 {
@@ -181,21 +177,22 @@ int	export(t_cmd *cmd, t_list **list_env, t_free **ptrs)
 	int	status;
 
 	status = 0;
-	i = 0;
+	i = -1;
 	if (cmd->args == NULL)
 		null_arg(list_env);
 	else
 	{
-		while (cmd->args[i])
+		while (cmd->args[++i])
 		{
-			if (valid(cmd->args[i]))
+			if (!ft_strcmp(cmd->args[i], "_"))
+				continue;
+			else if (valid(cmd->args[i]))
 			{
-				nvalid_output(cmd->args[i], ptrs);
+				nvalid_output(cmd->args[i], "export");
 				status = 1;
 			}
 			else
 				valid_arg(cmd->args[i], list_env, ptrs);
-			i++;
 		}
 	}
 	return (status);

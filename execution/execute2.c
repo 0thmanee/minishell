@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute2.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 16:39:30 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/04/04 21:57:33 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/04/05 00:02:32 by yboutsli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,20 +111,6 @@ static int middle_cmds(t_cmd *cmd, t_list **list_env, t_free **ptrs, int *io_fd)
 		(write(2, "minishell: ", 11), perror("Fork"), exit(1));
 	if (pid == 0)
 		status = child_execution(fd, cmd, list_env, ptrs);
-	//if heredoc wait
-	// if (cmd->infiles)
-	// {
-	// 	int i = 0;
-	// 	while (cmd->infiles[i].fd != -42)
-	// 	{
-	// 		if (cmd->infiles[i].type == 1)
-	// 		{
-	// 			waitpid(pid, NULL, 0);
-	// 			break ;
-	// 		}
-	// 		i++;
-	// 	}
-	// }
 	dup2(fd[0], 0);
 	close2(fd);
 	return (status);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/10 21:19:24 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/04/04 01:14:21 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/04/05 02:11:08 by yboutsli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int unset(t_list **list_env, char **args, t_free **ptrs)
 {
-	t_list *current;
+	t_list *curr;
 	t_list *prev;
 	int		i;
 	int		status;
@@ -22,32 +22,31 @@ int unset(t_list **list_env, char **args, t_free **ptrs)
 	status = 0;
 	if (!*list_env || !args)
 		return (0);
-	current = *list_env;
-	prev = NULL;
-	
-	while (current)
+	i = -1;
+	while (args[++i])
 	{
-		i = 0;
-		while (args[i])
+		curr = *list_env;
+		prev = NULL; 
+		while (curr)
 		{
 			if (valid(args[i]))
 			{
-				nvalid_output(args[i++], ptrs);
+				nvalid_output(args[i], "unset");
 				status = 1;
+				break;
 			}
-			else if(!ft_strcmp(current->var, args[i]))
+			else if(!ft_strcmp(curr->var, args[i]))
 			{
 				if (prev)
-					prev->next = current->next;
+					prev->next = curr->next;
 				else
-					*list_env = current->next;
-				ft_free_ptr(ptrs, current->value);
-				ft_free_ptr(ptrs, current->var);
+					*list_env = curr->next;
+				ft_free_ptr(ptrs, curr->value);
+				ft_free_ptr(ptrs, curr->var);
 			}
-			i++;
+			prev = curr;
+			curr = curr->next;
 		}
-		prev = current;
-		current = current->next;
 	}
 	return (status);
 }
