@@ -6,7 +6,7 @@
 /*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 11:49:46 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/04/05 02:01:08 by yboutsli         ###   ########.fr       */
+/*   Updated: 2024/04/05 02:41:54 by yboutsli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,6 @@ int	handle_io_helper1_2(t_cmd *cmd, t_list *list_env, t_free **ptrs, int *io_fd)
 	{
 		if (cmd->infiles[i].type == 1)
 		{
-			dup2(io_fd[1], 1);
 			dup2(io_fd[0], 0);
 			if (cmd->infiles[i + 1].fd == -42)
 			{

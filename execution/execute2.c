@@ -6,7 +6,7 @@
 /*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 16:39:30 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/04/05 00:02:32 by yboutsli         ###   ########.fr       */
+/*   Updated: 2024/04/05 02:40:34 by yboutsli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,6 @@ int	final_cmd(t_cmd *cmd, t_list **list_env, int io_fd[2], t_free **ptrs)
 	if (handle_io(cmd, *list_env, ptrs, io_fd))
 		return (1);
 	status = 0;
-	dup2(io_fd[1], 1);
-	close(io_fd[1]);
 	pid = new_fork();
 	if (pid == 0)
 	{
