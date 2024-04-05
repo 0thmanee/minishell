@@ -127,7 +127,11 @@ typedef	struct s_free
 	void	*ptr;
 	struct s_free	*next;
 }	t_free;
-
+typedef struct s_new
+{
+	t_list	*env;
+	t_free	**ptrs;
+}	t_new;
 typedef struct t_signal
 {
 	struct	termios original_terminos;
@@ -255,7 +259,9 @@ void	case0(char *str, t_list **list_env, t_free **ptrs);
 int	valid_args(char **args, t_free **ptrs);
 int	new_perror(char *str);
 int	last_bs(char *str);
-
+char	*parse_heredoc(char *input, t_list *list_env, t_free **ptrs);
+int	*fd1(t_free **ptrs);
+void	fd2(int tab[2]);
 // print
 void	print_it(t_token *tokens);
 void 	print_it_2(t_cmd *cmds);

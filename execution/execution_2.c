@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution_utils_1.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 14:59:37 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/04/04 01:48:25 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/04/05 22:51:28 by yboutsli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,32 +25,10 @@ void	ft_free(char **tab, t_free **ptrs)
 	ft_free_ptr(ptrs, tab);
 }
 
-char	**path(t_list **envp, t_free **ptrs)
-{
-	char	**npath;
-	t_list	*current;
-
-	current = *envp;
-	while (current)
-	{
-		if (!ft_strcmp(current->var, "PATH"))
-		{
-			npath = ft_split(current->value, ':', ptrs);
-			return (npath);
-		}
-		current = current->next;
-	}
-	return (NULL);
-}
-void	close2(int tab[2])
-{
-	close(tab[0]);
-	close(tab[1]);
-}
 char	**list2tab(t_list *list_env, t_free **ptrs)
 {
-	char 	**tab;
-	t_list *current;
+	char	**tab;
+	t_list	*current;
 	char	*tmp2;
 	int		i;
 	char	*tmp1;
@@ -72,5 +50,5 @@ char	**list2tab(t_list *list_env, t_free **ptrs)
 		current = current->next;
 	}
 	tab[i] = NULL;
-	return(tab);
+	return (tab);
 }

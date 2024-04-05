@@ -6,11 +6,12 @@
 /*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 16:03:22 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/04/05 14:54:24 by yboutsli         ###   ########.fr       */
+/*   Updated: 2024/04/05 22:41:54 by yboutsli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
 char	*shear_in_cwd(char *cmd, t_free **ptrs, int *type)
 {
 	char	*tmp[3];
@@ -66,6 +67,7 @@ char	*cmd_path(char *cmd, char **npath, t_free **ptrs, int *type)
 		*type = 0;
 	return (NULL);
 }
+
 int	args_size(t_cmd *cmd)
 {
 	int	i;
@@ -88,7 +90,7 @@ char	**execve_argv(t_cmd *cmd, t_free **ptrs)
 	args = ft_malloc(ptrs, (size + 2) * sizeof(char *));
 	args[0] = cmd->cmd;
 	if (size == 0)
-		args[1] =  NULL;
+		args[1] = NULL;
 	else
 	{
 		i = 0;
@@ -96,30 +98,4 @@ char	**execve_argv(t_cmd *cmd, t_free **ptrs)
 			args[i] = cmd->args[i - 1];
 	}
 	return (args);
-}
-int	new_execve(t_cmd *cmd, t_list **list_env, t_free **ptrs)
-{
-	char	**env_tab;
-	char	**args;
-	char	**npath;
-	char	*cmd_fpath;
-	int		type;
-
-	args = execve_argv(cmd, ptrs);
-	npath = path(list_env, ptrs);
-	cmd_fpath = cmd_path(cmd->cmd, npath, ptrs, &type);
-	env_tab = list2tab(*list_env, ptrs);
-	if (!cmd_fpath)
-	{
-		ft_putstr_fd("minishell: ", 2);
-		ft_putstr_fd(cmd->cmd, 2);
-		if (type == 1)
-			ft_putstr_fd(": No such file or directory\n", 2);
-		else if (type == 0)
-			ft_putstr_fd(": command not found\n", 2);
-		exit (127);
-	}
-	if (execve(cmd_fpath, args, env_tab) == -1)
-		(write(2, "minishell: ", 11), perror(cmd->cmd), exit (1));
-	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 08:42:35 by obouchta          #+#    #+#             */
-/*   Updated: 2024/04/05 14:50:42 by yboutsli         ###   ########.fr       */
+/*   Updated: 2024/04/05 18:09:35 by yboutsli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,7 +119,7 @@ int	main(int ac, char **av, char **envp)
 	t_list		*list_env;
 	t_free		*ptrs;
 
-	atexit(leaks);
+	// atexit(leaks);
 	if (ac != 1)
 		return (write(2, "minishell: too many arguments\n", 30), 1);
 	(void)av;

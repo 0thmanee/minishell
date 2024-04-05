@@ -6,7 +6,7 @@
 /*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 11:49:46 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/04/05 14:09:05 by yboutsli         ###   ########.fr       */
+/*   Updated: 2024/04/05 22:23:33 by yboutsli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -156,7 +156,6 @@ int	child_execve(t_cmd *cmd, t_list **list_env, t_free **ptrs)
 	if (WIFSIGNALED(status) && WTERMSIG(status) == SIGQUIT)
 	 	return (132);
 	return (WEXITSTATUS(status));//more study
-	return(status);
 }
 
 int	execute_1(t_cmd *cmd, t_list **list_env, t_free **ptrs,  int *io_fd)
@@ -176,10 +175,10 @@ int	execute_1(t_cmd *cmd, t_list **list_env, t_free **ptrs,  int *io_fd)
 		status = cd(cmd->args, list_env, ptrs);
 	else if (!ft_strcmp(cmd->cmd, "echo"))
 		status = echo(cmd);
+	else if (!ft_strcmp(cmd->cmd, "unset"))
+		status = unset(list_env, cmd->args, ptrs);
 	else if (!ft_strcmp(cmd->cmd, "pwd"))
 		pwd(list_env);
-	else if (!ft_strcmp(cmd->cmd, "unset"))
-		unset(list_env, cmd->args, ptrs);
 	else if (!ft_strcmp(cmd->cmd, "exit"))
 		ft_exit(cmd, list_env, ptrs);
 	else
