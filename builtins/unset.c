@@ -6,16 +6,38 @@
 /*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/10 21:19:24 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/04/05 02:11:08 by yboutsli         ###   ########.fr       */
+/*   Updated: 2024/04/05 16:05:29 by yboutsli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int unset(t_list **list_env, char **args, t_free **ptrs)
+void	unset_utils(t_list **env, t_list *c, t_list *p, t_free **ptrs)
 {
-	t_list *curr;
-	t_list *prev;
+	if (p)
+		p->next = c->next;
+	else
+		*env = c->next;
+	ft_free_ptr(ptrs, c->value);
+	ft_free_ptr(ptrs, c->var);
+}
+
+void	unset_utils1(t_list **curr, t_list **prev, t_list **list_env)
+{
+	*curr = *list_env;
+	*prev = NULL;
+}
+
+void	unset_utils2(t_list **curr, t_list **prev)
+{
+	*prev = *curr;
+	(*curr) = (*curr)->next;
+}
+
+int	unset(t_list **list_env, char **args, t_free **ptrs)
+{
+	t_list	*curr;
+	t_list	*prev;
 	int		i;
 	int		status;
 
@@ -25,27 +47,17 @@ int unset(t_list **list_env, char **args, t_free **ptrs)
 	i = -1;
 	while (args[++i])
 	{
-		curr = *list_env;
-		prev = NULL; 
+		unset_utils1(&curr, &prev, list_env);
 		while (curr)
 		{
 			if (valid(args[i]))
 			{
-				nvalid_output(args[i], "unset");
-				status = 1;
-				break;
+				status = nvalid_output(args[i], "unset");
+				break ;
 			}
-			else if(!ft_strcmp(curr->var, args[i]))
-			{
-				if (prev)
-					prev->next = curr->next;
-				else
-					*list_env = curr->next;
-				ft_free_ptr(ptrs, curr->value);
-				ft_free_ptr(ptrs, curr->var);
-			}
-			prev = curr;
-			curr = curr->next;
+			else if (!ft_strcmp(curr->var, args[i]))
+				unset_utils(list_env, curr, prev, ptrs);
+			unset_utils2(&curr, &prev);
 		}
 	}
 	return (status);

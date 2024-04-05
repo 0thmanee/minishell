@@ -6,29 +6,14 @@
 /*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 09:26:13 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/04/05 14:52:15 by yboutsli         ###   ########.fr       */
+/*   Updated: 2024/04/05 16:26:10 by yboutsli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-int	new_perror(char *str)
-{
-	write(2, "minishell: ", 11);
-	perror(str);
-	return (1);
-}
-int	last_bs(char *str)
-{
-	int	i;
 
-	i = 0;
-	while (str[i])
-		i++;
-	if (i >= 1 && str[i - 1] == '/')
-		return (0);
-	return(1);
-}
-void	cd_dir_utils(t_list **list_env, char *pwd, char *tmp[2], t_free **ptrs)
+static void	cd_dir_utils(t_list **list_env, char *pwd,
+			char *tmp[2], t_free **ptrs)
 {
 	char	*cwd;
 
@@ -41,12 +26,14 @@ void	cd_dir_utils(t_list **list_env, char *pwd, char *tmp[2], t_free **ptrs)
 	}
 	else
 	{
-		ft_putstr_fd("cd: error retrieving current directory: getcwd: cannot access parent directories: No such file or directory\n", 2);
+		ft_putstr_fd("cd: error retrieving current directory: getcwd: "
+			"cannot access parent directories: No such file or directory\n", 2);
 		env_update(list_env, "OLDPWD", pwd, ptrs);
 		env_update(list_env, "PWD", tmp[1], ptrs);
 	}
 }
-int	cd_dir(char *str, t_list **list_env, t_free **ptrs)
+
+static int	cd_dir(char *str, t_list **list_env, t_free **ptrs)
 {
 	char	*tmp[2];
 	int		status;
@@ -66,7 +53,7 @@ int	cd_dir(char *str, t_list **list_env, t_free **ptrs)
 	return (ft_free_ptr(ptrs, tmp[1]), ft_free_ptr(ptrs, tmp[0]), status);
 }
 
-int	cd_root(char *str, t_list **list_env, t_free **ptrs)
+static int	cd_root(char *str, t_list **list_env, t_free **ptrs)
 {
 	int		status;
 	char	*cwd;
@@ -85,7 +72,7 @@ int	cd_root(char *str, t_list **list_env, t_free **ptrs)
 	{
 		tmp = getcwd(NULL, 0);
 		if (tmp)
-		{	
+		{
 			env_update(list_env, "OLDPWD", cwd, ptrs);
 			env_update(list_env, "PWD", tmp, ptrs);
 			free(tmp);
@@ -94,7 +81,7 @@ int	cd_root(char *str, t_list **list_env, t_free **ptrs)
 	return (status);
 }
 
-int	cd_home(t_list **env, char *str, t_free **ptrs)
+static int	cd_home(t_list **env, char *str, t_free **ptrs)
 {
 	char	*home;
 	char	*cwd;
@@ -116,11 +103,10 @@ int	cd_home(t_list **env, char *str, t_free **ptrs)
 	return (0);
 }
 
-
 int	cd(char **args, t_list **env, t_free **ptrs)
 {
 	int		status;
-	
+
 	status = 0;
 	if (args == NULL)
 		status = cd_home(env, NULL, ptrs);

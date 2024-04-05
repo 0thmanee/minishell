@@ -6,17 +6,17 @@
 /*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/05 14:36:05 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/04/05 02:34:06 by yboutsli         ###   ########.fr       */
+/*   Updated: 2024/04/05 16:31:13 by yboutsli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
 void	env_utils(t_list **list_env, t_free **ptrs, char *cmd)
 {
 	char	*new_var;
 	char	*cmd_fpath;
 	char	**npath;
-
 
 	npath = path(list_env, ptrs);
 	cmd_fpath = cmd_path(cmd, npath, ptrs, 0);
@@ -27,6 +27,7 @@ void	env_utils(t_list **list_env, t_free **ptrs, char *cmd)
 	ft_free(npath, ptrs);
 	printf("_=%s\n", new_var);
 }
+
 int	env(t_list **list_env, t_cmd *cmd, t_free **ptrs)
 {
 	t_list	*curr;
