@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 08:42:35 by obouchta          #+#    #+#             */
-/*   Updated: 2024/04/04 21:59:17 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/04/05 02:09:22 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,10 +147,10 @@ int	process_input(char *input, t_list **list_env, t_free **ptrs)
 
 	(tokens = NULL, cmd = NULL, here_doc = 0, s_error = 1);
 	if (!valid_quotes(input))
-		return (ft_free_all(ptrs), 2);
+		return (2);
 	(add_spaces(&input, ptrs), trim_input(&input, ptrs));
 	if (!input || !tokenize_input(&input, &tokens, ptrs))
-		return (ft_free_all(ptrs), 0);
+		return (0);
 	if (syntax_error(tokens, &here_doc))
 	{
 		update_exit_status(list_env, 258, ptrs);

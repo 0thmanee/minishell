@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/03 02:36:31 by obouchta          #+#    #+#             */
-/*   Updated: 2024/04/04 00:39:30 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/04/05 01:55:33 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,8 @@ int	ft_strlcat(char *dest, char *src, int dstsize)
 
 	len_dest = ft_strlen(dest);
 	len_src = ft_strlen(src);
+	if (!src)
+		return (len_dest);
 	if (dstsize <= len_dest)
 		return (dstsize + len_src);
 	i = 0;
@@ -49,9 +51,11 @@ char	*ft_strcpy(char *dest, const char *src)
 	int	i;
 
 	i = 0;
-	while (*(src + i) != '\0')
+	if (!src)
+		return (NULL);
+	while (src[i])
 	{
-		*(dest + i) = *(src + i);
+		dest[i] = src[i];
 		i++;
 	}
 	dest[i] = '\0';
@@ -60,15 +64,28 @@ char	*ft_strcpy(char *dest, const char *src)
 
 char	*ft_strjoin(char *s1, char *s2, t_free **ptrs)
 {
+	size_t	len_s1;
+	size_t	len_s2;
 	char	*s3;
-	int		total_len;
+	size_t	i;
+	size_t	j;
 
-	if (!s1 || !s2)
-		return (NULL);
-	total_len = ft_strlen(s1) + ft_strlen(s2);
-	s3 = ft_malloc(ptrs, total_len + 1);
-	ft_strcpy(s3, s1);
-	ft_strlcat(s3, s2, total_len + 1);
+	i = 0;
+	j = 0;
+	len_s1 = ft_strlen(s1);
+	len_s2 = ft_strlen (s2);
+	s3 = ft_malloc(ptrs, len_s1 + len_s2 + 1);
+	while (i < len_s1 && s1[i])
+	{
+		s3[i] = s1[i];
+		i++;
+	}
+	while (j < len_s2 && s2[j])
+	{
+		s3[i + j] = s2[j];
+		j++;
+	}
+	s3[j + i] = '\0';
 	return (s3);
 }
 
