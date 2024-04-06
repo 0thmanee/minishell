@@ -6,7 +6,7 @@ final_cmd.c final_cmd_1.c final_cmd_2.c final_cmd_3.c syntax_error.c check_brace
 
 libft_files = ft_str_1.c ft_str_2.c ft_lst_1.c ft_lst_2.c ft_char.c ft_split.c ft_atoi.c
 execution_files = execution_1.c execution_2.c execution_3.c execv_utils.c execute1.c execute2.c heredoc.c \
-heredoc1.c execv_utils1.c execute2_1.c
+heredoc1.c execv_utils1.c execute2_1.c io.c
 
 builtins_srcs = $(addprefix builtins/,$(builtins_files))
 parsing_srcs = $(addprefix parsing/,$(parsing_files))
