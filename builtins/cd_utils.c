@@ -6,7 +6,7 @@
 /*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 16:23:17 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/04/05 16:24:17 by yboutsli         ###   ########.fr       */
+/*   Updated: 2024/04/06 07:04:37 by yboutsli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,8 @@ int	last_bs(char *str)
 	int	i;
 
 	i = 0;
+	if (!str)
+		return (1);
 	while (str[i])
 		i++;
 	if (i >= 1 && str[i - 1] == '/')

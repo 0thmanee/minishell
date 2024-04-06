@@ -6,7 +6,7 @@
 /*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 16:03:22 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/04/05 22:41:54 by yboutsli         ###   ########.fr       */
+/*   Updated: 2024/04/06 06:51:15 by yboutsli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,7 @@ char	*shear_in_cwd(char *cmd, t_free **ptrs, int *type)
 	{
 		ft_free_ptr(ptrs, tmp[1]);
 		ft_free_ptr(ptrs, tmp[2]);
-		if (type != 0)
-			*type = 1;
+		*type = 1;
 		return (NULL);
 	}
 }
@@ -46,25 +45,26 @@ char	*cmd_path(char *cmd, char **npath, t_free **ptrs, int *type)
 	char	*tmp;
 	char	*tmp1;
 
-	if (!cmd || *cmd == '\0' || !npath)
+	if (!cmd || *cmd == '\0')
 		return (NULL);
 	if (cmd[0] == '/')
 		return (cmd);
 	else if (!ft_strncmp(cmd, "./", 2))
 		return (shear_in_cwd(cmd, ptrs, type));
+	if (!npath)
+		return (*type = 1, NULL);
 	i = 0;
 	while (npath && npath[i])
 	{
 		tmp = ft_strjoin(npath[i], "/", ptrs);
 		tmp1 = ft_strjoin(tmp, cmd, ptrs);
 		ft_free_ptr(ptrs, tmp);
-		if (!access(tmp1, F_OK & X_OK))
+		if (!access(tmp1, F_OK | X_OK))
 			return (tmp1);
 		ft_free_ptr(ptrs, tmp1);
 		i++;
 	}
-	if (type != 0)
-		*type = 0;
+	*type = 0;
 	return (NULL);
 }
 
