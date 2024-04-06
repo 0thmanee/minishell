@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 19:21:40 by obouchta          #+#    #+#             */
-/*   Updated: 2024/03/31 22:24:07 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/04/06 05:08:41 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ int	ft_isalpha(int c)
 {
 	if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z'))
 		return (0);
-	else 
+	else
 		return (1);
 }
 
@@ -24,7 +24,7 @@ int	is_whitespace(char c)
 {
 	int		i;
 	char	*set;
-	
+
 	i = 0;
 	set = " \t\n\v\f\r";
 	while (set[i])
@@ -44,7 +44,7 @@ int	ft_isdigit(int c)
 		return (1);
 }
 
-int char_is_valid(char c)
+int	char_is_valid(char c)
 {
 	if (!(c >= 'a' && c <= 'z')
 		&& !(c >= 'A' && c <= 'Z')

@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 21:41:01 by obouchta          #+#    #+#             */
-/*   Updated: 2024/04/04 00:20:27 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/04/06 05:09:07 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,4 +86,3 @@ void	ft_lstadd_back_2(t_list **lst, t_list *new_node)
 		p -> next = new_node;
 	}
 }
-

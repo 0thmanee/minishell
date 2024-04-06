@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
+/*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 16:20:23 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/04/05 22:30:01 by yboutsli         ###   ########.fr       */
+/*   Updated: 2024/04/06 04:59:12 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static char	*utils3(t_new *new, char *input)
+static char	*utils3(t_new_1 *new, char *input)
 {
 	char	*tmp;
 
@@ -22,7 +22,7 @@ static char	*utils3(t_new *new, char *input)
 	return (input);
 }
 
-static void	utils(int fd[2], t_file *in, int mode, t_new *new)
+static void	utils(int fd[2], t_file *in, int mode, t_new_1 *new)
 {
 	char	*input;
 
@@ -53,7 +53,7 @@ int	here_doc(t_file *infile, int mode, t_list *list_env, t_free **ptrs)
 	int		pid;
 	int		fd[2];
 	int		status;
-	t_new	tmp;
+	t_new_1	tmp;
 
 	tmp.env = list_env;
 	tmp.ptrs = ptrs;

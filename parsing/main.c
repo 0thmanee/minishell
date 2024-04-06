@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
+/*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 08:42:35 by obouchta          #+#    #+#             */
-/*   Updated: 2024/04/06 02:02:40 by yboutsli         ###   ########.fr       */
+/*   Updated: 2024/04/06 05:04:05 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,20 +106,11 @@ void	read_input(t_list **list_env, t_free **ptrs)
 	}
 }
 
-void leaks()
-{
-    // fclose(gfp);
-    system("leaks minishell");
-    // usleep(1000 * 100 *10000);
-}
-	// gfp = fopen("leaks", "w");
-
 int	main(int ac, char **av, char **envp)
 {
 	t_list		*list_env;
 	t_free		*ptrs;
 
-	// atexit(leaks);
 	if (ac != 1)
 		return (write(2, "minishell: too many arguments\n", 30), 1);
 	(void)av;

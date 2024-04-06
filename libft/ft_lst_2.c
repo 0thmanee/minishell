@@ -6,12 +6,11 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/16 22:51:37 by obouchta          #+#    #+#             */
-/*   Updated: 2024/04/04 00:39:24 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/04/06 05:09:23 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
 
 t_cmd	*ft_lstnew_3(t_free **ptrs)
 {

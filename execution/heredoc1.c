@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc1.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
+/*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 22:26:57 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/04/05 22:30:22 by yboutsli         ###   ########.fr       */
+/*   Updated: 2024/04/06 04:56:59 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static char	*utils2(char *result, int *i, t_list *list_env, t_free **ptrs)
+char	*parse_helper(char *result, int *i, t_list *list_env, t_free **ptrs)
 {
 	if (result[*i + 1] == '{')
 		result = case_4(result, i, list_env, ptrs);
@@ -56,7 +56,7 @@ char	*parse_heredoc(char *input, t_list *list_env, t_free **ptrs)
 			if (parse_heredoc1(result, &i))
 				continue ;
 			else
-				result = utils2(result, &i, list_env, ptrs);
+				result = parse_helper(result, &i, list_env, ptrs);
 			if (!result)
 				return (NULL);
 		}

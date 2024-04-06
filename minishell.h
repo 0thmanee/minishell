@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
+/*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/06 01:54:38 by obouchta          #+#    #+#             */
-/*   Updated: 2024/04/06 03:34:20 by yboutsli         ###   ########.fr       */
+/*   Updated: 2024/04/06 05:12:55 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,29 +30,6 @@
 # define BUFFER_SIZE			1
 # define ANSI_COLOR_CYAN		"\x1b[36m"
 # define ANSI_COLOR_RESET	"\x1b[0m"
-
-/* in the header file */
-/*==== LEAKS FINDER ==*/
-// #include <libc.h>
-
-// FILE*gfp;
-
-// static void *__malloc(size_t size, int line, const char *file)
-// {
-//     void *ptr = malloc(size);
-//     fprintf(gfp, "dct[%p] = ['malloc', '%p', %i, '%s']\n", ptr, ptr, line, file);fflush(gfp);
-//     return (ptr);
-// }
-
-
-// static void __free(void *ptr, int line, const char *file)
-// {
-//     fprintf(gfp, "dct[%p] = ['free', '%p', %i, '%s']\n", ptr, ptr, line, file);fflush(gfp);
-//     free(ptr);
-// }
-
-// #define malloc(x) __malloc(x, __LINE__, __FILE__)
-// #define free(x) __free(x, __LINE__, __FILE__)
 
 typedef enum s_TokenType
 {
@@ -127,12 +104,22 @@ typedef struct s_free
 	struct s_free	*next;
 }	t_free;
 
-typedef struct s_new
+typedef struct s_new_1
 {
 	t_list	*env;
 	t_free	**ptrs;
-	t_token *token;
-}	t_new;
+	t_token	*token;
+	t_value	args;
+}	t_new_1;
+
+typedef struct s_new_2
+{
+	t_list	*env;
+	t_free	**ptrs;
+	t_token	*token;
+	t_value	args;
+}	t_new_2;
+
 typedef struct t_signal
 {
 	struct termios	original_terminos;
@@ -201,7 +188,13 @@ char	*case_1(char *result, int *i, t_list *list_env, t_free **ptrs);
 char	*case_2(char *result, int *i, t_free **ptrs);
 char	*case_3(char *result, int *i, t_free **ptrs);
 char	*case_4(char *result, int *i, t_list *list_env, t_free **ptrs);
+char	*replace_str(char *str, int tab[2], char *min_str, t_free **ptrs);
+char	*remove_char(char *str, int char_index, t_free **ptrs);
 void	expanding(t_token **tokens, t_list *list_env, t_free **ptrs);
+char	*expanding_1(t_list *list_env, t_token *token, t_free **ptrs);
+char	*expanding_2(t_list *list_env, t_value args, t_free **ptrs);
+char	*exp_init(int *i, int *count, char *new_result);
+void	utils2(int *i, int *count);
 int		final_command(t_token **tokens, t_cmd **command, t_free **ptrs);
 void	check_for_var_helper_1(char *value, int *vars, int *i, int *j);
 void	check_for_var_helper_2(char *value, int *vars, int *i, int *j);
@@ -265,9 +258,7 @@ char	*parse_heredoc(char *input, t_list *list_env, t_free **ptrs);
 int		*fd1(t_free **ptrs);
 void	fd2(int tab[2]);
 int		child_utils(t_cmd *cmd, t_list **list_env, t_free **ptrs);
-int		child_execution(int fd[2], t_cmd *cmd, t_list **list_env, t_free **ptrs);
+int		child_execution(int fd[2], t_cmd *cmd,
+			t_list **list_env, t_free **ptrs);
 
-// print
-void	print_it(t_token *tokens);
-void	print_it_2(t_cmd *cmds);
 #endif

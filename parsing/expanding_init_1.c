@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/16 03:19:46 by obouchta          #+#    #+#             */
-/*   Updated: 2024/04/04 00:39:55 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/04/06 05:02:29 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,9 +68,10 @@ void	specify_vars_helper(t_token *curr, t_free **ptrs)
 		curr->args[i].vars_len = calc_vars(curr->args[i].value);
 		if (curr->args[i].vars_len)
 		{
-			curr->args[i].vars = ft_malloc(ptrs, curr->args[i].vars_len * sizeof(int));
+			curr->args[i].vars = ft_malloc(ptrs,
+					curr->args[i].vars_len * sizeof(int));
 			check_for_var(curr->args[i].value,
-				curr->args[i].vars, curr->args[i].vars_len);	
+				curr->args[i].vars, curr->args[i].vars_len);
 		}
 		i++;
 	}
