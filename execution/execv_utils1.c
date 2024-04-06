@@ -6,7 +6,7 @@
 /*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 22:40:46 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/04/05 22:51:37 by yboutsli         ###   ########.fr       */
+/*   Updated: 2024/04/06 05:34:11 by yboutsli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,22 +28,24 @@ int	new_execve(t_cmd *cmd, t_list **list_env, t_free **ptrs)
 	char	**args;
 	char	**npath;
 	char	*cmd_fpath;
-	int		type;
+	int		type[2];
 
+	type[1] = 0;
 	args = execve_argv(cmd, ptrs);
 	npath = path(list_env, ptrs);
-	cmd_fpath = cmd_path(cmd->cmd, npath, ptrs, &type);
-	env_tab = list2tab(*list_env, ptrs);
+	cmd_fpath = cmd_path(cmd->cmd, npath, ptrs, &type[0]);
+	if (!ft_strcmp("./minishell", cmd->cmd))
+		type[1] = 1;
+	env_tab = list2tab(*list_env, ptrs, type[1]);
 	if (!cmd_fpath)
 	{
-		new_execve1(cmd, type);
+		new_execve1(cmd, type[0]);
 		exit (127);
 	}
 	if (execve(cmd_fpath, args, env_tab) == -1)
 	{
 		ft_free_all(ptrs);
-		write(2, "minishell: ", 11);
-		perror(cmd->cmd);
+		new_perror(cmd->cmd);
 		exit (1);
 	}
 	return (0);

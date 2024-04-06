@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/06 01:54:38 by obouchta          #+#    #+#             */
-/*   Updated: 2024/04/06 05:12:55 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/04/06 05:31:50 by yboutsli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -160,6 +160,7 @@ void	ft_putstr_fd(char *s, int fd);
 int		ft_atoi(const char *str);
 int		ft_lstsize(t_cmd *lst);
 int		is_ambig(char *value);
+char	*int_to_str(int num, t_free **ptrs);
 
 // Parsing
 int		char_is_valid(char c);
@@ -230,7 +231,7 @@ char	**execve_argv(t_cmd *cmd, t_free **ptrs);
 int		export(t_cmd *cmd, t_list **list_env, t_free **ptrs);
 int		echo(t_cmd *cmd);
 int		unset(t_list **list_env, char **args, t_free **ptrs);
-char	**list2tab(t_list *list_env, t_free **ptrs);
+char	**list2tab(t_list *list_env, t_free **ptrs, int type);
 int		env_size(t_list *list_env);
 void	close2(int tab[2]);
 int		here_doc(t_file *infile, int mode, t_list *list_env, t_free **ptrs);
