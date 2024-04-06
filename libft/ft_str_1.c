@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/03 02:36:31 by obouchta          #+#    #+#             */
-/*   Updated: 2024/04/06 05:12:27 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/04/06 07:36:24 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,7 @@ int	ft_strcmp(const char *s1, const char *s2)
 {
 	size_t	i;
 
-	if (!s1 || !s2 || !s1[0])
+	if (!s1 || !s2)
 		return (1);
 	i = 0;
 	while (s1[i] && s2[i] && s1[i] == s2[i])

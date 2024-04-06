@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/20 03:10:42 by obouchta          #+#    #+#             */
-/*   Updated: 2024/04/06 06:49:27 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/04/06 07:38:05 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ int	syntax_error(t_token *token, int *here_doc)
 
 void	read_from_heredoc(t_token *curr, int *pid, int *here_doc)
 {
-	char	*line;
+	char	*ln;
 	int		id;
 
 	if (curr->type == HERE_DOC && *here_doc > 0)
@@ -53,12 +53,12 @@ void	read_from_heredoc(t_token *curr, int *pid, int *here_doc)
 			rl_catch_signals = 1;
 			while (1)
 			{
-				line = readline("> ");
-				if (!line || (curr->next && !strcmp(line, curr->next->value)))
+				ln = readline("> ");
+				if (!ln || (curr->next && !ft_strcmp(ln, curr->next->value)))
 					break ;
-				free(line);
+				free(ln);
 			}
-			(free(line), exit(EXIT_SUCCESS));
+			(free(ln), exit(EXIT_SUCCESS));
 		}
 		else
 		{
