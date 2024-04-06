@@ -18,7 +18,7 @@ parsing_objects = $(addprefix object_files/,$(parsing_srcs:.c=.o))
 libft_objects = $(addprefix object_files/,$(libft_srcs:.c=.o))
 execution_objects = $(addprefix object_files/,$(execution_srcs:.c=.o))
 
-# CFLAGS = -Wall -Werror -Wextra -fsanitize=address -g
+CFLAGS = -Wall -Werror -Wextra -fsanitize=address -g
 READLINEDIR = $(shell brew --prefix readline)
 NAME = minishell
 

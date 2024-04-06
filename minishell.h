@@ -5,15 +5,14 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/02/29 09:26:55 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/03/1 by ybou41li         ###   ########.fr       */
+/*   Created: 2024/04/06 01:54:38 by obouchta          #+#    #+#             */
+/*   Updated: 2024/04/06 03:34:20 by yboutsli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 
 # define MINISHELL_H
-# include <sys/ioctl.h>
 # include <termios.h>
 # include <signal.h>
 # include <limits.h>
@@ -26,8 +25,8 @@
 # include <termios.h>
 # include <readline/readline.h>
 # include <readline/history.h>
-#include <termios.h>
-#include <sys/ioctl.h>
+# include <termios.h>
+# include <sys/ioctl.h>
 # define BUFFER_SIZE			1
 # define ANSI_COLOR_CYAN		"\x1b[36m"
 # define ANSI_COLOR_RESET	"\x1b[0m"
@@ -55,7 +54,7 @@
 // #define malloc(x) __malloc(x, __LINE__, __FILE__)
 // #define free(x) __free(x, __LINE__, __FILE__)
 
-typedef enum
+typedef enum s_TokenType
 {
 	EXPRESSION,
 	CMD,
@@ -70,46 +69,46 @@ typedef enum
 	EQUAL,
 	VAR,
 	VALUE,
-}	TokenType;
+}	t_TokenType;
 
 typedef struct s_value
 {
 	char	*value;
 	int		vars_len;
 	int		*vars;
-}   t_value;
+}	t_value;
 
 typedef struct s_token
 {
-	char	*value;
-	t_value   *args;
-	int  args_len;
-	int		type;
-	int  vars_len;
-	int  *vars;
-	int	delim_flag;
-	int		is_var;
+	char			*value;
+	t_value			*args;
+	int				args_len;
+	int				type;
+	int				vars_len;
+	int				*vars;
+	int				delim_flag;
+	int				is_var;
 	struct s_token	*next;
 }	t_token;
 
 typedef struct s_file
 {
-	char *file;
-	int fd;
-	int type;
-	char *delimiter;
-	int	delim_flag;
-	int	is_var;
-}   t_file;
+	char	*file;
+	int		fd;
+	int		type;
+	char	*delimiter;
+	int		delim_flag;
+	int		is_var;
+}	t_file;
 
 typedef struct s_cmd
 {
-	char	*cmd;
-	char	**args;
-	t_file *infiles;
-	t_file *outfiles;
-	int		io_error;
-	char	*file_error;
+	char			*cmd;
+	char			**args;
+	t_file			*infiles;
+	t_file			*outfiles;
+	int				io_error;
+	char			*file_error;
 	struct s_cmd	*next;
 }	t_cmd;
 
@@ -122,27 +121,29 @@ typedef struct s_list
 	struct s_list	*next;
 }	t_list;
 
-typedef	struct s_free
+typedef struct s_free
 {
-	void	*ptr;
+	void			*ptr;
 	struct s_free	*next;
 }	t_free;
+
 typedef struct s_new
 {
 	t_list	*env;
 	t_free	**ptrs;
+	t_token *token;
 }	t_new;
 typedef struct t_signal
 {
-	struct	termios original_terminos;
-	t_list	**env_lst;
-	t_free	**ptrs;
-}	s_signal;
+	struct termios	original_terminos;
+	t_list			**env_lst;
+	t_free			**ptrs;
+}	t_signal;
 
 // Global Variable to handle the state of the terminal when Entering SIGQUIT
 // and to Set The Exit Status When Entering SIGINT
 
-s_signal	g_signal;
+t_signal	g_signal;
 
 // libft
 char	*ft_strcpy(char *dest, const char *src);
@@ -173,9 +174,8 @@ int		ft_atoi(const char *str);
 int		ft_lstsize(t_cmd *lst);
 int		is_ambig(char *value);
 
-
 // Parsing
-int 	char_is_valid(char c);
+int		char_is_valid(char c);
 int		is_whitespace(char c);
 void	handle_signals(int signum);
 int		ft_new_len(char *input);
@@ -189,7 +189,7 @@ int		calc_args_len_helper(char *input, int *i, int *len);
 int		calc_args_len(char *input, int i);
 t_token	*get_cmd(char *input, int *i, int prev_type, t_free **ptrs);
 int		calc_cmd_len(char *input, int *i);
-t_value *get_values(char *input, int *i, int *args_len, t_free **ptrs);
+t_value	*get_values(char *input, int *i, int *args_len, t_free **ptrs);
 int		valid_quotes(char *input);
 char	*quoted_cmd(char *input, int *i, t_free **ptrs);
 t_token	*get_in_out(char *input, int *i, t_token **tokens, t_free **ptrs);
@@ -236,35 +236,38 @@ char	*cmd_path(char *cmd, char **npath, t_free **ptrs, int *type);
 char	**execve_argv(t_cmd *cmd, t_free **ptrs);
 int		export(t_cmd *cmd, t_list **list_env, t_free **ptrs);
 int		echo(t_cmd *cmd);
-int 	unset(t_list **list_env, char **args, t_free **ptrs);
+int		unset(t_list **list_env, char **args, t_free **ptrs);
 char	**list2tab(t_list *list_env, t_free **ptrs);
 int		env_size(t_list *list_env);
 void	close2(int tab[2]);
 int		here_doc(t_file *infile, int mode, t_list *list_env, t_free **ptrs);
 int		new_execve(t_cmd *cmd, t_list **list_env, t_free **ptrs);
-int		execute_2(t_cmd **cmd_list, t_list **list_env, t_free **ptrs, int *io_fd);
-int 	new_fork();
+int		execute_2(t_cmd **cmd_list, t_list **list_env,
+			t_free **ptrs, int *io_fd);
+int		new_fork(void);
 int		valid(char *str);
-int 	nvalid_output(char *str1, char *str2);
+int		nvalid_output(char *str1, char *str2);
 void	env_lc_update(t_cmd *cmd, t_list **list_env, t_free **ptrs);
 int		ft_exit(t_cmd *cmd, t_list **list_env, t_free **ptrs);
 int		args_size(t_cmd *cmd);
 void	update_exit_status(t_list **list_env, int status, t_free **ptrs);
 int		handle_io(t_cmd *cmd, t_list *list_env, t_free **ptrs, int *io_fd);
-int		execute_1(t_cmd *cmd, t_list **list_env, t_free **ptrs,  int *io_fd);
-int	handle_io_helper1(t_cmd *cmd, t_list *list_env, t_free **ptrs, int *io_fd);
+int		execute_1(t_cmd *cmd, t_list **list_env, t_free **ptrs, int *io_fd);
+int		handle_io_helper1(t_cmd *cmd, t_list *list_env,
+			t_free **ptrs, int *io_fd);
 void	null_arg(t_list **list_env);
-int	handle_io_helper2(t_cmd *cmd, t_free **ptrs);
+int		handle_io_helper2(t_cmd *cmd, t_free **ptrs);
 void	case0(char *str, t_list **list_env, t_free **ptrs);
-int	valid_args(char **args, t_free **ptrs);
-int	new_perror(char *str);
-int	last_bs(char *str);
+int		valid_args(char **args, t_free **ptrs);
+int		new_perror(char *str);
+int		last_bs(char *str);
 char	*parse_heredoc(char *input, t_list *list_env, t_free **ptrs);
-int	*fd1(t_free **ptrs);
+int		*fd1(t_free **ptrs);
 void	fd2(int tab[2]);
-int	child_execution(int fd[2], t_cmd *cmd, t_list **list_env, t_free **ptrs);
-int child_utils(t_cmd *cmd, t_list **list_env, t_free **ptrs);
+int		child_utils(t_cmd *cmd, t_list **list_env, t_free **ptrs);
+int		child_execution(int fd[2], t_cmd *cmd, t_list **list_env, t_free **ptrs);
+
 // print
 void	print_it(t_token *tokens);
-void 	print_it_2(t_cmd *cmds);
+void	print_it_2(t_cmd *cmds);
 #endif
