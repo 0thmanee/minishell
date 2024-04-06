@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
+/*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/06 01:54:38 by obouchta          #+#    #+#             */
-/*   Updated: 2024/04/06 05:31:50 by yboutsli         ###   ########.fr       */
+/*   Updated: 2024/04/06 07:25:26 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -160,7 +160,6 @@ void	ft_putstr_fd(char *s, int fd);
 int		ft_atoi(const char *str);
 int		ft_lstsize(t_cmd *lst);
 int		is_ambig(char *value);
-char	*int_to_str(int num, t_free **ptrs);
 
 // Parsing
 int		char_is_valid(char c);
@@ -182,7 +181,7 @@ int		valid_quotes(char *input);
 char	*quoted_cmd(char *input, int *i, t_free **ptrs);
 t_token	*get_in_out(char *input, int *i, t_token **tokens, t_free **ptrs);
 t_token	*get_pipe(char *input, int *i, int type, t_free **ptrs);
-int		remove_quotes(t_token **tokens, t_free **ptrs);
+void	remove_quotes(t_token **tokens, t_free **ptrs);
 void	join_args(t_token **tokens, t_free **ptrs);
 int		extract_expr(char *src, char **dest, int *i, t_free **ptrs);
 char	*case_1(char *result, int *i, t_list *list_env, t_free **ptrs);
@@ -196,7 +195,7 @@ char	*expanding_1(t_list *list_env, t_token *token, t_free **ptrs);
 char	*expanding_2(t_list *list_env, t_value args, t_free **ptrs);
 char	*exp_init(int *i, int *count, char *new_result);
 void	utils2(int *i, int *count);
-int		final_command(t_token **tokens, t_cmd **command, t_free **ptrs);
+void	final_command(t_token **tokens, t_cmd **command, t_free **ptrs);
 void	check_for_var_helper_1(char *value, int *vars, int *i, int *j);
 void	check_for_var_helper_2(char *value, int *vars, int *i, int *j);
 void	check_for_var_helper_3(char *value, int *vars, int *i, int *j);
@@ -261,5 +260,6 @@ void	fd2(int tab[2]);
 int		child_utils(t_cmd *cmd, t_list **list_env, t_free **ptrs);
 int		child_execution(int fd[2], t_cmd *cmd,
 			t_list **list_env, t_free **ptrs);
+char	*int_to_str(int num, t_free **ptrs);
 
 #endif

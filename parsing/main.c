@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
+/*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 08:42:35 by obouchta          #+#    #+#             */
-/*   Updated: 2024/04/06 06:28:56 by yboutsli         ###   ########.fr       */
+/*   Updated: 2024/04/06 06:46:03 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,9 @@ int	process_input(char *input, t_list **list_env, t_free **ptrs)
 	(add_spaces(&input, ptrs), trim_input(&input, ptrs));
 	if (!input || !tokenize_input(&input, &tokens, ptrs))
 		return (0);
+	specify_vars(&tokens, ptrs);
+	expanding(&tokens, *list_env, ptrs);
+	remove_quotes(&tokens, ptrs);
 	if (syntax_error(tokens, &here_doc))
 	{
 		update_exit_status(list_env, 258, ptrs);
@@ -70,10 +73,7 @@ int	process_input(char *input, t_list **list_env, t_free **ptrs)
 			return (3);
 		return (2);
 	}
-	(join_args(&tokens, ptrs), specify_vars(&tokens, ptrs));
-	expanding(&tokens, *list_env, ptrs);
-	if (!remove_quotes(&tokens, ptrs) || !final_command(&tokens, &cmd, ptrs))
-		return (0);
+	(join_args(&tokens, ptrs), final_command(&tokens, &cmd, ptrs));
 	return (ft_execution(&cmd, list_env, ptrs), 1);
 }
 

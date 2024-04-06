@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/17 02:23:24 by obouchta          #+#    #+#             */
-/*   Updated: 2024/04/05 03:44:24 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/04/06 06:41:54 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void	extract_command(t_token *token, char **cmd, t_free **ptrs)
 	}
 }
 
-int	final_command(t_token **tokens, t_cmd **command, t_free **ptrs)
+void	final_command(t_token **tokens, t_cmd **command, t_free **ptrs)
 {
 	t_token	*curr;
 	t_cmd	*new_cmd;
@@ -49,5 +49,4 @@ int	final_command(t_token **tokens, t_cmd **command, t_free **ptrs)
 		while (curr && curr->type != PIPE)
 			curr = curr->next;
 	}
-	return (1);
 }
