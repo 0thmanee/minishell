@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/17 05:22:00 by obouchta          #+#    #+#             */
-/*   Updated: 2024/04/05 03:45:30 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/04/06 22:11:39 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,30 +26,30 @@ int	infiles_len(t_token *curr)
 	return (len);
 }
 
-void	extract_infiles_helper_1(t_token *curr, t_file **infiles,
+void	extract_infiles_helper_1(t_token *curr, t_file *infiles,
 	int *i, t_free **ptrs)
 {
-	(*infiles)[*i].file = ft_strdup(curr->value, ptrs);
-	(*infiles)[*i].fd = -1;
-	(*infiles)[*i].type = 0;
-	(*infiles)[*i].delim_flag = 0;
-	(*infiles)[*i].is_var = curr->is_var;
+	infiles[*i].file = ft_strdup(curr->value, ptrs);
+	infiles[*i].fd = -1;
+	infiles[*i].type = 0;
+	infiles[*i].delim_flag = 0;
+	infiles[*i].is_var = curr->vars_len;
 	(*i)++;
 }
 
-void	extract_infiles_helper_2(t_token *curr, t_file **infiles,
+void	extract_infiles_helper_2(t_token *curr, t_file *infiles,
 	int *i, t_free **ptrs)
 {
-	(*infiles)[*i].file = NULL;
-	(*infiles)[*i].fd = -1;
-	(*infiles)[*i].type = 1;
-	(*infiles)[*i].delimiter = ft_strdup(curr->value, ptrs);
-	(*infiles)[*i].delim_flag = curr->delim_flag;
-	(*infiles)[*i].is_var = curr->is_var;
+	infiles[*i].file = NULL;
+	infiles[*i].fd = -1;
+	infiles[*i].type = 1;
+	infiles[*i].delimiter = ft_strdup(curr->value, ptrs);
+	infiles[*i].delim_flag = curr->delim_flag;
+	infiles[*i].is_var = curr->vars_len;
 	(*i)++;
 }
 
-void	extract_infiles(t_token *token, t_file **infiles, t_free **ptrs)
+void	extract_infiles(t_token *token, t_cmd *cmd, t_free **ptrs)
 {
 	t_token	*curr;
 	int		i;
@@ -60,14 +60,14 @@ void	extract_infiles(t_token *token, t_file **infiles, t_free **ptrs)
 		curr = curr->next;
 	if (!infiles_len(curr))
 		return ;
-	*infiles = ft_malloc(ptrs, (infiles_len(curr) + 1) * sizeof(t_file));
+	cmd->infiles = ft_malloc(ptrs, (infiles_len(curr) + 1) * sizeof(t_file));
 	while (curr && curr->type != PIPE)
 	{
 		if (curr->type == IN_FILE)
-			extract_infiles_helper_1(curr, infiles, &i, ptrs);
+			extract_infiles_helper_1(curr, cmd->infiles, &i, ptrs);
 		if (curr->type == DELIMITER)
-			extract_infiles_helper_2(curr, infiles, &i, ptrs);
+			extract_infiles_helper_2(curr, cmd->infiles, &i, ptrs);
 		curr = curr->next;
 	}
-	(*infiles)[i].fd = -42;
+	cmd->infiles[i].fd = -42;
 }

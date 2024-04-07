@@ -6,13 +6,13 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/17 02:23:24 by obouchta          #+#    #+#             */
-/*   Updated: 2024/04/06 06:41:54 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/04/06 23:52:48 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	extract_command(t_token *token, char **cmd, t_free **ptrs)
+void	extract_command(t_token *token, t_cmd *cmd, t_free **ptrs)
 {
 	t_token	*curr;
 
@@ -22,7 +22,10 @@ void	extract_command(t_token *token, char **cmd, t_free **ptrs)
 	while (curr && curr->type != PIPE)
 	{
 		if (curr->type == CMD)
-			*cmd = ft_strdup(curr->value, ptrs);
+		{
+			cmd->cmd = ft_strdup(curr->value, ptrs);
+			cmd->cmd_is_var = curr->vars_len;
+		}
 		curr = curr->next;
 	}
 }
@@ -38,10 +41,11 @@ void	final_command(t_token **tokens, t_cmd **command, t_free **ptrs)
 		if (curr == *tokens || curr->type == PIPE)
 		{
 			new_cmd = ft_lstnew_3(ptrs);
-			extract_command(curr, &(new_cmd->cmd), ptrs);
-			extract_args(curr, &(new_cmd->args), &(new_cmd->cmd), ptrs);
-			extract_infiles(curr, &(new_cmd->infiles), ptrs);
-			extract_outfiles(curr, &(new_cmd->outfiles), ptrs);
+			extract_command(curr, new_cmd, ptrs);
+			extract_args(curr, new_cmd, ptrs);
+			extract_infiles(curr, new_cmd, ptrs);
+			extract_outfiles(curr, new_cmd, ptrs);
+			move_options(new_cmd, ptrs);
 			ft_lstadd_back_3(command, new_cmd);
 			if (curr && curr->type)
 				curr = curr->next;

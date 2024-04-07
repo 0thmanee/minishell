@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/16 03:19:46 by obouchta          #+#    #+#             */
-/*   Updated: 2024/04/06 05:02:29 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/04/06 22:12:14 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,8 +88,6 @@ void	specify_vars(t_token **tokens, t_free **ptrs)
 		curr->vars_len = calc_vars(curr->value);
 		if (curr->vars_len > 0)
 		{
-			if (curr->type == OUT_FILE || curr->type == IN_FILE)
-				curr->is_var = 1;
 			curr->vars = ft_malloc(ptrs, curr->vars_len * sizeof(int));
 			check_for_var(curr->value, curr->vars, curr->vars_len);
 		}

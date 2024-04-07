@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 21:41:01 by obouchta          #+#    #+#             */
-/*   Updated: 2024/04/06 05:09:07 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/04/06 22:12:37 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@ t_token	*ft_lstnew_1(char *value, int type, t_value *args, t_free **ptrs)
 	new_node->value = value;
 	new_node->args = args;
 	new_node->type = type;
-	new_node->is_var = 0;
 	new_node->next = NULL;
 	return (new_node);
 }

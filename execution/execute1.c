@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute1.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
+/*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 11:49:46 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/04/06 00:16:34 by yboutsli         ###   ########.fr       */
+/*   Updated: 2024/04/07 00:24:26 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,10 +47,10 @@ static int	child_execve(t_cmd *cmd, t_list **list_env, t_free **ptrs)
 	if (pid == 0)
 		new_execve(cmd, list_env, ptrs);
 	waitpid(pid, &status, 0);
+	if (WIFSIGNALED(status) && WTERMSIG(status) == SIGINT)
+		return (130);
 	if (WIFSIGNALED(status) && WTERMSIG(status) == SIGQUIT)
 		return (131);
-	if (WIFSIGNALED(status) && WTERMSIG(status) == SIGQUIT)
-		return (132);
 	return (WEXITSTATUS(status));
 }
 

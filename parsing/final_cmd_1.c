@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/17 04:30:01 by obouchta          #+#    #+#             */
-/*   Updated: 2024/04/05 03:45:01 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/04/06 21:12:24 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,18 +25,22 @@ int	tokens_len(t_token *tokens)
 	return (len);
 }
 
-void	get_cmd_from_args(t_token *curr, char **cmd, int *start, t_free **ptrs)
+int	get_cmd_from_args(t_token *curr, t_cmd *cmd, t_free **ptrs)
 {
 	int	i;
+	int	start;
 
 	i = 0;
+	start = 0;
 	while (i < curr->args_len && !curr->args[i].value)
 		i++;
 	if (i < curr->args_len)
 	{
-		*cmd = ft_strdup(curr->args[i].value, ptrs);
-		*start = i + 1;
+		cmd->cmd = ft_strdup(curr->args[i].value, ptrs);
+		cmd->cmd_is_var = curr->args[i].vars_len;
+		start = i + 1;
 	}
+	return (start);
 }
 
 int	get_new_args_len(t_token *token, int i)
@@ -53,7 +57,7 @@ int	get_new_args_len(t_token *token, int i)
 	return (len);
 }
 
-void	extract_args_helper(t_token *curr, char ***args, int i, t_free **ptrs)
+void	extract_args_helper(t_token *curr, t_cmd *cmd, int i, t_free **ptrs)
 {
 	int	new_len;
 	int	j;
@@ -62,37 +66,37 @@ void	extract_args_helper(t_token *curr, char ***args, int i, t_free **ptrs)
 	j = 0;
 	if (!new_len)
 		return ;
-	*args = ft_malloc(ptrs, (new_len + 1) * sizeof(char *));
+	cmd->args = ft_malloc(ptrs, (new_len + 1) * sizeof(char *));
 	while (i < curr->args_len)
 	{
 		if (curr->args[i].value)
 		{
-			(*args)[j] = ft_strdup(curr->args[i].value, ptrs);
+			(cmd->args)[j] = ft_strdup(curr->args[i].value, ptrs);
 			j++;
 		}
 		i++;
 	}
-	(*args)[j] = NULL;
+	(cmd->args)[j] = NULL;
 }
 
-void	extract_args(t_token *token, char ***args, char **cmd, t_free **ptrs)
+void	extract_args(t_token *token, t_cmd *cmd, t_free **ptrs)
 {
 	t_token	*curr;
 	int		i;
 	int		start;
 
 	curr = token;
-	start = 0;
 	i = 0;
+	start = 0;
 	if (curr && curr->type == PIPE)
 		curr = curr->next;
 	while (curr && curr->type != PIPE)
 	{
 		if (curr->type == CMD && curr->args_len)
 		{
-			if (!(*cmd))
-				get_cmd_from_args(curr, cmd, &start, ptrs);
-			extract_args_helper(curr, args, start, ptrs);
+			if (!cmd->cmd)
+				start = get_cmd_from_args(curr, cmd, ptrs);
+			extract_args_helper(curr, cmd, start, ptrs);
 		}
 		curr = curr->next;
 	}

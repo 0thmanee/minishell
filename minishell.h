@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/06 01:54:38 by obouchta          #+#    #+#             */
-/*   Updated: 2024/04/06 07:28:15 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/04/06 22:32:32 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,6 @@ typedef struct s_token
 	int				vars_len;
 	int				*vars;
 	int				delim_flag;
-	int				is_var;
 	struct s_token	*next;
 }	t_token;
 
@@ -85,7 +84,7 @@ typedef struct s_cmd
 	t_file			*infiles;
 	t_file			*outfiles;
 	int				io_error;
-	char			*file_error;
+	int				cmd_is_var;
 	struct s_cmd	*next;
 }	t_cmd;
 
@@ -150,6 +149,8 @@ void	ft_lstadd_back_3(t_cmd **lst, t_cmd *new_node);
 t_list	*ft_lstlast(t_list *lst);
 int		ft_isalpha(int c);
 char	**ft_split(char const *s, char c, t_free **ptrs);
+char	**ft_split_2(char *s, t_free **ptrs);
+size_t	words_counts_2(char const *s);
 int		is_whitespace(char c);
 void	*ft_malloc(t_free **list_aloc, size_t size);
 void	ft_free_ptr(t_free **list_aloc, void *ptr);
@@ -201,10 +202,11 @@ void	check_for_var_helper_2(char *value, int *vars, int *i, int *j);
 void	check_for_var_helper_3(char *value, int *vars, int *i, int *j);
 void	specify_vars(t_token **tokens, t_free **ptrs);
 int		tokens_len(t_token *tokens);
-void	extract_command(t_token *token, char **cmd, t_free **ptrs);
-void	extract_args(t_token *token, char ***args, char **cmd, t_free **ptrs);
-void	extract_infiles(t_token *token, t_file **infiles, t_free **ptrs);
-void	extract_outfiles(t_token *token, t_file **outfiles, t_free **ptrs);
+void	extract_command(t_token *token, t_cmd *cmd, t_free **ptrs);
+void	extract_args(t_token *token, t_cmd *cmd, t_free **ptrs);
+void	extract_infiles(t_token *token, t_cmd *cmd, t_free **ptrs);
+void	extract_outfiles(t_token *token, t_cmd *cmd, t_free **ptrs);
+void	move_options(t_cmd *cmd, t_free **ptrs);
 int		syntax_error(t_token *token, int *here_doc);
 int		check_braces(char *value);
 int		invalid_braces(t_token *curr);
