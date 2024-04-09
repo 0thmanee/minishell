@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execv_utils1.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yasser03 <yasser03@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 22:40:46 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/04/06 07:02:25 by yboutsli         ###   ########.fr       */
+/*   Updated: 2024/04/09 02:19:14 by yasser03         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,8 +45,8 @@ int	new_execve(t_cmd *cmd, t_list **list_env, t_free **ptrs)
 		new_execve1(cmd, args, env_tab, type[0]);
 	if (execve(cmd_fpath, args, env_tab) == -1)
 	{
-		ft_free_all(ptrs);
 		new_perror(cmd->cmd);
+		ft_free_all(ptrs);
 		exit (1);
 	}
 	return (0);
