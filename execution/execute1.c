@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute1.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yasser03 <yasser03@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 11:49:46 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/04/07 00:24:26 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/04/09 00:32:02 by yasser03         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ static int	execute1_utils(t_cmd *cmd, t_list **list_env, t_free **ptrs)
 	else if (!ft_strcmp(cmd->cmd, "pwd"))
 		pwd(list_env);
 	else if (!ft_strcmp(cmd->cmd, "exit"))
-		ft_exit(cmd, list_env, ptrs);
+		ft_exit(cmd, list_env, ptrs, 1);
 	else
 		status = child_execve(cmd, list_env, ptrs);
 	return (status);
