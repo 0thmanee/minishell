@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/06 01:54:38 by obouchta          #+#    #+#             */
-/*   Updated: 2024/04/06 22:32:32 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/04/13 11:54:17 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,18 +119,6 @@ typedef struct s_new_2
 	t_value	args;
 }	t_new_2;
 
-typedef struct t_signal
-{
-	struct termios	original_terminos;
-	t_list			**env_lst;
-	t_free			**ptrs;
-}	t_signal;
-
-// Global Variable to handle the state of the terminal when Entering SIGQUIT
-// and to Set The Exit Status When Entering SIGINT
-
-t_signal	g_signal;
-
 // libft
 char	*ft_strcpy(char *dest, const char *src);
 char	*ft_strjoin(char *s1, char *s2, t_free **ptrs);
@@ -166,6 +154,7 @@ int		is_ambig(char *value);
 int		char_is_valid(char c);
 int		is_whitespace(char c);
 void	handle_signals(int signum);
+void	heredoc_sigint(int signum);
 int		ft_new_len(char *input);
 int		quoted(char *input, int i);
 void	add_spaces(char **input, t_free **ptrs);

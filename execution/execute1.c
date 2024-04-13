@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute1.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yasser03 <yasser03@student.42.fr>          +#+  +:+       +#+        */
+/*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 11:49:46 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/04/09 00:32:02 by yasser03         ###   ########.fr       */
+/*   Updated: 2024/04/13 11:56:07 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,12 +37,14 @@ void	env_lc_update(t_cmd *cmd, t_list **list_env, t_free **ptrs)
 
 static int	child_execve(t_cmd *cmd, t_list **list_env, t_free **ptrs)
 {
-	int		pid;
-	int		status;
+	int				pid;
+	int				status;
+	struct termios	attr;
 
 	status = 0;
 	if (!(cmd->cmd) || cmd->io_error)
 		return (0);
+	tcgetattr(STDIN_FILENO, &attr);
 	pid = fork();
 	if (pid == 0)
 		new_execve(cmd, list_env, ptrs);
@@ -50,7 +52,11 @@ static int	child_execve(t_cmd *cmd, t_list **list_env, t_free **ptrs)
 	if (WIFSIGNALED(status) && WTERMSIG(status) == SIGINT)
 		return (130);
 	if (WIFSIGNALED(status) && WTERMSIG(status) == SIGQUIT)
+	{
+		tcsetattr(STDIN_FILENO, TCSANOW, &attr);
+		printf("Quit : 3\n");
 		return (131);
+	}
 	return (WEXITSTATUS(status));
 }
 
@@ -72,7 +78,7 @@ static int	execute1_utils(t_cmd *cmd, t_list **list_env, t_free **ptrs)
 	else if (!ft_strcmp(cmd->cmd, "pwd"))
 		pwd(list_env);
 	else if (!ft_strcmp(cmd->cmd, "exit"))
-		ft_exit(cmd, list_env, ptrs, 1);
+		ft_exit(cmd, list_env, ptrs);
 	else
 		status = child_execve(cmd, list_env, ptrs);
 	return (status);

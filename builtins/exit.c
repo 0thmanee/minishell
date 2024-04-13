@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yasser03 <yasser03@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/31 00:17:09 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/04/09 00:28:42 by yasser03         ###   ########.fr       */
+/*   Updated: 2024/04/05 16:26:50 by yboutsli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,15 +45,14 @@ void	ft_exit_utils(char *arg, t_free **ptrs)
 	exit(nb);
 }
 
-int	ft_exit(t_cmd *cmd, t_list **list_env, t_free **ptrs, int exit_print)
+int	ft_exit(t_cmd *cmd, t_list **list_env, t_free **ptrs)
 {
 	int	exit_stat;
 
 	if (!cmd->args)
 	{
 		exit_stat = ft_atoi(get_env(list_env, "?"));
-		if (exit_print)
-			printf("exit\n");
+		printf("exit\n");
 		ft_free_all(ptrs);
 		exit(exit_stat);
 	}

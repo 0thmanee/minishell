@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_utils1.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yasser03 <yasser03@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 16:29:49 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/04/09 02:25:23 by yasser03         ###   ########.fr       */
+/*   Updated: 2024/04/05 16:30:52 by yboutsli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ t_list	*env_lst(char **envp, t_free **ptrs)
 	i = -1;
 	while (envp[++i])
 	{
-		if (!ft_strncmp(envp[i], "OLDPWD", 6), !ft_strncmp(envp[i], "?", 1))
+		if (!ft_strncmp(envp[i], "OLDPWD", 6))
 			continue ;
 		j = 0;
 		while (envp[i][j] && envp[i][j] != '=')

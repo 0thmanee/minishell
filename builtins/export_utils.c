@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yasser03 <yasser03@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 16:08:36 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/04/08 18:55:17 by yasser03         ###   ########.fr       */
+/*   Updated: 2024/04/05 16:14:02 by yboutsli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int	valid(char *str)
 		return (1);
 	while (str[i] != '\0' && str[i] != '=' && str[i] != '+')
 	{
-		if (ft_isalpha(str[i]) && str[i] != '_')
+		if (!ft_isdigit(str[i]) && str[i] != '_')
 			return (1);
 		i++;
 	}
@@ -76,7 +76,7 @@ void	null_arg(t_list **list_env)
 		curr[1] = *list_env;
 		while (curr[1] && curr[1]->index != count)
 			curr[1] = curr[1]->next;
-		if (curr[1] && curr[1]->type == 0 && ft_strcmp(curr[1]->var, "_"))
+		if (curr[1] && curr[1]->type == 0 && ft_strcmp(curr[1]->value, "_"))
 		{
 			printf("declare -x %s", curr[1]->var);
 			if (curr[1]->value)

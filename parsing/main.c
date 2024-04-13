@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 08:42:35 by obouchta          #+#    #+#             */
-/*   Updated: 2024/04/07 00:24:55 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/04/13 12:01:03 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,8 +108,9 @@ void	read_input(t_list **list_env, t_free **ptrs)
 
 int	main(int ac, char **av, char **envp)
 {
-	t_list		*list_env;
-	t_free		*ptrs;
+	t_list			*list_env;
+	t_free			*ptrs;
+	struct termios	attr;
 
 	if (ac != 1)
 		return (write(2, "minishell: too many arguments\n", 30), 1);
@@ -119,10 +120,8 @@ int	main(int ac, char **av, char **envp)
 	if (!list_env)
 		env_init(&list_env, &ptrs);
 	ft_lstadd_back_2(&list_env, ft_lstnew_2("?", "0", 1, &ptrs));
-	if (!isatty(STDIN_FILENO))
-		exit(1);
-	tcgetattr(STDIN_FILENO, &g_signal.original_terminos);
-	g_signal.env_lst = &list_env;
-	g_signal.ptrs = &ptrs;
+	tcgetattr(STDIN_FILENO, &attr);
+	attr.c_lflag = ~ECHOCTL;
+	tcsetattr(STDIN_FILENO, TCSANOW, &attr);
 	read_input(&list_env, &ptrs);
 }
