@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 16:08:36 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/04/13 20:31:23 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/04/13 20:54:37 by yboutsli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int	valid(char *str)
 		return (1);
 	while (str[i] != '\0' && str[i] != '=' && str[i] != '+')
 	{
-		if (ft_isalpha(str[i]) && str[i] != '_')
+		if ((ft_isalpha(str[i]) && ft_isdigit(str[i])) && str[i] != '_')
 			return (1);
 		i++;
 	}
