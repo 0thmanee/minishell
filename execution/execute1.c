@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 11:49:46 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/04/13 11:56:07 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/04/13 20:32:30 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ static int	execute1_utils(t_cmd *cmd, t_list **list_env, t_free **ptrs)
 	else if (!ft_strcmp(cmd->cmd, "pwd"))
 		pwd(list_env);
 	else if (!ft_strcmp(cmd->cmd, "exit"))
-		ft_exit(cmd, list_env, ptrs);
+		ft_exit(cmd, list_env, ptrs, 1);
 	else
 		status = child_execve(cmd, list_env, ptrs);
 	return (status);

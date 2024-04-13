@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/06 01:54:38 by obouchta          #+#    #+#             */
-/*   Updated: 2024/04/13 11:54:17 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/04/13 20:33:53 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -232,7 +232,7 @@ int		new_fork(void);
 int		valid(char *str);
 int		nvalid_output(char *str1, char *str2);
 void	env_lc_update(t_cmd *cmd, t_list **list_env, t_free **ptrs);
-int		ft_exit(t_cmd *cmd, t_list **list_env, t_free **ptrs);
+int		ft_exit(t_cmd *cmd, t_list **list_env, t_free **ptrs, int exit_print);
 int		args_size(t_cmd *cmd);
 void	update_exit_status(t_list **list_env, int status, t_free **ptrs);
 int		handle_io(t_cmd *cmd, t_list *list_env, t_free **ptrs, int *io_fd);
