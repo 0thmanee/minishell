@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 07:19:14 by obouchta          #+#    #+#             */
-/*   Updated: 2024/04/05 03:52:39 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/04/13 14:44:06 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,7 +109,7 @@ t_token	*get_cmd(char *input, int *i, int prev_type, t_free **ptrs)
 	new_token = ft_lstnew_1(cmd, regonize_type_2(prev_type),
 			get_values(input, i, &args_len, ptrs), ptrs);
 	new_token->args_len = args_len;
-	if (input[*i])
+	if (args_len)
 		(*i)--;
 	return (new_token);
 }

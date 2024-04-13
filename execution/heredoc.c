@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 16:20:23 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/04/13 11:58:05 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/04/13 14:10:11 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,6 @@ static void	utils(int fd[2], t_file *in, int mode, t_new_1 *new)
 	char	*input;
 
 	signal(SIGINT, SIG_DFL);
-	rl_catch_signals = 1;
 	if (mode)
 		close(fd[0]);
 	input = readline("> ");
