@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 16:47:50 by obouchta          #+#    #+#             */
-/*   Updated: 2024/04/06 05:10:13 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/04/13 15:44:39 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,49 +63,4 @@ char	*ft_strdup(char *str, t_free **ptrs)
 	}
 	dest[i] = '\0';
 	return (dest);
-}
-
-char	*ft_strdup_1(char *str)
-{
-	char	*dest;
-	size_t	srclen;
-	size_t	i;
-
-	if (!str)
-		return (NULL);
-	srclen = ft_strlen(str);
-	dest = malloc(srclen + 1);
-	if (!dest)
-		return (NULL);
-	i = 0;
-	while (str[i])
-	{
-		dest[i] = str[i];
-		i++;
-	}
-	dest[i] = '\0';
-	return (dest);
-}
-
-char	*ft_substr_2(char const *s, int start, int len)
-{
-	int		i;
-	char	*subs;
-
-	if (!s)
-		return (NULL);
-	if (!len)
-		return (NULL);
-	subs = malloc(len + 1);
-	if (!subs)
-		return (NULL);
-	i = 0;
-	while (i < len && s[start])
-	{
-		subs[i] = s[start];
-		start++;
-		i++;
-	}
-	subs[i] = '\0';
-	return (subs);
 }

@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/06 05:10:23 by obouchta          #+#    #+#             */
-/*   Updated: 2024/04/06 05:12:42 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/04/13 15:44:51 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,35 +25,6 @@ int	ft_lstsize(t_cmd *lst)
 		count++;
 	}
 	return (count);
-}
-
-char	*ft_strjoin_2(char *s1, char *s2)
-{
-	size_t	len_s1;
-	size_t	len_s2;
-	char	*p;
-	size_t	i;
-	size_t	j;
-
-	i = 0;
-	j = 0;
-	len_s1 = ft_strlen(s1);
-	len_s2 = ft_strlen(s2);
-	p = (char *)malloc (sizeof(char) * (len_s1 + len_s2 + 1));
-	if (!p)
-		return (NULL);
-	while (i < len_s1 && s1[i])
-	{
-		p[i] = s1[i];
-		i++;
-	}
-	while (j < len_s2 && s2[j])
-	{
-		p[i + j] = s2[j];
-		j++;
-	}
-	p[j + i] = '\0';
-	return (p);
 }
 
 int	is_ambig(char *value)
