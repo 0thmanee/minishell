@@ -3,14 +3,35 @@
 /*                                                        :::      ::::::::   */
 /*   execv_utils1.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 22:40:46 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/04/13 12:04:34 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/04/14 21:09:33 by yboutsli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void	ft_check(char *cmd, t_free **ptrs)
+{
+	struct stat	file_stat;
+
+	if (access(cmd, F_OK | X_OK) == 0)
+	{
+		if (stat(cmd, &file_stat) == 0 && S_ISDIR(file_stat.st_mode))
+		{
+			ft_putstr_fd("minishell: ", 2);
+			(ft_putstr_fd(cmd, 2), ft_putstr_fd(": is a directory\n", 2));
+			(ft_free_all(ptrs), exit(126));
+		}
+		else if (stat(cmd, &file_stat) == 0 && S_ISLNK(file_stat.st_mode))
+		{
+			ft_putstr_fd("minishell: ", 2);
+			(ft_putstr_fd(cmd, 2), ft_putstr_fd(": is a symbolic link\n", 2));
+			(ft_free_all(ptrs), exit(126));
+		}
+	}
+}
 
 static void	new_execve1(t_cmd *cmd, char **args, char **env_tab, int type)
 {
@@ -45,6 +66,7 @@ int	new_execve(t_cmd *cmd, t_list **list_env, t_free **ptrs)
 		new_execve1(cmd, args, env_tab, type[0]);
 	if (execve(cmd_fpath, args, env_tab) == -1)
 	{
+		ft_check(cmd->cmd, ptrs);
 		new_perror(cmd->cmd);
 		ft_free_all(ptrs);
 		exit (1);
