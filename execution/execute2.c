@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute2.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 16:39:30 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/04/13 14:46:24 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/04/14 22:33:32 by yboutsli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ int	final_cmd(t_cmd *cmd, t_list **list_env, int io_fd[2], t_free **ptrs)
 	close(io_fd[1]);
 	dup2(io_fd[0], 0);
 	close(io_fd[0]);
+	waitpid(pid, &status, 0);
 	return (status);
 }
 
@@ -81,15 +82,16 @@ int	execute_2(t_cmd **cmd_list, t_list **list_env, t_free **ptrs, int *io_fd)
 	int		status;
 
 	curr = *cmd_list;
+	status = 0;
 	while (curr->next)
 	{
-		status = middle_cmds(curr, list_env, ptrs, io_fd);
+		middle_cmds(curr, list_env, ptrs, io_fd);
 		if (status == 1)
 			return (status);
 		curr = curr->next;
 	}
 	status = final_cmd(curr, list_env, io_fd, ptrs);
-	while (waitpid(0, &status, 0) != -1)
+	while (waitpid(0, NULL, 0) != -1)
 		;
 	return (WEXITSTATUS(status));
 }

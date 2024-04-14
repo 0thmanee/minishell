@@ -6,7 +6,7 @@
 /*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 22:40:46 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/04/14 21:09:33 by yboutsli         ###   ########.fr       */
+/*   Updated: 2024/04/14 22:19:55 by yboutsli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,12 +22,6 @@ void	ft_check(char *cmd, t_free **ptrs)
 		{
 			ft_putstr_fd("minishell: ", 2);
 			(ft_putstr_fd(cmd, 2), ft_putstr_fd(": is a directory\n", 2));
-			(ft_free_all(ptrs), exit(126));
-		}
-		else if (stat(cmd, &file_stat) == 0 && S_ISLNK(file_stat.st_mode))
-		{
-			ft_putstr_fd("minishell: ", 2);
-			(ft_putstr_fd(cmd, 2), ft_putstr_fd(": is a symbolic link\n", 2));
 			(ft_free_all(ptrs), exit(126));
 		}
 	}
@@ -68,8 +62,9 @@ int	new_execve(t_cmd *cmd, t_list **list_env, t_free **ptrs)
 	{
 		ft_check(cmd->cmd, ptrs);
 		new_perror(cmd->cmd);
-		ft_free_all(ptrs);
-		exit (1);
+		if (access(cmd->cmd, F_OK | X_OK) == -1)
+			(ft_free_all(ptrs), exit (127));
+		(ft_free_all(ptrs), exit (1));
 	}
 	return (0);
 }
