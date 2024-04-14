@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution_2.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
+/*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 14:59:37 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/04/06 05:28:34 by yboutsli         ###   ########.fr       */
+/*   Updated: 2024/04/14 16:48:23 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,15 +25,16 @@ void	ft_free(char **tab, t_free **ptrs)
 	ft_free_ptr(ptrs, tab);
 }
 
-static void	index_init(int *i1, int *i2, t_list **list_env, t_list **current)
+static void	index_init(int *i, t_list **list_env, t_list **current,
+	t_free **ptrs)
 {
 	char	*tmp;
 
-	*i1 = 0;
-	*i2 = 0;
-	tmp = get_env(list_env, "SHLVL");
+	i[0] = 0;
+	i[1] = 0;
+	tmp = get_env(list_env, "SHLVL", 0, ptrs);
 	if (!tmp)
-		*i2 = 1;
+		i[1] = 1;
 	*current = *list_env;
 }
 
@@ -65,7 +66,7 @@ char	**list2tab(t_list *list_env, t_free **ptrs, int type)
 	char	*tmp[2];
 	int		i[2];
 
-	index_init(&i[0], &i[1], &list_env, &current);
+	index_init(i, &list_env, &current, ptrs);
 	tab = ft_malloc(ptrs, (env_size(list_env) + 1 + i[1]) * sizeof(char *));
 	while (current)
 	{

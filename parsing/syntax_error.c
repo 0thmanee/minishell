@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/20 03:10:42 by obouchta          #+#    #+#             */
-/*   Updated: 2024/04/06 07:38:05 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/04/14 16:45:24 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ int	syntax_error(t_token *token, int *here_doc)
 			&& (!token->next || token->next->type == PIPE))
 			return (1);
 		else if (invalid_braces(token))
-			return (1);
+			return (2);
 		token = token->next;
 	}
 	return (0);
@@ -86,4 +86,30 @@ void	open_heredoc(t_token *tokens, int here_doc, int *s_error)
 			break ;
 		}
 	}
+}
+
+int	check_syntax(t_token *tokens)
+{
+	int	here_doc;
+	int	s_error;
+	int	mode;
+
+	here_doc = 0;
+	s_error = 1;
+	mode = syntax_error(tokens, &here_doc);
+	if (mode)
+	{
+		exit_status(0, 258);
+		if (here_doc)
+			open_heredoc(tokens, here_doc, &s_error);
+		if (s_error)
+		{
+			if (mode == 1)
+				ft_putstr_fd("minishell: syntax error\n", 2);
+			else if (mode == 2)
+				ft_putstr_fd("minishell: bad substitution\n", 2);
+		}
+		return (1);
+	}
+	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/06 03:41:44 by obouchta          #+#    #+#             */
-/*   Updated: 2024/04/06 03:41:59 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/04/14 16:52:37 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,25 +60,26 @@ void	case_4_helper(char **result, int *i, t_free **ptrs)
 char	*case_4(char *result, int *i, t_list *list_env, t_free **ptrs)
 {
 	int		j;
-	char	*tmp;
-	char	*var;
-	char	*value;
+	char	*str[3];
+	int		is_exit;
 	int		tab[2];
 
 	j = 2;
-	while (result[j + *i] && result[j + *i] != '}')
-		j++;
-	var = ft_substr(result, *i + 2, j - 2, ptrs);
-	value = get_env(&list_env, var);
-	(ft_free_ptr(ptrs, var), var = NULL);
-	if (value != NULL)
+	is_exit = 0;
+	if (result[j + *i] == '?')
+		exit_case(&is_exit, &j);
+	else
+		while (result[j + *i] && result[j + *i] != '}')
+			j++;
+	str[1] = ft_substr(result, *i + 2, j - 2, ptrs);
+	str[2] = get_env(&list_env, str[1], is_exit, ptrs);
+	(ft_free_ptr(ptrs, str[1]), str[1] = NULL);
+	if (str[2] != NULL)
 	{
-		tmp = result;
-		tab[0] = *i;
-		tab[1] = *i + j + 1;
-		result = replace_str(tmp, tab, value, ptrs);
-		*i += ft_strlen(value) + 1;
-		ft_free_ptr(ptrs, tmp);
+		str[0] = result;
+		make_tab(tab, *i, *i + j + 1);
+		result = replace_str(str[0], tab, str[2], ptrs);
+		utils1(i, ft_strlen(str[2]) + 1, str, ptrs);
 	}
 	else
 		case_4_helper(&result, i, ptrs);

@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/31 00:17:09 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/04/13 20:33:47 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/04/14 16:45:08 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,13 +45,13 @@ void	ft_exit_utils(char *arg, t_free **ptrs)
 	exit(nb);
 }
 
-int	ft_exit(t_cmd *cmd, t_list **list_env, t_free **ptrs, int exit_print)
+int	ft_exit(t_cmd *cmd, t_free **ptrs, int exit_print)
 {
 	int	exit_stat;
 
 	if (!cmd->args)
 	{
-		exit_stat = ft_atoi(get_env(list_env, "?"));
+		exit_stat = exit_status(1, -1);
 		if (exit_print)
 			printf("exit\n");
 		ft_free_all(ptrs);
@@ -62,4 +62,14 @@ int	ft_exit(t_cmd *cmd, t_list **list_env, t_free **ptrs, int exit_print)
 	else
 		ft_exit_utils(cmd->args[0], ptrs);
 	return (0);
+}
+
+int	exit_status(int mode, int new_status)
+{
+	static int	status = 0;
+
+	if (mode)
+		return (status);
+	status = new_status;
+	return (-1);
 }

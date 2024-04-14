@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 11:49:46 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/04/13 20:32:30 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/04/14 15:52:41 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ void	env_lc_update(t_cmd *cmd, t_list **list_env, t_free **ptrs)
 			i++;
 		new_var = ft_strdup(cmd->args[i], ptrs);
 	}
-	value = get_env(list_env, "_");
+	value = get_env(list_env, "_", 0, ptrs);
 	if (!value)
 		ft_lstadd_back_2(list_env, ft_lstnew_2("_", new_var, 0, ptrs));
 	else
@@ -76,9 +76,9 @@ static int	execute1_utils(t_cmd *cmd, t_list **list_env, t_free **ptrs)
 	else if (!ft_strcmp(cmd->cmd, "unset"))
 		status = unset(list_env, cmd->args, ptrs);
 	else if (!ft_strcmp(cmd->cmd, "pwd"))
-		pwd(list_env);
+		pwd(list_env, ptrs);
 	else if (!ft_strcmp(cmd->cmd, "exit"))
-		ft_exit(cmd, list_env, ptrs, 1);
+		ft_exit(cmd, ptrs, 1);
 	else
 		status = child_execve(cmd, list_env, ptrs);
 	return (status);

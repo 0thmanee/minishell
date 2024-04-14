@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 23:00:44 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/04/13 20:32:54 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/04/14 15:52:44 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,9 +28,9 @@ int	child_utils(t_cmd *cmd, t_list **list_env, t_free **ptrs)
 	else if (!ft_strcmp(cmd->cmd, "unset"))
 		status = unset(list_env, cmd->args, ptrs);
 	else if (!ft_strcmp(cmd->cmd, "pwd"))
-		pwd(list_env);
+		pwd(list_env, ptrs);
 	else if (!ft_strcmp(cmd->cmd, "exit"))
-		ft_exit(cmd, list_env, ptrs, 0);
+		ft_exit(cmd, ptrs, 0);
 	else
 		status = new_execve(cmd, list_env, ptrs);
 	return (status);

@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/06 03:38:21 by obouchta          #+#    #+#             */
-/*   Updated: 2024/04/06 03:41:42 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/04/14 16:52:28 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,9 +49,9 @@ void	make_tab(int tab[2], int i, int j)
 	tab[1] = j;
 }
 
-void	utils1(int *i, char *str[3], t_free **ptrs)
+void	utils1(int *i, int len, char *str[3], t_free **ptrs)
 {
-	*i += ft_strlen(str[2]);
+	*i += len;
 	ft_free_ptr(ptrs, str[0]);
 }
 
@@ -70,14 +70,14 @@ char	*case_1(char *result, int *i, t_list *list_env, t_free **ptrs)
 		while (!char_is_valid(result[j + *i]))
 			j++;
 	str[1] = ft_substr(result, *i + 1, j - 1, ptrs);
-	str[2] = get_env(&list_env, str[1]);
+	str[2] = get_env(&list_env, str[1], is_exit, ptrs);
 	ft_free_ptr(ptrs, str[1]);
 	if (str[2] != NULL)
 	{
 		str[0] = result;
 		make_tab(tab, *i, *i + j);
 		result = replace_str(str[0], tab, str[2], ptrs);
-		utils1(i, str, ptrs);
+		utils1(i, ft_strlen(str[2]), str, ptrs);
 	}
 	else if (!is_exit)
 		case_1_helper(&result, i, ptrs);

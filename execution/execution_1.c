@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution_1.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
+/*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/12 03:41:21 by yasser03          #+#    #+#             */
-/*   Updated: 2024/04/05 22:57:30 by yboutsli         ###   ########.fr       */
+/*   Updated: 2024/04/14 15:55:15 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,19 +53,6 @@ int	env_size(t_list *list_env)
 	return (count);
 }
 
-void	update_exit_status(t_list **list_env, int status, t_free **ptrs)
-{
-	t_list	*curr;
-
-	if (!list_env)
-		return ;
-	curr = *list_env;
-	while (curr && ft_strcmp(curr->var, "?"))
-		curr = curr->next;
-	ft_free_ptr(ptrs, curr->value);
-	curr->value = int_to_str(status, ptrs);
-}
-
 int	ft_execution(t_cmd **cmd, t_list **list_env, t_free **ptrs)
 {
 	int	status;
@@ -77,7 +64,7 @@ int	ft_execution(t_cmd **cmd, t_list **list_env, t_free **ptrs)
 		status = execute_1(*cmd, list_env, ptrs, fd);
 	else
 		status = execute_2(cmd, list_env, ptrs, fd);
-	update_exit_status(list_env, status, ptrs);
+	exit_status(0, status);
 	fd2(fd);
 	ft_free_ptr(ptrs, fd);
 	return (status);

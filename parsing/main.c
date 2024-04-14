@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 08:42:35 by obouchta          #+#    #+#             */
-/*   Updated: 2024/04/13 19:38:17 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/04/14 16:45:14 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,39 +40,28 @@ int	tokenize_input(char **input, t_token **tokens, t_free **ptrs)
 	return ((ft_free_ptr(ptrs, *input)), 1);
 }
 
-void	init_data(t_token **tokens, t_cmd **cmd, int *here_doc, int *s_error)
+void	init_data(t_token **tokens, t_cmd **cmd)
 {
 	*tokens = NULL;
 	*cmd = NULL;
-	*here_doc = 0;
-	*s_error = 1;
 }
 
 int	process_input(char *input, t_list **list_env, t_free **ptrs)
 {
 	t_token	*tokens;
 	t_cmd	*cmd;
-	int		here_doc;
-	int		s_error;
 
-	init_data(&tokens, &cmd, &here_doc, &s_error);
+	init_data(&tokens, &cmd);
 	if (!valid_quotes(input))
 		return (2);
 	(add_spaces(&input, ptrs), trim_input(&input, ptrs));
 	if (!input || !tokenize_input(&input, &tokens, ptrs))
 		return (0);
+	if (check_syntax(tokens))
+		return (1);
 	specify_vars(&tokens, ptrs);
 	expanding(&tokens, *list_env, ptrs);
 	remove_quotes(&tokens, ptrs);
-	if (syntax_error(tokens, &here_doc))
-	{
-		update_exit_status(list_env, 258, ptrs);
-		if (here_doc)
-			open_heredoc(tokens, here_doc, &s_error);
-		if (!s_error)
-			return (3);
-		return (2);
-	}
 	(join_args(&tokens, ptrs), final_command(&tokens, &cmd, ptrs));
 	return (ft_execution(&cmd, list_env, ptrs), 1);
 }
@@ -80,7 +69,6 @@ int	process_input(char *input, t_list **list_env, t_free **ptrs)
 void	read_input(t_list **list_env, t_free **ptrs)
 {
 	char	*input;
-	int		exit_stat;
 
 	(signal(SIGINT, handle_signals), signal(SIGQUIT, handle_signals));
 	rl_catch_signals = 0;
@@ -88,10 +76,7 @@ void	read_input(t_list **list_env, t_free **ptrs)
 	{
 		input = readline("Minishell $> ");
 		if (!input)
-		{
-			exit_stat = ft_atoi(get_env(list_env, "?"));
-			(ft_free_all(ptrs), printf("exit\n"), exit(exit_stat));
-		}
+			(ft_free_all(ptrs), printf("exit\n"), exit(exit_status(1, -1)));
 		if (!input[0])
 		{
 			free(input);
@@ -101,8 +86,7 @@ void	read_input(t_list **list_env, t_free **ptrs)
 			add_history(input);
 		else if (history_length)
 			ft_strcpy(input, history_get(history_length)->line);
-		if (process_input(input, list_env, ptrs) == 2)
-			ft_putstr_fd("minishell: syntax error\n", 2);
+		process_input(input, list_env, ptrs);
 	}
 }
 
@@ -119,7 +103,6 @@ int	main(int ac, char **av, char **envp)
 	list_env = env_lst(envp, &ptrs);
 	if (!list_env)
 		env_init(&list_env, &ptrs);
-	ft_lstadd_back_2(&list_env, ft_lstnew_2("?", "0", 1, &ptrs));
 	tcgetattr(STDIN_FILENO, &attr);
 	attr.c_lflag = ~ECHOCTL;
 	tcsetattr(STDIN_FILENO, TCSANOW, &attr);

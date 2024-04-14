@@ -3,19 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   env_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
+/*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 20:29:05 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/04/05 16:29:36 by yboutsli         ###   ########.fr       */
+/*   Updated: 2024/04/14 15:44:31 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	*get_env(t_list **head, char *env_var)
+char	*get_env(t_list **head, char *env_var, int is_exit, t_free **ptrs)
 {
 	t_list	*current;
 
+	if (is_exit)
+		return (int_to_str(exit_status(1, -1), ptrs));
 	if (!head)
 		return (NULL);
 	current = *head;

@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 04:48:49 by obouchta          #+#    #+#             */
-/*   Updated: 2024/04/05 04:51:00 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/04/14 16:29:25 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,11 @@ int	check_braces_helper(char *value, int *i)
 {
 	while (value[*i] && value[*i] != '}' && value[*i] != '\"')
 	{
-		if (is_whitespace(value[*i]) || char_is_valid(value[*i])
+		if (char_is_valid(value[*i]) && value[*i + 1]
+			&& !char_is_valid(value[*i + 1]))
+			return (1);
+		if (is_whitespace(value[*i])
+			|| (char_is_valid(value[*i]) && value[*i] != '?')
 			|| value[*i] == '{' || value[(*i)++] == '$')
 			return (1);
 	}
@@ -65,7 +69,9 @@ int	invalid_braces(t_token *curr)
 		{
 			if (ft_strchr(curr->value, '{')
 				&& check_braces(curr->args[i].value))
+			{
 				return (1);
+			}
 			i++;
 		}
 	}

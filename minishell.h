@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/06 01:54:38 by obouchta          #+#    #+#             */
-/*   Updated: 2024/04/13 20:33:53 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/04/14 16:52:50 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -185,6 +185,8 @@ char	*expanding_1(t_list *list_env, t_token *token, t_free **ptrs);
 char	*expanding_2(t_list *list_env, t_value args, t_free **ptrs);
 char	*exp_init(int *i, int *count, char *new_result);
 void	utils2(int *i, int *count);
+void	make_tab(int tab[2], int i, int j);
+void	utils1(int *i, int len, char *str[3], t_free **ptrs);
 void	final_command(t_token **tokens, t_cmd **command, t_free **ptrs);
 void	check_for_var_helper_1(char *value, int *vars, int *i, int *j);
 void	check_for_var_helper_2(char *value, int *vars, int *i, int *j);
@@ -197,12 +199,15 @@ void	extract_infiles(t_token *token, t_cmd *cmd, t_free **ptrs);
 void	extract_outfiles(t_token *token, t_cmd *cmd, t_free **ptrs);
 void	move_options(t_cmd *cmd, t_free **ptrs);
 int		syntax_error(t_token *token, int *here_doc);
+int		check_syntax(t_token *tokens);
 int		check_braces(char *value);
 int		invalid_braces(t_token *curr);
 void	open_heredoc(t_token *tokens, int here_doc, int *s_error);
+int		exit_status(int mode, int new_status);
+void	exit_case(int *is_exit, int *j);
 
 // Execution
-char	*get_env(t_list **head, char *env_var);
+char	*get_env(t_list **head, char *env_var, int is_exit, t_free **ptrs);
 t_list	*get_env_node(t_list **list_env, char *var);
 int		var_exist(char *var, t_list *list_env);
 int		env_update(t_list **head, char *env_var, char *new, t_free **ptrs);
@@ -210,7 +215,7 @@ t_list	*env_lst(char **envp, t_free **ptrs);
 void	env_init(t_list	**env, t_free **ptrs);
 int		cd(char **args, t_list **env, t_free **ptrs);
 int		env(t_list **list_env, t_cmd *cmd, t_free **ptrs);
-int		pwd(t_list **list_env);
+int		pwd(t_list **list_env, t_free **ptrs);
 int		set_valid(char *str);
 int		add_set(t_list **set, char *input);
 int		ft_execution(t_cmd **cmd, t_list **list_env, t_free **ptrs);
@@ -232,7 +237,7 @@ int		new_fork(void);
 int		valid(char *str);
 int		nvalid_output(char *str1, char *str2);
 void	env_lc_update(t_cmd *cmd, t_list **list_env, t_free **ptrs);
-int		ft_exit(t_cmd *cmd, t_list **list_env, t_free **ptrs, int exit_print);
+int		ft_exit(t_cmd *cmd, t_free **ptrs, int exit_print);
 int		args_size(t_cmd *cmd);
 void	update_exit_status(t_list **list_env, int status, t_free **ptrs);
 int		handle_io(t_cmd *cmd, t_list *list_env, t_free **ptrs, int *io_fd);

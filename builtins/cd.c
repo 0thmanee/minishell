@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
+/*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 09:26:13 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/04/05 16:26:10 by yboutsli         ###   ########.fr       */
+/*   Updated: 2024/04/14 15:45:34 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ static int	cd_dir(char *str, t_list **list_env, t_free **ptrs)
 	char	*pwd;
 
 	status = 0;
-	pwd = get_env(list_env, "PWD");
+	pwd = get_env(list_env, "PWD", 0, ptrs);
 	if (!last_bs(pwd))
 		tmp[0] = ft_strdup(str, ptrs);
 	else
@@ -59,7 +59,7 @@ static int	cd_root(char *str, t_list **list_env, t_free **ptrs)
 	char	*cwd;
 	char	*tmp;
 
-	cwd = get_env(list_env, "PWD");
+	cwd = get_env(list_env, "PWD", 0, ptrs);
 	status = 0;
 	if (chdir(str) == -1)
 	{
@@ -86,8 +86,8 @@ static int	cd_home(t_list **env, char *str, t_free **ptrs)
 	char	*home;
 	char	*cwd;
 
-	cwd = get_env(env, "PWD");
-	home = get_env(env, "HOME");
+	cwd = get_env(env, "PWD", 0, ptrs);
+	home = get_env(env, "HOME", 0, ptrs);
 	if (!home)
 	{
 		ft_putstr_fd("minishell: cd: HOME not set\n", 2);

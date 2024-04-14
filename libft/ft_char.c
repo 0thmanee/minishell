@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 19:21:40 by obouchta          #+#    #+#             */
-/*   Updated: 2024/04/13 16:19:08 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/04/14 16:15:50 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ int	ft_strchr(char *str, char c)
 	while (str[i])
 	{
 		if (str[i] == c)
-			return (i + 1);
+			return (1);
 		i++;
 	}
 	return (0);
