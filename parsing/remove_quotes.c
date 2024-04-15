@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 17:17:09 by obouchta          #+#    #+#             */
-/*   Updated: 2024/04/13 15:37:29 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/04/16 00:48:19 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,11 +42,15 @@ int	no_quotes_len(char *cmd)
 	{
 		if (cmd[i] == '\'' || cmd[i] == '\"')
 		{
-			len -= 2;
+			len--;
 			quote = cmd[i++];
 			while (cmd[i] && cmd[i] != quote)
 				i++;
-			i++;
+			if (cmd[i])
+			{
+				i++;
+				len--;
+			}
 		}
 		else
 			i++;
@@ -57,28 +61,28 @@ int	no_quotes_len(char *cmd)
 char	*no_quoted_value(char *cmd, int len, t_free **ptrs)
 {
 	char	*new_cmd;
-	int		i;
-	int		j;
+	int		indxs[2];
 	char	quote;
 
 	if (!cmd)
 		return (NULL);
-	i = 0;
-	j = 0;
+	indxs[0] = 0;
+	indxs[1] = 0;
 	new_cmd = ft_malloc(ptrs, len + 1);
-	while (cmd[i])
+	while (cmd[indxs[0]])
 	{
-		if (cmd[i] == '\'' || cmd[i] == '\"')
+		if (cmd[indxs[0]] == '\'' || cmd[indxs[0]] == '\"')
 		{
-			quote = cmd[i++];
-			while (cmd[i] != quote)
-				new_cmd[j++] = cmd[i++];
-			i++;
+			quote = cmd[indxs[0]++];
+			while (cmd[indxs[0]] && cmd[indxs[0]] != quote)
+				new_cmd[indxs[1]++] = cmd[indxs[0]++];
+			if (cmd[indxs[0]])
+				indxs[0]++;
 		}
 		else
-			new_cmd[j++] = cmd[i++];
+			new_cmd[indxs[1]++] = cmd[indxs[0]++];
 	}
-	new_cmd[j] = '\0';
+	new_cmd[indxs[1]] = '\0';
 	return (new_cmd);
 }
 
