@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution_2.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 14:59:37 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/04/14 16:48:23 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/04/17 19:02:00 by yboutsli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,26 +62,26 @@ static void	creat_tabs(char **tab, t_free **ptrs, char *tmp1)
 char	**list2tab(t_list *list_env, t_free **ptrs, int type)
 {
 	char	**tab;
-	t_list	*current;
+	t_list	*curr;
 	char	*tmp[2];
 	int		i[2];
 
-	index_init(i, &list_env, &current, ptrs);
+	index_init(i, &list_env, &curr, ptrs);
 	tab = ft_malloc(ptrs, (env_size(list_env) + 1 + i[1]) * sizeof(char *));
-	while (current)
+	while (curr)
 	{
-		if (current->var && current->value)
+		if (curr->var && curr->value && curr->type == 0)
 		{
-			tmp[0] = ft_strjoin(current->var, "=", ptrs);
-			if (!ft_strcmp(current->var, "SHLVL") && type == 1)
-				tmp[1] = list2tab_1(current->value, ptrs, tmp[0]);
+			tmp[0] = ft_strjoin(curr->var, "=", ptrs);
+			if (!ft_strcmp(curr->var, "SHLVL") && type == 1)
+				tmp[1] = list2tab_1(curr->value, ptrs, tmp[0]);
 			else
-				tmp[1] = ft_strjoin(tmp[0], current->value, ptrs);
+				tmp[1] = ft_strjoin(tmp[0], curr->value, ptrs);
 			ft_free_ptr(ptrs, tmp[0]);
 			creat_tabs(&tab[i[0]], ptrs, tmp[1]);
 			i[0]++;
 		}
-		current = current->next;
+		curr = curr->next;
 	}
 	if (i[1] == 1)
 		tab[i[0]++] = ft_strdup("SHLVL=1", ptrs);
