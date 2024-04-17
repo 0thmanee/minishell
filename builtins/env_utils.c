@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 20:29:05 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/04/14 15:44:31 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/04/17 22:29:50 by yboutsli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,20 +32,22 @@ char	*get_env(t_list **head, char *env_var, int is_exit, t_free **ptrs)
 
 int	env_update(t_list **head, char *env_var, char *new, t_free **ptrs)
 {
-	t_list	*current;
+	t_list	*curr;
 
-	current = *head;
-	while (current)
+	curr = *head;
+	while (curr)
 	{
-		if (!ft_strcmp(current->var, env_var) && current->type == 0)
+		if (!ft_strcmp(env_var, "OLDPWD") && !ft_strcmp(curr->var, "OLDPWD"))
+			curr->type = 0;
+		if (!ft_strcmp(curr->var, env_var) && curr->type == 0)
 		{
-			ft_free_ptr(ptrs, current->value);
-			current->value = ft_strdup(new, ptrs);
+			ft_free_ptr(ptrs, curr->value);
+			curr->value = ft_strdup(new, ptrs);
 			return (0);
 		}
-		current = current->next;
+		curr = curr->next;
 	}
-	if (!current)
+	if (!curr)
 		ft_lstadd_back_2(head, ft_lstnew_2(env_var, new, 0, ptrs));
 	return (1);
 }

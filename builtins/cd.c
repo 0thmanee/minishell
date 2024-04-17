@@ -6,7 +6,7 @@
 /*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 09:26:13 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/04/14 21:23:23 by yboutsli         ###   ########.fr       */
+/*   Updated: 2024/04/17 22:50:06 by yboutsli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,8 @@ static void	cd_dir_utils(t_list **list_env, char *pwd,
 	if (cwd)
 	{
 		env_update(list_env, "OLDPWD", pwd, ptrs);
-		env_update(list_env, "PWD", cwd, ptrs);
+		if (!var_exist("PWD", *list_env))
+			env_update(list_env, "PWD", cwd, ptrs);
 		free(cwd);
 	}
 	else
@@ -29,7 +30,8 @@ static void	cd_dir_utils(t_list **list_env, char *pwd,
 		ft_putstr_fd("cd: error retrieving current directory: getcwd: "
 			"cannot access parent directories: No such file or directory\n", 2);
 		env_update(list_env, "OLDPWD", pwd, ptrs);
-		env_update(list_env, "PWD", tmp[1], ptrs);
+		if (!var_exist("PWD", *list_env))
+			env_update(list_env, "PWD", tmp[1], ptrs);
 	}
 }
 
@@ -74,7 +76,8 @@ static int	cd_root(char *str, t_list **list_env, t_free **ptrs)
 		if (tmp)
 		{
 			env_update(list_env, "OLDPWD", cwd, ptrs);
-			env_update(list_env, "PWD", tmp, ptrs);
+			if (!var_exist("PWD", *list_env))
+				env_update(list_env, "PWD", tmp, ptrs);
 			free(tmp);
 		}
 	}
@@ -98,7 +101,8 @@ static int	cd_home(t_list **env, char *str, t_free **ptrs)
 	else
 	{
 		env_update(env, "OLDPWD", cwd, ptrs);
-		env_update(env, "PWD", home, ptrs);
+		if (!var_exist("PWD", *env))
+			env_update(env, "PWD", home, ptrs);
 	}
 	return (0);
 }

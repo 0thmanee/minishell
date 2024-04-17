@@ -6,7 +6,7 @@
 /*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 14:59:37 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/04/17 19:02:00 by yboutsli         ###   ########.fr       */
+/*   Updated: 2024/04/17 20:40:45 by yboutsli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,8 @@ char	**list2tab(t_list *list_env, t_free **ptrs, int type)
 	char	*tmp[2];
 	int		i[2];
 
+	if (!list_env)
+		return (NULL);
 	index_init(i, &list_env, &curr, ptrs);
 	tab = ft_malloc(ptrs, (env_size(list_env) + 1 + i[1]) * sizeof(char *));
 	while (curr)
