@@ -6,7 +6,7 @@
 /*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 14:59:37 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/04/17 20:40:45 by yboutsli         ###   ########.fr       */
+/*   Updated: 2024/04/17 23:04:21 by yboutsli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,9 +79,7 @@ char	**list2tab(t_list *list_env, t_free **ptrs, int type)
 				tmp[1] = list2tab_1(curr->value, ptrs, tmp[0]);
 			else
 				tmp[1] = ft_strjoin(tmp[0], curr->value, ptrs);
-			ft_free_ptr(ptrs, tmp[0]);
-			creat_tabs(&tab[i[0]], ptrs, tmp[1]);
-			i[0]++;
+			(ft_free_ptr(ptrs, tmp[0]), creat_tabs(&tab[i[0]++], ptrs, tmp[1]));
 		}
 		curr = curr->next;
 	}
