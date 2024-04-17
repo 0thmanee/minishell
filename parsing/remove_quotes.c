@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 17:17:09 by obouchta          #+#    #+#             */
-/*   Updated: 2024/04/16 00:48:19 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/04/17 06:51:33 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,32 +30,31 @@ int	set_delim_flag(t_token *curr)
 
 int	no_quotes_len(char *cmd)
 {
-	int		len;
-	int		i;
+	int		len_indx[2];
 	char	quote;
 
-	len = ft_strlen(cmd);
-	i = 0;
+	len_indx[0] = ft_strlen(cmd);
+	len_indx[1] = 0;
 	if (!cmd)
 		return (0);
-	while (cmd[i])
+	while (cmd[len_indx[1]])
 	{
-		if (cmd[i] == '\'' || cmd[i] == '\"')
+		if (cmd[len_indx[1]] == '\'' || cmd[len_indx[1]] == '\"')
 		{
-			len--;
-			quote = cmd[i++];
-			while (cmd[i] && cmd[i] != quote)
-				i++;
-			if (cmd[i])
+			len_indx[0]--;
+			quote = cmd[len_indx[1]++];
+			while (cmd[len_indx[1]] && cmd[len_indx[1]] != quote)
+				len_indx[1]++;
+			if (cmd[len_indx[1]])
 			{
-				i++;
-				len--;
+				len_indx[1]++;
+				len_indx[0]--;
 			}
 		}
 		else
-			i++;
+			len_indx[1]++;
 	}
-	return (len);
+	return (len_indx[0]);
 }
 
 char	*no_quoted_value(char *cmd, int len, t_free **ptrs)

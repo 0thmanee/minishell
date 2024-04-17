@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 08:42:35 by obouchta          #+#    #+#             */
-/*   Updated: 2024/04/14 16:45:14 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/04/17 06:46:44 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ int	process_input(char *input, t_list **list_env, t_free **ptrs)
 
 	init_data(&tokens, &cmd);
 	if (!valid_quotes(input))
-		return (2);
+		return (ft_putstr_fd("minishell: syntax error\n", 2), 2);
 	(add_spaces(&input, ptrs), trim_input(&input, ptrs));
 	if (!input || !tokenize_input(&input, &tokens, ptrs))
 		return (0);
