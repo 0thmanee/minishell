@@ -6,7 +6,7 @@
 /*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/06 01:54:38 by obouchta          #+#    #+#             */
-/*   Updated: 2024/04/14 21:00:08 by yboutsli         ###   ########.fr       */
+/*   Updated: 2024/04/18 21:51:05 by yboutsli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -214,6 +214,7 @@ int		var_exist(char *var, t_list *list_env);
 int		env_update(t_list **head, char *env_var, char *new, t_free **ptrs);
 t_list	*env_lst(char **envp, t_free **ptrs);
 void	env_init(t_list	**env, t_free **ptrs);
+void	env_init1(t_list	**env, t_free **ptrs);
 int		cd(char **args, t_list **env, t_free **ptrs);
 int		env(t_list **list_env, t_cmd *cmd, t_free **ptrs);
 int		pwd(t_list **list_env, t_free **ptrs);

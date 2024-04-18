@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 08:42:35 by obouchta          #+#    #+#             */
-/*   Updated: 2024/04/17 06:46:44 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/04/18 21:50:13 by yboutsli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,13 +89,17 @@ void	read_input(t_list **list_env, t_free **ptrs)
 		process_input(input, list_env, ptrs);
 	}
 }
-
+void le()
+{
+	system("leaks minishell");
+}
 int	main(int ac, char **av, char **envp)
 {
 	t_list			*list_env;
 	t_free			*ptrs;
 	struct termios	attr;
 
+	atexit(le);
 	if (ac != 1)
 		return (write(2, "minishell: too many arguments\n", 30), 1);
 	(void)av;
@@ -103,6 +107,8 @@ int	main(int ac, char **av, char **envp)
 	list_env = env_lst(envp, &ptrs);
 	if (!list_env)
 		env_init(&list_env, &ptrs);
+	else
+		env_init1(&list_env, &ptrs);
 	tcgetattr(STDIN_FILENO, &attr);
 	attr.c_lflag = ~ECHOCTL;
 	tcsetattr(STDIN_FILENO, TCSANOW, &attr);

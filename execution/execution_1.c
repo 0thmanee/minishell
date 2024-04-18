@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution_1.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/12 03:41:21 by yasser03          #+#    #+#             */
-/*   Updated: 2024/04/14 15:55:15 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/04/18 21:22:46 by yboutsli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ int	env_size(t_list *list_env)
 	current = list_env;
 	while (current)
 	{
-		if (current->var && current->value)
+		if (current->var && current->value && current->type == 0)
 			count++;
 		current = current->next;
 	}

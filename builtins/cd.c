@@ -6,7 +6,7 @@
 /*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 09:26:13 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/04/17 22:50:06 by yboutsli         ###   ########.fr       */
+/*   Updated: 2024/04/18 18:29:12 by yboutsli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,8 @@ static void	cd_dir_utils(t_list **list_env, char *pwd,
 	cwd = getcwd(NULL, 0);
 	if (cwd)
 	{
-		env_update(list_env, "OLDPWD", pwd, ptrs);
+		if (!var_exist("OLDPWD", *list_env))
+			env_update(list_env, "OLDPWD", pwd, ptrs);
 		if (!var_exist("PWD", *list_env))
 			env_update(list_env, "PWD", cwd, ptrs);
 		free(cwd);
@@ -29,7 +30,8 @@ static void	cd_dir_utils(t_list **list_env, char *pwd,
 	{
 		ft_putstr_fd("cd: error retrieving current directory: getcwd: "
 			"cannot access parent directories: No such file or directory\n", 2);
-		env_update(list_env, "OLDPWD", pwd, ptrs);
+		if (!var_exist("OLDPWD", *list_env))
+			env_update(list_env, "OLDPWD", pwd, ptrs);
 		if (!var_exist("PWD", *list_env))
 			env_update(list_env, "PWD", tmp[1], ptrs);
 	}
@@ -66,8 +68,7 @@ static int	cd_root(char *str, t_list **list_env, t_free **ptrs)
 	if (chdir(str) == -1)
 	{
 		ft_putstr_fd("cd: no such file or directory: ", 2);
-		ft_putstr_fd(str, 2);
-		ft_putstr_fd("\n", 2);
+		(ft_putstr_fd(str, 2), ft_putstr_fd("\n", 2));
 		status = 1;
 	}
 	else
@@ -75,7 +76,8 @@ static int	cd_root(char *str, t_list **list_env, t_free **ptrs)
 		tmp = getcwd(NULL, 0);
 		if (tmp)
 		{
-			env_update(list_env, "OLDPWD", cwd, ptrs);
+			if (!var_exist("OLDPWD", *list_env))
+				env_update(list_env, "OLDPWD", cwd, ptrs);
 			if (!var_exist("PWD", *list_env))
 				env_update(list_env, "PWD", tmp, ptrs);
 			free(tmp);
@@ -100,7 +102,8 @@ static int	cd_home(t_list **env, char *str, t_free **ptrs)
 		return (write(2, "minishell: ", 11), perror(str), 1);
 	else
 	{
-		env_update(env, "OLDPWD", cwd, ptrs);
+		if (!var_exist("OLDPWD", *env))
+			env_update(env, "OLDPWD", cwd, ptrs);
 		if (!var_exist("PWD", *env))
 			env_update(env, "PWD", home, ptrs);
 	}

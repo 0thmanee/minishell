@@ -6,7 +6,7 @@
 /*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 20:29:05 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/04/17 22:29:50 by yboutsli         ###   ########.fr       */
+/*   Updated: 2024/04/18 20:34:59 by yboutsli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,15 +56,13 @@ void	env_init(t_list	**env, t_free **ptrs)
 {
 	char	*cwd;
 	char	*tmp;
-	t_list	*new_node;
 
 	cwd = getcwd(NULL, 0);
 	if (cwd != NULL)
 	{
 		ft_lstadd_back_2(env, ft_lstnew_2("PATH",
 				"/usr/gnu/bin:/usr/local/bin:/bin:/usr/bin:.", 1, ptrs));
-		new_node = ft_lstnew_2("PWD", cwd, 0, ptrs);
-		ft_lstadd_back_2(env, new_node);
+		ft_lstadd_back_2(env, ft_lstnew_2("PWD", cwd, 0, ptrs));
 		tmp = ft_strjoin(cwd, "/./minishell", ptrs);
 		ft_lstadd_back_2(env, ft_lstnew_2("_", tmp, 0, ptrs));
 		ft_lstadd_back_2(env, ft_lstnew_2("OLDPWD", NULL, 0, ptrs));
@@ -78,6 +76,8 @@ int	var_exist(char *var, t_list *list_env)
 {
 	t_list	*curr;
 
+	if (!list_env)
+		return (1);
 	curr = list_env;
 	while (curr)
 	{
