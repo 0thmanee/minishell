@@ -3,41 +3,41 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
+/*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 08:42:35 by obouchta          #+#    #+#             */
-/*   Updated: 2024/04/18 21:50:13 by yboutsli         ###   ########.fr       */
+/*   Updated: 2024/04/18 22:32:09 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	tokenize_input(char **input, t_token **tokens, t_free **ptrs)
+int	tokenize_input(char *input, t_token **tokens, t_free **ptrs)
 {
 	t_token	*new_token;
 	int		i;
 
 	i = 0;
-	while ((*input)[i])
+	while (input[i])
 	{
-		if (i == 0 || is_whitespace((*input)[i]))
+		if (i == 0 || is_whitespace(input[i]))
 		{
-			while ((*input)[i] && is_whitespace((*input)[i]))
+			while (input[i] && is_whitespace(input[i]))
 				i++;
-			if (regonize_type(*input, i) != EXPRESSION
-				&& regonize_type(*input, i) != PIPE)
-				new_token = get_in_out(*input, &i, tokens, ptrs);
-			else if (regonize_type(*input, i) == PIPE)
-				new_token = get_pipe(*input, &i, PIPE, ptrs);
+			if (regonize_type(input, i) != EXPRESSION
+				&& regonize_type(input, i) != PIPE)
+				new_token = get_in_out(input, &i, tokens, ptrs);
+			else if (regonize_type(input, i) == PIPE)
+				new_token = get_pipe(input, &i, PIPE, ptrs);
 			else
-				new_token = get_cmd(*input, &i, CMD, ptrs);
+				new_token = get_cmd(input, &i, CMD, ptrs);
 			if (new_token)
 				ft_lstadd_back_1(tokens, new_token);
 		}
 		else
 			i++;
 	}
-	return ((ft_free_ptr(ptrs, *input)), 1);
+	return ((ft_free_ptr(ptrs, input)), 1);
 }
 
 void	init_data(t_token **tokens, t_cmd **cmd)
@@ -53,9 +53,9 @@ int	process_input(char *input, t_list **list_env, t_free **ptrs)
 
 	init_data(&tokens, &cmd);
 	if (!valid_quotes(input))
-		return (ft_putstr_fd("minishell: syntax error\n", 2), 2);
+		return (free(input), ft_putstr_fd("minishell: syntax error\n", 2), 2);
 	(add_spaces(&input, ptrs), trim_input(&input, ptrs));
-	if (!input || !tokenize_input(&input, &tokens, ptrs))
+	if (!input || !tokenize_input(input, &tokens, ptrs))
 		return (0);
 	if (check_syntax(tokens))
 		return (1);
@@ -89,17 +89,13 @@ void	read_input(t_list **list_env, t_free **ptrs)
 		process_input(input, list_env, ptrs);
 	}
 }
-void le()
-{
-	system("leaks minishell");
-}
+
 int	main(int ac, char **av, char **envp)
 {
 	t_list			*list_env;
 	t_free			*ptrs;
 	struct termios	attr;
 
-	atexit(le);
 	if (ac != 1)
 		return (write(2, "minishell: too many arguments\n", 30), 1);
 	(void)av;
