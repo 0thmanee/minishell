@@ -6,22 +6,26 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/15 02:58:32 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/04/06 07:29:36 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/04/19 19:14:33 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	*utils4(int type, char *result, int *i, t_new_1 new)
+char	*utils4(t_var var, char *result, int *i, t_new_1 new_strct)
 {
-	if (type == 1)
-		result = case_1(result, i, new.env, new.ptrs);
-	else if (type == 2)
-		result = case_2(result, i, new.ptrs);
-	else if (type == 3)
-		result = case_3(result, i, new.ptrs);
-	else if (type == 4)
-		result = case_4(result, i, new.env, new.ptrs);
+	int	arr[2];
+
+	arr[0] = *i;
+	arr[1] = var.size;
+	if (var.mode == 1)
+		result = case_1(result, arr, new_strct.env, new_strct.ptrs);
+	else if (var.mode == 2)
+		result = case_2(result, arr, new_strct.ptrs);
+	else if (var.mode == 3)
+		result = case_3(result, arr, new_strct.ptrs);
+	else if (var.mode == 4)
+		result = case_4(result, arr, new_strct.env, new_strct.ptrs);
 	return (result);
 }
 
@@ -29,7 +33,7 @@ int	utils_5(char **result, int *i, int *count, t_new_1 new_strct)
 {
 	if ((*result)[*i] == '$' && (*result)[*i + 1] != '\0')
 	{
-		if (new_strct.token->vars[*count] == 0)
+		if (new_strct.token->vars[*count].mode == 0)
 		{
 			utils2(i, count);
 			return (1);
@@ -106,6 +110,7 @@ void	expanding(t_token **tokens, t_list *list_env, t_free **ptrs)
 			curr->args[i].value = expanding_2(list_env, curr->args[i], ptrs);
 			ft_free_ptr(ptrs, tmp_val);
 		}
+		remove_last_doll(curr, ptrs);
 		curr = curr->next;
 	}
 }

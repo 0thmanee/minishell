@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/16 03:19:46 by obouchta          #+#    #+#             */
-/*   Updated: 2024/04/06 22:12:14 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/04/19 19:22:33 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,16 +32,30 @@ int	calc_vars(char *str)
 	return (nbr);
 }
 
-void	check_for_var(char *value, int *vars, int len)
+int	check_removed_doll(char *value)
+{
+	int	len;
+
+	if (!value)
+		return (0);
+	len = ft_strlen(value);
+	if (len < 3 || (len >= 3 && value[len - 3] != '$'))
+		return (0);
+	if ((value[len - 1] == '\'' && value[len - 2] == '\'')
+		|| (value[len - 1] == '\"' && value[len - 2] == '\"'))
+		return (1);
+	return (0);
+}
+
+void	check_for_var(char *value, t_var *vars, int len)
 {
 	int		i;
 	int		j;
 
-	(void)vars;
 	i = 0;
 	j = 0;
 	while (i < len)
-		vars[i++] = 0;
+		vars[i++].mode = 0;
 	i = 0;
 	while (value[i])
 	{
@@ -63,13 +77,14 @@ void	specify_vars_helper(t_token *curr, t_free **ptrs)
 	i = 0;
 	if (!curr->args_len)
 		return ;
+	curr->args[i].removed_doll = check_removed_doll(curr->args[i].value);
 	while (i < curr->args_len)
 	{
 		curr->args[i].vars_len = calc_vars(curr->args[i].value);
 		if (curr->args[i].vars_len)
 		{
 			curr->args[i].vars = ft_malloc(ptrs,
-					curr->args[i].vars_len * sizeof(int));
+					curr->args[i].vars_len * sizeof(t_var));
 			check_for_var(curr->args[i].value,
 				curr->args[i].vars, curr->args[i].vars_len);
 		}
@@ -86,9 +101,10 @@ void	specify_vars(t_token **tokens, t_free **ptrs)
 	while (curr)
 	{
 		curr->vars_len = calc_vars(curr->value);
+		curr->removed_doll = check_removed_doll(curr->value);
 		if (curr->vars_len > 0)
 		{
-			curr->vars = ft_malloc(ptrs, curr->vars_len * sizeof(int));
+			curr->vars = ft_malloc(ptrs, curr->vars_len * sizeof(t_var));
 			check_for_var(curr->value, curr->vars, curr->vars_len);
 		}
 		if (curr->args_len)

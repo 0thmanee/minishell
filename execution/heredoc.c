@@ -6,23 +6,23 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 16:20:23 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/04/18 22:33:55 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/04/19 19:34:10 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static char	*utils3(t_new_1 *new, char *input)
+static char	*utils3(t_new_1 *new_strct, char *input)
 {
 	char	*tmp;
 
 	tmp = input;
-	input = parse_heredoc(input, new->env, new->ptrs);
+	input = parse_heredoc(input, new_strct->env, new_strct->ptrs);
 	free(tmp);
 	return (input);
 }
 
-static void	utils(int fd[2], t_file *in, int mode, t_new_1 *new)
+static void	utils(int fd[2], t_file *in, int mode, t_new_1 *new_strct)
 {
 	char	*input;
 
@@ -34,7 +34,7 @@ static void	utils(int fd[2], t_file *in, int mode, t_new_1 *new)
 	while (input != NULL && ft_strcmp(input, in->delimiter))
 	{
 		if (in->delim_flag && !check_braces(input))
-			input = utils3(new, input);
+			input = utils3(new_strct, input);
 		if (mode)
 			(write(fd[1], input, ft_strlen(input)), write(fd[1], "\n", 1));
 		if (mode && ft_strchr(input, '{') && check_braces(input))
@@ -65,10 +65,7 @@ int	here_doc(t_file *infile, int mode, t_list *list_env, t_free **ptrs)
 	if (pid == 0)
 		utils(fd, infile, mode, &tmp);
 	if (mode)
-	{
-		dup2(fd[0], 0);
-		close2(fd);
-	}
+		(dup2(fd[0], 0), close2(fd));
 	waitpid(pid, &status, 0);
 	if (WIFSIGNALED(status) && WTERMSIG(status) == SIGINT)
 	{

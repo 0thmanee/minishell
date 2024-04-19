@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/06 03:40:19 by obouchta          #+#    #+#             */
-/*   Updated: 2024/04/06 05:03:14 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/04/19 19:36:13 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,4 +66,32 @@ void	utils2(int *i, int *count)
 {
 	(*i)++;
 	(*count)++;
+}
+
+void	remove_last_doll(t_token *curr, t_free **ptrs)
+{
+	char	*tmp;
+	int		i;
+
+	if (curr->value && curr->removed_doll)
+	{
+		tmp = curr->value;
+		curr->value = ft_substr(curr->value, 0,
+				ft_strlen(curr->value) - 1, ptrs);
+		ft_free_ptr(ptrs, tmp);
+	}
+	if (!curr->args)
+		return ;
+	i = 0;
+	while (i < curr->args_len)
+	{
+		if (curr->args[i].value && curr->args[i].removed_doll)
+		{
+			tmp = curr->args[i].value;
+			curr->args[i].value = ft_substr(curr->args[i].value, 0,
+					ft_strlen(curr->args[i].value) - 1, ptrs);
+			ft_free_ptr(ptrs, tmp);
+		}
+		i++;
+	}
 }

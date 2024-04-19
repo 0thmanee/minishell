@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/06 01:54:38 by obouchta          #+#    #+#             */
-/*   Updated: 2024/04/18 22:32:48 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/04/19 19:33:24 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,11 +49,18 @@ typedef enum s_TokenType
 	VALUE,
 }	t_TokenType;
 
+typedef struct s_var
+{
+	int	mode;
+	int	size;
+}	t_var;
+
 typedef struct s_value
 {
 	char	*value;
 	int		vars_len;
-	int		*vars;
+	t_var	*vars;
+	int		removed_doll;
 }	t_value;
 
 typedef struct s_token
@@ -63,8 +70,9 @@ typedef struct s_token
 	int				args_len;
 	int				type;
 	int				vars_len;
-	int				*vars;
+	t_var			*vars;
 	int				delim_flag;
+	int				removed_doll;
 	struct s_token	*next;
 }	t_token;
 
@@ -175,10 +183,10 @@ t_token	*get_pipe(char *input, int *i, int type, t_free **ptrs);
 void	remove_quotes(t_token **tokens, t_free **ptrs);
 void	join_args(t_token **tokens, t_free **ptrs);
 int		extract_expr(char *src, char **dest, int *i, t_free **ptrs);
-char	*case_1(char *result, int *i, t_list *list_env, t_free **ptrs);
+char	*case_1(char *result, int *arr, t_list *list_env, t_free **ptrs);
 char	*case_2(char *result, int *i, t_free **ptrs);
 char	*case_3(char *result, int *i, t_free **ptrs);
-char	*case_4(char *result, int *i, t_list *list_env, t_free **ptrs);
+char	*case_4(char *result, int *arr, t_list *list_env, t_free **ptrs);
 char	*replace_str(char *str, int tab[2], char *min_str, t_free **ptrs);
 char	*remove_char(char *str, int char_index, t_free **ptrs);
 void	expanding(t_token **tokens, t_list *list_env, t_free **ptrs);
@@ -189,9 +197,9 @@ void	utils2(int *i, int *count);
 void	make_tab(int tab[2], int i, int j);
 void	utils1(int *i, int len, char *str[3], t_free **ptrs);
 void	final_command(t_token **tokens, t_cmd **command, t_free **ptrs);
-void	check_for_var_helper_1(char *value, int *vars, int *i, int *j);
-void	check_for_var_helper_2(char *value, int *vars, int *i, int *j);
-void	check_for_var_helper_3(char *value, int *vars, int *i, int *j);
+void	check_for_var_helper_1(char *value, t_var *vars, int *i, int *j);
+void	check_for_var_helper_2(char *value, t_var *vars, int *i, int *j);
+void	check_for_var_helper_3(char *value, t_var *vars, int *i, int *j);
 void	specify_vars(t_token **tokens, t_free **ptrs);
 int		tokens_len(t_token *tokens);
 void	extract_command(t_token *token, t_cmd *cmd, t_free **ptrs);
@@ -205,7 +213,8 @@ int		check_braces(char *value);
 int		invalid_braces(t_token *curr);
 void	open_heredoc(t_token *tokens, int here_doc, int *s_error);
 int		exit_status(int mode, int new_status);
-void	exit_case(int *is_exit, int *j);
+int		calc_var_size(char *value, int i);
+void	remove_last_doll(t_token *curr, t_free **ptrs);
 
 // Execution
 char	*get_env(t_list **head, char *env_var, int is_exit, t_free **ptrs);

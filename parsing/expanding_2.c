@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/06 04:36:31 by obouchta          #+#    #+#             */
-/*   Updated: 2024/04/06 07:29:49 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/04/19 17:20:28 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,16 +22,21 @@ t_new_2	create_new_2(t_list **list_env, t_free **ptrs, t_value args)
 	return (new_strct);
 }
 
-char	*utils4_1(int type, char *result, int *i, t_new_2 new)
+char	*utils4_1(t_var var, char *result, int *i, t_new_2 new_strct)
 {
-	if (type == 1)
-		result = case_1(result, i, new.env, new.ptrs);
-	else if (type == 2)
-		result = case_2(result, i, new.ptrs);
-	else if (type == 3)
-		result = case_3(result, i, new.ptrs);
-	else if (type == 4)
-		result = case_4(result, i, new.env, new.ptrs);
+	int	arr[2];
+
+	arr[0] = *i;
+	arr[1] = var.size;
+	if (var.mode == 1)
+		result = case_1(result, arr, new_strct.env, new_strct.ptrs);
+	else if (var.mode == 2)
+		result = case_2(result, arr, new_strct.ptrs);
+	else if (var.mode == 3)
+		result = case_3(result, arr, new_strct.ptrs);
+	else if (var.mode == 4)
+		result = case_4(result, arr, new_strct.env, new_strct.ptrs);
+	*i = arr[0];
 	return (result);
 }
 
@@ -39,7 +44,7 @@ int	utils_5_1(char **result, int *i, int *count, t_new_2 new_strct)
 {
 	if ((*result)[*i] == '$' && (*result)[*i + 1] != '\0')
 	{
-		if (new_strct.args.vars[*count] == 0)
+		if (new_strct.args.vars[*count].mode == 0)
 		{
 			utils2(i, count);
 			return (1);

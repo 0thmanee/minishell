@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 04:48:49 by obouchta          #+#    #+#             */
-/*   Updated: 2024/04/14 16:29:25 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/04/19 16:47:39 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,11 +67,9 @@ int	invalid_braces(t_token *curr)
 	{
 		while (i < curr->args_len)
 		{
-			if (ft_strchr(curr->value, '{')
+			if (ft_strchr(curr->args[i].value, '{')
 				&& check_braces(curr->args[i].value))
-			{
 				return (1);
-			}
 			i++;
 		}
 	}
