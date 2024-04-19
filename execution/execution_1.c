@@ -6,7 +6,7 @@
 /*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/12 03:41:21 by yasser03          #+#    #+#             */
-/*   Updated: 2024/04/18 21:22:46 by yboutsli         ###   ########.fr       */
+/*   Updated: 2024/04/19 21:48:24 by yboutsli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ int	env_size(t_list *list_env)
 	current = list_env;
 	while (current)
 	{
-		if (current->var && current->value && current->type == 0)
+		if (current->var && current->value)
 			count++;
 		current = current->next;
 	}

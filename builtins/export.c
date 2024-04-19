@@ -6,7 +6,7 @@
 /*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/05 16:57:06 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/04/05 16:13:54 by yboutsli         ###   ########.fr       */
+/*   Updated: 2024/04/19 21:45:51 by yboutsli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ static void	case1(char *str, t_list **list_env, int append, t_free **ptrs)
 		ft_free_ptr(ptrs, var);
 		return ;
 	}
-	ft_lstadd_back_2(list_env, ft_lstnew_2(var, "\0", 0, ptrs));
+	ft_lstadd_back_2(list_env, ft_lstnew_2(var, "\0", ptrs));
 }
 
 static void	case2_helper(t_list *new, char *value, int append, t_free **ptrs)
@@ -68,7 +68,7 @@ static void	case2(char *str, t_list **list_env, int append, t_free **ptrs)
 		ft_free_ptr(ptrs, var);
 		return ;
 	}
-	ft_lstadd_back_2(list_env, ft_lstnew_2(var, value, 0, ptrs));
+	ft_lstadd_back_2(list_env, ft_lstnew_2(var, value, ptrs));
 }
 
 static void	valid_arg(char *str, t_list **list_env, t_free **ptrs)

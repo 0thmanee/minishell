@@ -3,15 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/06 01:54:38 by obouchta          #+#    #+#             */
-/*   Updated: 2024/04/19 19:46:45 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/04/19 21:46:37 by yboutsli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
-
+	
 # define MINISHELL_H
 # include <termios.h>
 # include <signal.h>
@@ -101,7 +101,6 @@ typedef struct s_list
 {
 	char			*var;
 	char			*value;
-	int				type;
 	int				index;
 	struct s_list	*next;
 }	t_list;
@@ -139,7 +138,7 @@ char	*ft_substr(char const *s, int start, int len, t_free **ptrs);
 char	*ft_strdup(char *str, t_free **ptrs);
 t_token	*ft_lstnew_1(char *value, int type, t_value *args, t_free **ptrs);
 void	ft_lstadd_back_1(t_token **lst, t_token *new_node);
-t_list	*ft_lstnew_2(void *content1, void *content2, int exit, t_free **ptrs);
+t_list	*ft_lstnew_2(void *content1, void *content2, t_free **ptrs);
 void	ft_lstadd_back_2(t_list **lst, t_list *new_node);
 t_cmd	*ft_lstnew_3(t_free **ptrs);
 void	ft_lstadd_back_3(t_cmd **lst, t_cmd *new_node);

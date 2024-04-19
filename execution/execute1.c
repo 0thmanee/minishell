@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute1.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 11:49:46 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/04/14 15:52:41 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/04/19 21:46:22 by yboutsli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void	env_lc_update(t_cmd *cmd, t_list **list_env, t_free **ptrs)
 	}
 	value = get_env(list_env, "_", 0, ptrs);
 	if (!value)
-		ft_lstadd_back_2(list_env, ft_lstnew_2("_", new_var, 0, ptrs));
+		ft_lstadd_back_2(list_env, ft_lstnew_2("_", new_var, ptrs));
 	else
 		env_update(list_env, "_", new_var, ptrs);
 }

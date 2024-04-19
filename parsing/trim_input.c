@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   trim_input.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/22 09:02:08 by obouchta          #+#    #+#             */
-/*   Updated: 2024/04/05 04:54:23 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/04/19 21:05:51 by yboutsli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	trim_input(char **input, t_free **ptrs)
 	i = 0;
 	new_len = 0;
 	tmp = *input;
-	while ((*input)[i] && (*input)[i] == ' ')
+	while ((*input)[i] && is_whitespace((*input)[i]))
 		i++;
 	if (i == ft_strlen(*input))
 	{
@@ -33,7 +33,7 @@ void	trim_input(char **input, t_free **ptrs)
 	start = i--;
 	while ((*input)[++i])
 		new_len++;
-	while (--i >= 0 && (*input)[i] == ' ')
+	while (--i >= 0 && is_whitespace((*input)[i]))
 		new_len--;
 	*input = ft_substr(*input, start, new_len, ptrs);
 	ft_free_ptr(ptrs, tmp);

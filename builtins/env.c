@@ -6,7 +6,7 @@
 /*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/05 14:36:05 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/04/05 16:31:13 by yboutsli         ###   ########.fr       */
+/*   Updated: 2024/04/19 21:48:01 by yboutsli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ int	env(t_list **list_env, t_cmd *cmd, t_free **ptrs)
 	{
 		if (!ft_strcmp(curr->var, "_"))
 			env_utils(list_env, ptrs, cmd->cmd);
-		else if (curr->value && curr->type == 0)
+		else if (curr->value)
 			printf("%s=%s\n", curr->var, curr->value);
 		curr = curr->next;
 	}

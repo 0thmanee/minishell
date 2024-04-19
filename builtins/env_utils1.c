@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_utils1.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 16:29:49 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/04/19 19:40:12 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/04/19 21:58:06 by yboutsli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,8 +80,9 @@ t_list	*env_lst(char **envp, t_free **ptrs)
 		while (envp[i][j] && envp[i][j] != '=')
 			j++;
 		var = ft_substr(envp[i], 0, j, ptrs);
+		// printf("var = %s\n", var);
 		value = ft_substr(envp[i], j + 1, ft_strlen(envp[i]), ptrs);
-		ft_lstadd_back_2(&env, ft_lstnew_2(var, value, 0, ptrs));
+		ft_lstadd_back_2(&env, ft_lstnew_2(var, value, ptrs));
 		(ft_free_ptr(ptrs, var), ft_free_ptr(ptrs, value));
 	}
 	shlvl_var(&env, ptrs);
@@ -92,23 +93,20 @@ void	env_init1(t_list	**env, t_free **ptrs)
 {
 	char	*cwd;
 	char	*tmp;
-	char	*args[5];
+	char	*args[4];
 
 	cwd = getcwd(NULL, 0);
 	if (cwd != NULL)
 	{
-		args[0] = "PATH";
-		args[1] = "PWD";
-		args[2] = "_";
-		args[3] = "OLDPWD";
-		args[4] = NULL;
+		args[0] = "PWD";
+		args[1] = "_";
+		args[2] = "OLDPWD";
+		args[3] = NULL;
 		unset(env, args, ptrs);
-		ft_lstadd_back_2(env, ft_lstnew_2("PATH",
-				"/usr/gnu/bin:/usr/local/bin:/bin:/usr/bin:.", 1, ptrs));
-		ft_lstadd_back_2(env, ft_lstnew_2("PWD", cwd, 0, ptrs));
+		ft_lstadd_back_2(env, ft_lstnew_2("PWD", cwd, ptrs));
 		tmp = ft_strjoin(cwd, "/./minishell", ptrs);
-		ft_lstadd_back_2(env, ft_lstnew_2("_", tmp, 0, ptrs));
-		ft_lstadd_back_2(env, ft_lstnew_2("OLDPWD", NULL, 0, ptrs));
+		ft_lstadd_back_2(env, ft_lstnew_2("_", tmp, ptrs));
+		ft_lstadd_back_2(env, ft_lstnew_2("OLDPWD", NULL, ptrs));
 		ft_free_ptr(ptrs, tmp);
 	}
 	free(cwd);

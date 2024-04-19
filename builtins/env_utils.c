@@ -6,7 +6,7 @@
 /*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 20:29:05 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/04/18 20:34:59 by yboutsli         ###   ########.fr       */
+/*   Updated: 2024/04/19 21:47:50 by yboutsli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,9 +37,7 @@ int	env_update(t_list **head, char *env_var, char *new, t_free **ptrs)
 	curr = *head;
 	while (curr)
 	{
-		if (!ft_strcmp(env_var, "OLDPWD") && !ft_strcmp(curr->var, "OLDPWD"))
-			curr->type = 0;
-		if (!ft_strcmp(curr->var, env_var) && curr->type == 0)
+		if (!ft_strcmp(curr->var, env_var))
 		{
 			ft_free_ptr(ptrs, curr->value);
 			curr->value = ft_strdup(new, ptrs);
@@ -48,7 +46,7 @@ int	env_update(t_list **head, char *env_var, char *new, t_free **ptrs)
 		curr = curr->next;
 	}
 	if (!curr)
-		ft_lstadd_back_2(head, ft_lstnew_2(env_var, new, 0, ptrs));
+		ft_lstadd_back_2(head, ft_lstnew_2(env_var, new, ptrs));
 	return (1);
 }
 
@@ -60,15 +58,13 @@ void	env_init(t_list	**env, t_free **ptrs)
 	cwd = getcwd(NULL, 0);
 	if (cwd != NULL)
 	{
-		ft_lstadd_back_2(env, ft_lstnew_2("PATH",
-				"/usr/gnu/bin:/usr/local/bin:/bin:/usr/bin:.", 1, ptrs));
-		ft_lstadd_back_2(env, ft_lstnew_2("PWD", cwd, 0, ptrs));
+		ft_lstadd_back_2(env, ft_lstnew_2("PWD", cwd, ptrs));
 		tmp = ft_strjoin(cwd, "/./minishell", ptrs);
-		ft_lstadd_back_2(env, ft_lstnew_2("_", tmp, 0, ptrs));
-		ft_lstadd_back_2(env, ft_lstnew_2("OLDPWD", NULL, 0, ptrs));
+		ft_lstadd_back_2(env, ft_lstnew_2("_", tmp, ptrs));
+		ft_lstadd_back_2(env, ft_lstnew_2("OLDPWD", NULL, ptrs));
 		ft_free_ptr(ptrs, tmp);
 	}
-	ft_lstadd_back_2(env, ft_lstnew_2("SHLVL", "1", 0, ptrs));
+	ft_lstadd_back_2(env, ft_lstnew_2("SHLVL", "1", ptrs));
 	free(cwd);
 }
 
@@ -81,7 +77,7 @@ int	var_exist(char *var, t_list *list_env)
 	curr = list_env;
 	while (curr)
 	{
-		if (!ft_strcmp(curr->var, var) && curr->type == 0)
+		if (!ft_strcmp(curr->var, var))
 			return (0);
 		curr = curr->next;
 	}
@@ -95,7 +91,7 @@ t_list	*get_env_node(t_list **list_env, char *var)
 	curr = *list_env;
 	while (curr)
 	{
-		if (!ft_strcmp(curr->var, var) && curr->type == 0)
+		if (!ft_strcmp(curr->var, var))
 			return (curr);
 		curr = curr->next;
 	}

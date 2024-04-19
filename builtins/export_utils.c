@@ -6,7 +6,7 @@
 /*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 16:08:36 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/04/13 20:54:37 by yboutsli         ###   ########.fr       */
+/*   Updated: 2024/04/19 21:48:14 by yboutsli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ void	null_arg(t_list **list_env)
 		curr[1] = *list_env;
 		while (curr[1] && curr[1]->index != count)
 			curr[1] = curr[1]->next;
-		if (curr[1] && curr[1]->type == 0 && ft_strcmp(curr[1]->var, "_"))
+		if (curr[1] && ft_strcmp(curr[1]->var, "_"))
 		{
 			printf("declare -x %s", curr[1]->var);
 			if (curr[1]->value)
@@ -93,5 +93,5 @@ void	case0(char *str, t_list **list_env, t_free **ptrs)
 {
 	if (!var_exist(str, *list_env))
 		return ;
-	ft_lstadd_back_2(list_env, ft_lstnew_2(str, NULL, 0, ptrs));
+	ft_lstadd_back_2(list_env, ft_lstnew_2(str, NULL, ptrs));
 }

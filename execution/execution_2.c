@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution_2.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 14:59:37 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/04/19 19:42:18 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/04/19 21:48:34 by yboutsli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ char	**list2tab(t_list *list_env, t_free **ptrs)
 	curr = list_env;
 	while (curr)
 	{
-		if (curr->var && curr->value && curr->type == 0)
+		if (curr->var && curr->value)
 		{
 			tmp[0] = ft_strjoin(curr->var, "=", ptrs);
 			tmp[1] = ft_strjoin(tmp[0], curr->value, ptrs);

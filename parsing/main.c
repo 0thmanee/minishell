@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 08:42:35 by obouchta          #+#    #+#             */
-/*   Updated: 2024/04/19 19:31:38 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/04/19 21:22:20 by yboutsli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,10 @@ int	process_input(char *input, t_list **list_env, t_free **ptrs)
 
 	init_data(&tokens, &cmd);
 	if (!valid_quotes(input))
+	{
+		exit_status(0, 258);
 		return (free(input), ft_putstr_fd("minishell: syntax error\n", 2), 2);
+	}
 	(add_spaces(&input, ptrs), trim_input(&input, ptrs));
 	if (!input || !tokenize_input(input, &tokens, ptrs))
 		return (0);
