@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/31 22:45:14 by obouchta          #+#    #+#             */
-/*   Updated: 2024/04/06 05:05:04 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/04/19 19:44:26 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ long	calc_result(long tmp, long result, char c, int sign)
 	return (tmp);
 }
 
-int	ft_atoi(const char *str)
+long	ft_atoi(const char *str)
 {
 	int		i;
 	int		sign;

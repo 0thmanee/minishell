@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/06 01:54:38 by obouchta          #+#    #+#             */
-/*   Updated: 2024/04/19 19:33:24 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/04/19 19:46:45 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -155,7 +155,7 @@ void	ft_free_all(t_free **list_aloc);
 int		ft_isdigit(int c);
 int		ft_strchr(char *str, char c);
 void	ft_putstr_fd(char *s, int fd);
-int		ft_atoi(const char *str);
+long	ft_atoi(const char *str);
 int		ft_lstsize(t_cmd *lst);
 int		is_ambig(char *value);
 
@@ -237,7 +237,7 @@ char	**execve_argv(t_cmd *cmd, t_free **ptrs);
 int		export(t_cmd *cmd, t_list **list_env, t_free **ptrs);
 int		echo(t_cmd *cmd);
 int		unset(t_list **list_env, char **args, t_free **ptrs);
-char	**list2tab(t_list *list_env, t_free **ptrs, int type);
+char	**list2tab(t_list *list_env, t_free **ptrs);
 int		env_size(t_list *list_env);
 void	close2(int tab[2]);
 int		here_doc(t_file *infile, int mode, t_list *list_env, t_free **ptrs);

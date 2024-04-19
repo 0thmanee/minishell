@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execv_utils1.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
+/*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 22:40:46 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/04/14 22:19:55 by yboutsli         ###   ########.fr       */
+/*   Updated: 2024/04/19 19:44:00 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,18 +46,15 @@ int	new_execve(t_cmd *cmd, t_list **list_env, t_free **ptrs)
 	char	**args;
 	char	**npath;
 	char	*cmd_fpath;
-	int		type[2];
+	int		type;
 
-	type[1] = 0;
-	type[0] = 0;
+	type = 0;
 	args = execve_argv(cmd, ptrs);
 	npath = path(list_env, ptrs);
-	cmd_fpath = cmd_path(cmd->cmd, npath, ptrs, &type[0]);
-	if (!ft_strcmp("./minishell", cmd->cmd))
-		type[1] = 1;
-	env_tab = list2tab(*list_env, ptrs, type[1]);
+	cmd_fpath = cmd_path(cmd->cmd, npath, ptrs, &type);
+	env_tab = list2tab(*list_env, ptrs);
 	if (!cmd_fpath)
-		new_execve1(cmd, args, env_tab, type[0]);
+		new_execve1(cmd, args, env_tab, type);
 	if (execve(cmd_fpath, args, env_tab) == -1)
 	{
 		ft_check(cmd->cmd, ptrs);

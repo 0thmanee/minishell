@@ -3,14 +3,64 @@
 /*                                                        :::      ::::::::   */
 /*   env_utils1.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
+/*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 16:29:49 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/04/18 21:49:21 by yboutsli         ###   ########.fr       */
+/*   Updated: 2024/04/19 19:40:12 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void	shlvl_error(int num, t_free **ptrs)
+{
+	char	*tmp;
+
+	tmp = int_to_str(num, ptrs);
+	ft_putstr_fd("minishell: warning: shell level (", 2);
+	ft_putstr_fd(tmp, 2);
+	ft_putstr_fd(") too high, resetting to 1\n", 2);
+	ft_free_ptr(ptrs, tmp);
+}
+
+char	*shlvl_var1(int shlvl, t_free **ptrs)
+{
+	char	*tmp[2];
+
+	tmp[0] = int_to_str(shlvl, ptrs);
+	tmp[1] = ft_strjoin("SHLVL=", tmp[0], ptrs);
+	ft_free_ptr(ptrs, tmp[0]);
+	return (tmp[1]);
+}
+
+void	shlvl_var(t_list **env, t_free **ptrs)
+{
+	t_cmd	cmd;
+	char	*arg[2];
+	int		shlvl;
+	char	*envp_shlvl;
+
+	arg[0] = ft_strdup("SHLVL=1", ptrs);
+	arg[1] = NULL;
+	cmd.args = arg;
+	envp_shlvl = getenv("SHLVL");
+	if (!envp_shlvl || envp_shlvl[0] == '\0')
+		(ft_free_ptr(ptrs, arg[0]), export(&cmd, env, ptrs));
+	else
+	{
+		shlvl = (int)ft_atoi(envp_shlvl);
+		if (shlvl >= 1000)
+			shlvl_error(shlvl, ptrs);
+		else if (shlvl < 0)
+			(ft_free_ptr(ptrs, arg[0]), arg[0] = ft_strdup("SHLVL=0", ptrs));
+		else if (shlvl == 999)
+			(ft_free_ptr(ptrs, arg[0]), arg[0] = ft_strdup("SHLVL=", ptrs));
+		else
+			arg[0] = shlvl_var1(++shlvl, ptrs);
+		export(&cmd, env, ptrs);
+	}
+	ft_free_ptr(ptrs, arg[0]);
+}
 
 t_list	*env_lst(char **envp, t_free **ptrs)
 {
@@ -34,6 +84,7 @@ t_list	*env_lst(char **envp, t_free **ptrs)
 		ft_lstadd_back_2(&env, ft_lstnew_2(var, value, 0, ptrs));
 		(ft_free_ptr(ptrs, var), ft_free_ptr(ptrs, value));
 	}
+	shlvl_var(&env, ptrs);
 	return (env);
 }
 
