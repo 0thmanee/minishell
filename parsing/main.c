@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
+/*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 08:42:35 by obouchta          #+#    #+#             */
-/*   Updated: 2024/04/19 21:22:20 by yboutsli         ###   ########.fr       */
+/*   Updated: 2024/04/20 11:21:15 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,8 +108,10 @@ int	main(int ac, char **av, char **envp)
 		env_init(&list_env, &ptrs);
 	else
 		env_init1(&list_env, &ptrs);
-	tcgetattr(STDIN_FILENO, &attr);
+	if (tcgetattr(STDIN_FILENO, &attr) == -1)
+		(ft_free_all(&ptrs), exit(1));
 	attr.c_lflag = ~ECHOCTL;
-	tcsetattr(STDIN_FILENO, TCSANOW, &attr);
+	if (tcsetattr(STDIN_FILENO, TCSANOW, &attr) == -1)
+		(ft_free_all(&ptrs), exit(1));
 	read_input(&list_env, &ptrs);
 }

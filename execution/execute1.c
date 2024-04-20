@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute1.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
+/*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 11:49:46 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/04/19 21:46:22 by yboutsli         ###   ########.fr       */
+/*   Updated: 2024/04/20 11:23:09 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,8 @@ static int	child_execve(t_cmd *cmd, t_list **list_env, t_free **ptrs)
 	status = 0;
 	if (!(cmd->cmd) || cmd->io_error)
 		return (0);
-	tcgetattr(STDIN_FILENO, &attr);
+	if (tcgetattr(STDIN_FILENO, &attr) == -1)
+		(ft_free_all(ptrs), exit(1));
 	pid = fork();
 	if (pid == 0)
 		new_execve(cmd, list_env, ptrs);
@@ -53,7 +54,8 @@ static int	child_execve(t_cmd *cmd, t_list **list_env, t_free **ptrs)
 		return (130);
 	if (WIFSIGNALED(status) && WTERMSIG(status) == SIGQUIT)
 	{
-		tcsetattr(STDIN_FILENO, TCSANOW, &attr);
+		if (tcsetattr(STDIN_FILENO, TCSANOW, &attr) == -1)
+			(ft_free_all(ptrs), exit(1));
 		printf("Quit : 3\n");
 		return (131);
 	}
