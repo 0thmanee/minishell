@@ -6,12 +6,12 @@
 /*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/06 01:54:38 by obouchta          #+#    #+#             */
-/*   Updated: 2024/04/19 21:46:37 by yboutsli         ###   ########.fr       */
+/*   Updated: 2024/04/20 14:07:11 by yboutsli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
-	
+
 # define MINISHELL_H
 # include <termios.h>
 # include <signal.h>
@@ -231,7 +231,7 @@ int		add_set(t_list **set, char *input);
 int		ft_execution(t_cmd **cmd, t_list **list_env, t_free **ptrs);
 char	**path(t_list **envp, t_free **ptrs);
 void	ft_free(char **tab, t_free **ptrs);
-char	*cmd_path(char *cmd, char **npath, t_free **ptrs, int *type);
+char	*cmd_path(char *cmd, char **npath, t_free **ptrs);
 char	**execve_argv(t_cmd *cmd, t_free **ptrs);
 int		export(t_cmd *cmd, t_list **list_env, t_free **ptrs);
 int		echo(t_cmd *cmd);
@@ -267,5 +267,6 @@ int		child_utils(t_cmd *cmd, t_list **list_env, t_free **ptrs);
 int		child_execution(int fd[2], t_cmd *cmd,
 			t_list **list_env, t_free **ptrs);
 char	*int_to_str(int num, t_free **ptrs);
+void	cmd_error(char *str1, char *str2);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 16:29:49 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/04/19 21:58:06 by yboutsli         ###   ########.fr       */
+/*   Updated: 2024/04/20 14:06:46 by yboutsli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,6 @@ t_list	*env_lst(char **envp, t_free **ptrs)
 		while (envp[i][j] && envp[i][j] != '=')
 			j++;
 		var = ft_substr(envp[i], 0, j, ptrs);
-		// printf("var = %s\n", var);
 		value = ft_substr(envp[i], j + 1, ft_strlen(envp[i]), ptrs);
 		ft_lstadd_back_2(&env, ft_lstnew_2(var, value, ptrs));
 		(ft_free_ptr(ptrs, var), ft_free_ptr(ptrs, value));

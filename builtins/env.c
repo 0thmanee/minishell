@@ -6,7 +6,7 @@
 /*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/05 14:36:05 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/04/19 21:48:01 by yboutsli         ###   ########.fr       */
+/*   Updated: 2024/04/20 13:58:09 by yboutsli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	env_utils(t_list **list_env, t_free **ptrs, char *cmd)
 	char	**npath;
 
 	npath = path(list_env, ptrs);
-	cmd_fpath = cmd_path(cmd, npath, ptrs, 0);
+	cmd_fpath = cmd_path(cmd, npath, ptrs);
 	if (!cmd_fpath)
 		new_var = cmd;
 	else

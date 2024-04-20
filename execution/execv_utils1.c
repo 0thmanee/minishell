@@ -3,41 +3,81 @@
 /*                                                        :::      ::::::::   */
 /*   execv_utils1.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 22:40:46 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/04/19 19:44:00 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/04/20 14:06:18 by yboutsli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	ft_check(char *cmd, t_free **ptrs)
+char	*rm_slash(char *cmd, t_free **ptrs)
 {
-	struct stat	file_stat;
+	int		cmd_len;
+	char	*tmp;
 
-	if (access(cmd, F_OK | X_OK) == 0)
+	cmd_len = ft_strlen(cmd);
+	if (cmd_len != 0 && cmd[cmd_len - 1] == '/')
+		tmp = ft_substr(cmd, 0, cmd_len - 1, ptrs);
+	else
+		tmp = ft_strdup(cmd, ptrs);
+	return (tmp);
+}
+
+void	check_cmd1(char *cmd, t_free **ptrs, struct stat statbuf)
+{
+	char	*tmp;
+
+	tmp = rm_slash(cmd, ptrs);
+	if (access(tmp, F_OK) == 0 && S_ISREG(statbuf.st_mode) == 0)
 	{
-		if (stat(cmd, &file_stat) == 0 && S_ISDIR(file_stat.st_mode))
-		{
-			ft_putstr_fd("minishell: ", 2);
-			(ft_putstr_fd(cmd, 2), ft_putstr_fd(": is a directory\n", 2));
-			(ft_free_all(ptrs), exit(126));
-		}
+		ft_free_ptr(ptrs, tmp);
+		cmd_error(cmd, "Not a directory");
+		exit(126);
+	}
+	else
+	{
+		ft_free_ptr(ptrs, tmp);
+		cmd_error(cmd, "No such file or directory");
+		exit(127);
 	}
 }
 
-static void	new_execve1(t_cmd *cmd, char **args, char **env_tab, int type)
+void	check_cmd(char *cmd, char **cmd_fpath, t_free **ptrs)
 {
-	if (execve(cmd->cmd, args, env_tab) == 0)
-		exit(0);
-	ft_putstr_fd("minishell: ", 2);
-	ft_putstr_fd(cmd->cmd, 2);
-	if (type == 1)
-		ft_putstr_fd(": No such file or directory\n", 2);
+	struct stat	statbuf;
+
+	stat(cmd, &statbuf);
+	if (access(cmd, F_OK) == 0 && stat(cmd, &statbuf) == 0)
+	{
+		if (S_ISREG(statbuf.st_mode) && statbuf.st_size == 0)
+			exit(0);
+		if (S_ISREG(statbuf.st_mode))
+			*cmd_fpath = ft_strdup(cmd, ptrs);
+		else if (S_ISDIR(statbuf.st_mode))
+			(cmd_error(cmd, "is a directory"), exit(126));
+		else
+			(cmd_error(cmd, "command not found"), exit(127));
+	}
 	else
-		ft_putstr_fd(": command not found\n", 2);
-	exit(127);
+		check_cmd1(cmd, ptrs, statbuf);
+}
+
+int	slash_point(char *cmd)
+{
+	int	i;
+
+	i = 0;
+	if (cmd && cmd[0] == '.')
+		return (0);
+	while (cmd && cmd[i] != '\0')
+	{
+		if (cmd[i] == '/')
+			return (0);
+		i++;
+	}
+	return (1);
 }
 
 int	new_execve(t_cmd *cmd, t_list **list_env, t_free **ptrs)
@@ -46,42 +86,23 @@ int	new_execve(t_cmd *cmd, t_list **list_env, t_free **ptrs)
 	char	**args;
 	char	**npath;
 	char	*cmd_fpath;
-	int		type;
 
-	type = 0;
-	args = execve_argv(cmd, ptrs);
+	cmd_fpath = NULL;
 	npath = path(list_env, ptrs);
-	cmd_fpath = cmd_path(cmd->cmd, npath, ptrs, &type);
+	args = execve_argv(cmd, ptrs);
 	env_tab = list2tab(*list_env, ptrs);
-	if (!cmd_fpath)
-		new_execve1(cmd, args, env_tab, type);
+	if (!slash_point(cmd->cmd))
+		check_cmd(cmd->cmd, &cmd_fpath, ptrs);
+	else
+	{
+		cmd_fpath = cmd_path(cmd->cmd, npath, ptrs);
+		if (!cmd_fpath)
+			(cmd_error(cmd->cmd, "command not found"), exit(127));
+	}
 	if (execve(cmd_fpath, args, env_tab) == -1)
 	{
-		ft_check(cmd->cmd, ptrs);
 		new_perror(cmd->cmd);
-		if (access(cmd->cmd, F_OK | X_OK) == -1)
-			(ft_free_all(ptrs), exit (127));
 		(ft_free_all(ptrs), exit (1));
 	}
 	return (0);
-}
-
-char	**path(t_list **envp, t_free **ptrs)
-{
-	char	**npath;
-	t_list	*current;
-
-	current = *envp;
-	if (!envp)
-		return (NULL);
-	while (current)
-	{
-		if (!ft_strcmp(current->var, "PATH"))
-		{
-			npath = ft_split(current->value, ':', ptrs);
-			return (npath);
-		}
-		current = current->next;
-	}
-	return (NULL);
 }
