@@ -6,7 +6,7 @@
 /*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 16:17:59 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/04/05 16:26:32 by yboutsli         ###   ########.fr       */
+/*   Updated: 2024/04/21 18:47:05 by yboutsli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 
 static int	long_nb(char *s)
 {
-	unsigned long long	nb;
-	int					sign;
-	int					i;
+	size_t		nb;
+	int			sign;
+	int			i;
 
 	nb = 0;
 	sign = 1;
@@ -30,8 +30,8 @@ static int	long_nb(char *s)
 	while (s[i])
 	{
 		nb = (nb * 10) + (s[i] - 48);
-		if ((sign == 1 && nb > LLONG_MAX)
-			|| (sign == -1 && nb > (unsigned long long)LLONG_MAX + 1))
+		if ((sign == 1 && nb > LONG_MAX)
+			|| (sign == -1 && nb > ((size_t)(LONG_MAX) + 1)))
 			return (1);
 		i++;
 	}
