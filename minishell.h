@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
+/*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/06 01:54:38 by obouchta          #+#    #+#             */
-/*   Updated: 2024/04/20 14:07:11 by yboutsli         ###   ########.fr       */
+/*   Updated: 2024/04/21 13:27:10 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,7 @@ typedef struct s_file
 	char	*delimiter;
 	int		delim_flag;
 	int		is_var;
+	int		index;
 }	t_file;
 
 typedef struct s_cmd
@@ -162,7 +163,6 @@ int		is_ambig(char *value);
 int		char_is_valid(char c);
 int		is_whitespace(char c);
 void	handle_signals(int signum);
-void	heredoc_sigint(int signum);
 int		ft_new_len(char *input);
 int		quoted(char *input, int i);
 void	add_spaces(char **input, t_free **ptrs);
@@ -170,7 +170,6 @@ void	trim_input(char **input, t_free **ptrs);
 int		regonize_type(char *input, int i);
 int		regonize_type_2(int prev_type);
 int		get_last_type(t_token *tokens);
-int		calc_args_len_helper(char *input, int *i, int *len);
 int		calc_args_len(char *input, int i);
 t_token	*get_cmd(char *input, int *i, int prev_type, t_free **ptrs);
 int		calc_cmd_len(char *input, int *i);
@@ -191,6 +190,7 @@ char	*remove_char(char *str, int char_index, t_free **ptrs);
 void	expanding(t_token **tokens, t_list *list_env, t_free **ptrs);
 char	*expanding_1(t_list *list_env, t_token *token, t_free **ptrs);
 char	*expanding_2(t_list *list_env, t_value args, t_free **ptrs);
+void	update_vars(t_token *token);
 char	*exp_init(int *i, int *count, char *new_result);
 void	utils2(int *i, int *count);
 void	make_tab(int tab[2], int i, int j);
@@ -226,8 +226,6 @@ void	env_init1(t_list	**env, t_free **ptrs);
 int		cd(char **args, t_list **env, t_free **ptrs);
 int		env(t_list **list_env, t_cmd *cmd, t_free **ptrs);
 int		pwd(t_list **list_env, t_free **ptrs);
-int		set_valid(char *str);
-int		add_set(t_list **set, char *input);
 int		ft_execution(t_cmd **cmd, t_list **list_env, t_free **ptrs);
 char	**path(t_list **envp, t_free **ptrs);
 void	ft_free(char **tab, t_free **ptrs);
@@ -249,7 +247,7 @@ int		nvalid_output(char *str1, char *str2);
 void	env_lc_update(t_cmd *cmd, t_list **list_env, t_free **ptrs);
 int		ft_exit(t_cmd *cmd, t_free **ptrs, int exit_print);
 int		args_size(t_cmd *cmd);
-void	update_exit_status(t_list **list_env, int status, t_free **ptrs);
+void	open_prev(t_cmd *cmd, int index, t_free **ptrs);
 int		handle_io(t_cmd *cmd, t_list *list_env, t_free **ptrs, int *io_fd);
 int		execute_1(t_cmd *cmd, t_list **list_env, t_free **ptrs, int *io_fd);
 int		handle_io_helper1(t_cmd *cmd, t_list *list_env,

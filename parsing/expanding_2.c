@@ -6,11 +6,26 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/06 04:36:31 by obouchta          #+#    #+#             */
-/*   Updated: 2024/04/19 17:20:28 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/04/21 13:27:46 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void	update_vars(t_token *token)
+{
+	int	i;
+
+	i = 0;
+	if (!token->vars_len)
+		return ;
+	while (i < token->vars_len)
+	{
+		if (token->vars[i].mode != 2)
+			token->vars[i].mode = 0;
+		i++;
+	}
+}
 
 t_new_2	create_new_2(t_list **list_env, t_free **ptrs, t_value args)
 {

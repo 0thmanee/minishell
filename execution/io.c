@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   io.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
+/*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/06 00:03:20 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/04/06 00:03:43 by yboutsli         ###   ########.fr       */
+/*   Updated: 2024/04/21 13:11:21 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,24 +39,25 @@ int	handle_io_helper1(t_cmd *cmd, t_list *list_env, t_free **ptrs, int *io_fd)
 	int	i;
 
 	if (handle_io_helper1_2(cmd, list_env, ptrs, io_fd))
-		return (1);
+		return (-1);
 	i = -1;
 	while (cmd->infiles[++i].fd != -42)
 	{
 		if (cmd->infiles[i].type == 0)
 		{
 			if (cmd->infiles[i].is_var && is_ambig(cmd->infiles[i].file))
-				return (write(2, "minishell: ambiguous redirect\n", 30), 1);
+				return (write(2, "minishell: ambiguous redirect\n", 30),
+					cmd->infiles[i].index);
 			cmd->infiles[i].fd = open(cmd->infiles[i].file, O_RDONLY);
 			if (cmd->infiles[i].fd == -1)
 				return (write(2, "minishell: ", 11),
-					perror(cmd->infiles[i].file), 1);
+					perror(cmd->infiles[i].file), cmd->infiles[i].index);
 			if (cmd->infiles[i + 1].fd == -42)
 				dup2(cmd->infiles[i].fd, 0);
 			close(cmd->infiles[i].fd);
 		}
 	}
-	return (0);
+	return (-2);
 }
 
 int	handle_io_helper2_2(t_cmd *cmd, int *i, t_free **ptrs)
@@ -109,11 +110,29 @@ int	handle_io_helper2(t_cmd *cmd, t_free **ptrs)
 	return (0);
 }
 
-int	handle_io(t_cmd *cmd, t_list *list_env, t_free **ptrs, int *io_fd)
+void	open_prev(t_cmd *cmd, int index, t_free **ptrs)
 {
-	if (cmd->infiles && handle_io_helper1(cmd, list_env, ptrs, io_fd))
-		return (1);
-	if (cmd->outfiles && handle_io_helper2(cmd, ptrs))
-		return (1);
-	return (0);
+	int	i;
+
+	i = 0;
+	while (cmd->outfiles[i].fd != -42)
+	{
+		if (cmd->outfiles[i].index < index)
+		{
+			if (cmd->outfiles[i].is_var && is_ambig(cmd->outfiles[i].file))
+				return ;
+			if (cmd->outfiles[i].is_var)
+				trim_input(&cmd->outfiles[i].file, ptrs);
+			if (cmd->outfiles[i].type == 2)
+				cmd->outfiles[i].fd = open(cmd->outfiles[i].file,
+						O_CREAT | O_TRUNC | O_RDWR, 0644);
+			else if (cmd->outfiles[i].type == 3)
+				cmd->outfiles[i].fd = open(cmd->outfiles[i].file,
+						O_CREAT | O_APPEND | O_RDWR, 0644);
+			if (cmd->outfiles[i].fd == -1)
+				return ;
+			(cmd->outfiles[i].fd != -1 && close(cmd->outfiles[i].fd));
+		}
+		i++;
+	}
 }
