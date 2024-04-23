@@ -6,7 +6,7 @@
 /*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 22:40:46 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/04/20 14:06:18 by yboutsli         ###   ########.fr       */
+/*   Updated: 2024/04/23 14:15:35 by yboutsli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,6 +95,8 @@ int	new_execve(t_cmd *cmd, t_list **list_env, t_free **ptrs)
 		check_cmd(cmd->cmd, &cmd_fpath, ptrs);
 	else
 	{
+		if (!npath)
+			(cmd_error(cmd->cmd, "No such file or directory"), exit(127));
 		cmd_fpath = cmd_path(cmd->cmd, npath, ptrs);
 		if (!cmd_fpath)
 			(cmd_error(cmd->cmd, "command not found"), exit(127));
