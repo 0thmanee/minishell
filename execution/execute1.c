@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 11:49:46 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/04/21 13:10:58 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/04/23 16:36:52 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,8 @@ int	handle_io(t_cmd *cmd, t_list *list_env, t_free **ptrs, int *io_fd)
 			return (1);
 		else if (index >= 0)
 		{
-			open_prev(cmd, index, ptrs);
+			if (cmd->outfiles)
+				open_prev(cmd, index, ptrs);
 			return (1);
 		}
 	}
