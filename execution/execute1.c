@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 11:49:46 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/04/23 16:36:52 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/04/23 17:27:17 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,20 +14,8 @@
 
 int	handle_io(t_cmd *cmd, t_list *list_env, t_free **ptrs, int *io_fd)
 {
-	int	index;
-
-	if (cmd->infiles)
-	{
-		index = handle_io_helper1(cmd, list_env, ptrs, io_fd);
-		if (index == -1)
-			return (1);
-		else if (index >= 0)
-		{
-			if (cmd->outfiles)
-				open_prev(cmd, index, ptrs);
-			return (1);
-		}
-	}
+	if (cmd->infiles && handle_io_helper(cmd, list_env, ptrs, io_fd))
+		return (1);
 	if (cmd->outfiles && handle_io_helper2(cmd, ptrs))
 		return (1);
 	return (0);

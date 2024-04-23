@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/16 03:27:56 by obouchta          #+#    #+#             */
-/*   Updated: 2024/04/14 15:53:51 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/04/23 18:23:58 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ void	handle_signals(int signum)
 		printf("\n");
 		rl_replace_line("", 0);
 		rl_on_new_line();
-		rl_redisplay();
+		if (waitpid(0, 0, 0) == -1)
+			rl_redisplay();
 	}
 }

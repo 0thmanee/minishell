@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/06 01:54:38 by obouchta          #+#    #+#             */
-/*   Updated: 2024/04/21 13:27:10 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/04/23 18:30:33 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -249,6 +249,8 @@ int		ft_exit(t_cmd *cmd, t_free **ptrs, int exit_print);
 int		args_size(t_cmd *cmd);
 void	open_prev(t_cmd *cmd, int index, t_free **ptrs);
 int		handle_io(t_cmd *cmd, t_list *list_env, t_free **ptrs, int *io_fd);
+int		handle_io_helper(t_cmd *cmd, t_list *list_env,
+			t_free **ptrs, int *io_fd);
 int		execute_1(t_cmd *cmd, t_list **list_env, t_free **ptrs, int *io_fd);
 int		handle_io_helper1(t_cmd *cmd, t_list *list_env,
 			t_free **ptrs, int *io_fd);

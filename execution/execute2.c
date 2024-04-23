@@ -3,14 +3,30 @@
 /*                                                        :::      ::::::::   */
 /*   execute2.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
+/*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 16:39:30 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/04/14 22:33:32 by yboutsli         ###   ########.fr       */
+/*   Updated: 2024/04/23 17:54:57 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int	handle_io_helper(t_cmd *cmd, t_list *list_env, t_free **ptrs, int *io_fd)
+{
+	int	index;
+
+	index = handle_io_helper1(cmd, list_env, ptrs, io_fd);
+	if (index == -1)
+		return (-1);
+	else if (index >= 0)
+	{
+		if (cmd->outfiles)
+			open_prev(cmd, index, ptrs);
+		return (1);
+	}
+	return (0);
+}
 
 int	final_cmd(t_cmd *cmd, t_list **list_env, int io_fd[2], t_free **ptrs)
 {
@@ -60,9 +76,16 @@ static int	middle_cmds(t_cmd *cmd,
 	int	status;
 	int	fd[2];
 	int	pid;
+	int	io_mode;
 
-	if (cmd->infiles && handle_io_helper1(cmd, *list_env, ptrs, io_fd))
-		return (1);
+	if (cmd->infiles)
+	{
+		io_mode = handle_io_helper(cmd, *list_env, ptrs, io_fd);
+		if (io_mode == -1)
+			return (1);
+		else if (io_mode)
+			return (2);
+	}
 	status = 0;
 	if (pipe(fd) == -1)
 		(write(2, "minishell: ", 11), perror("pipe"), exit(1));
@@ -85,7 +108,7 @@ int	execute_2(t_cmd **cmd_list, t_list **list_env, t_free **ptrs, int *io_fd)
 	status = 0;
 	while (curr->next)
 	{
-		middle_cmds(curr, list_env, ptrs, io_fd);
+		status = middle_cmds(curr, list_env, ptrs, io_fd);
 		if (status == 1)
 			return (status);
 		curr = curr->next;
