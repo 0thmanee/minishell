@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 16:20:23 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/04/23 18:13:13 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/04/23 21:32:29 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,8 +67,12 @@ int	here_doc(t_file *infile, int mode, t_list *list_env, t_free **ptrs)
 	if (mode)
 		(dup2(fd[0], 0), close2(fd));
 	waitpid(pid, &status, 0);
+	// ft_putstr_fd(, 2);
+	printf("status %d\n", WIFSIGNALED(status));
+
 	if (WIFSIGNALED(status) && WTERMSIG(status) == SIGINT)
 	{
+	//	ft_putstr_fd("signaled\n", 2);
 		printf("\n");
 		return (1);
 	}

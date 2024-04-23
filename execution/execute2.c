@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 16:39:30 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/04/23 17:54:57 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/04/24 00:03:15 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,7 @@ static int	middle_cmds(t_cmd *cmd,
 	if (cmd->infiles)
 	{
 		io_mode = handle_io_helper(cmd, *list_env, ptrs, io_fd);
+		printf("io_mode= %d\n", io_mode);
 		if (io_mode == -1)
 			return (1);
 		else if (io_mode)

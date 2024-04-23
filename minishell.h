@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/06 01:54:38 by obouchta          #+#    #+#             */
-/*   Updated: 2024/04/23 18:30:33 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/04/24 00:00:40 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,6 @@ typedef struct s_cmd
 	char			**args;
 	t_file			*infiles;
 	t_file			*outfiles;
-	int				io_error;
 	int				cmd_is_var;
 	struct s_cmd	*next;
 }	t_cmd;

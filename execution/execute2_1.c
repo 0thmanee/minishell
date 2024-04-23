@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 23:00:44 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/04/14 15:52:44 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/04/24 00:03:17 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ int	child_execution(int fd[2], t_cmd *cmd, t_list **list_env, t_free **ptrs)
 		return (1);
 	close2(fd);
 	status = 0;
-	if (cmd->cmd == NULL || cmd->io_error)
+	if (cmd->cmd == NULL)
 		exit(0);
 	status = child_utils(cmd, list_env, ptrs);
 	exit(status);

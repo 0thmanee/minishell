@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 11:49:46 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/04/23 17:27:17 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/04/24 00:00:26 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ static int	child_execve(t_cmd *cmd, t_list **list_env,
 	int				status;
 
 	status = 0;
-	if (!(cmd->cmd) || cmd->io_error)
+	if (!(cmd->cmd))
 		return (0);
 	pid = fork();
 	if (pid == 0)
@@ -104,7 +104,7 @@ int	execute_1(t_cmd *cmd, t_list **list_env, t_free **ptrs, int *io_fd)
 		(ft_free_all(ptrs), exit(1));
 	if (handle_io(cmd, *list_env, ptrs, io_fd))
 		return (1);
-	if (cmd->cmd == NULL || cmd->io_error)
+	if (cmd->cmd == NULL)
 		return (0);
 	status = execute1_utils(cmd, list_env, attr, ptrs);
 	if (ft_strcmp(cmd->cmd, "env"))
