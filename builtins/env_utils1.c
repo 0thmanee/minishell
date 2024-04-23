@@ -6,7 +6,7 @@
 /*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 16:29:49 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/04/20 14:06:46 by yboutsli         ###   ########.fr       */
+/*   Updated: 2024/04/23 15:22:40 by yboutsli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ void	shlvl_var(t_list **env, t_free **ptrs)
 	cmd.args = arg;
 	envp_shlvl = getenv("SHLVL");
 	if (!envp_shlvl || envp_shlvl[0] == '\0')
-		(ft_free_ptr(ptrs, arg[0]), export(&cmd, env, ptrs));
+		export(&cmd, env, ptrs);
 	else
 	{
 		shlvl = (int)ft_atoi(envp_shlvl);
