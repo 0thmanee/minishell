@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 16:20:23 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/04/24 06:43:19 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/04/24 19:46:59 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,16 +21,12 @@ static char	*utils3(t_new_1 *new_strct, char *input)
 	free(tmp);
 	return (input);
 }
-void	handler_2(int sig)
-{
-	(void)sig;
-	signal(SIGINT, SIG_DFL);
-}
+
 static void	utils(int fd[2], t_file *in, int mode, t_new_1 *new_strct)
 {
 	char	*input;
 
-	signal(SIGINT, handler_2);
+	signal(SIGINT, SIG_DFL);
 	rl_catch_signals = 1;
 	if (mode)
 		close(fd[0]);
