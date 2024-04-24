@@ -23,6 +23,7 @@ READLINEDIR = $(shell brew --prefix readline)
 NAME = minishell
 
 all: $(NAME)
+
 $(NAME): $(parsing_objects) $(libft_objects) $(builtins_objects) $(get_next_line_objects) $(execution_objects)
 	@cc $(CFLAGS) $^ -o $(NAME) -L$(READLINEDIR)/lib -lreadline
 	@printf "\033[32m[ ✔ ] %s\n\033[0m" "Program Created"

@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 16:20:23 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/04/23 21:32:29 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/04/24 06:43:19 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,12 +21,16 @@ static char	*utils3(t_new_1 *new_strct, char *input)
 	free(tmp);
 	return (input);
 }
-
+void	handler_2(int sig)
+{
+	(void)sig;
+	signal(SIGINT, SIG_DFL);
+}
 static void	utils(int fd[2], t_file *in, int mode, t_new_1 *new_strct)
 {
 	char	*input;
 
-	signal(SIGINT, SIG_DFL);
+	signal(SIGINT, handler_2);
 	rl_catch_signals = 1;
 	if (mode)
 		close(fd[0]);
@@ -67,13 +71,9 @@ int	here_doc(t_file *infile, int mode, t_list *list_env, t_free **ptrs)
 	if (mode)
 		(dup2(fd[0], 0), close2(fd));
 	waitpid(pid, &status, 0);
-	// ft_putstr_fd(, 2);
-	printf("status %d\n", WIFSIGNALED(status));
-
 	if (WIFSIGNALED(status) && WTERMSIG(status) == SIGINT)
 	{
-	//	ft_putstr_fd("signaled\n", 2);
-		printf("\n");
+		write(1, "\n", 1);
 		return (1);
 	}
 	return (0);
