@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/06 01:54:38 by obouchta          #+#    #+#             */
-/*   Updated: 2024/04/24 04:40:44 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/04/24 21:09:04 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,6 +127,8 @@ typedef struct s_new_2
 	t_value	args;
 }	t_new_2;
 
+int	g_signum;
+
 // libft
 char	*ft_strcpy(char *dest, const char *src);
 char	*ft_strjoin(char *s1, char *s2, t_free **ptrs);
@@ -162,6 +164,7 @@ int		is_ambig(char *value);
 int		char_is_valid(char c);
 int		is_whitespace(char c);
 void	handle_signals(int signum);
+void	heredoc_sig(int signum);
 int		ft_new_len(char *input);
 int		quoted(char *input, int i);
 void	add_spaces(char **input, t_free **ptrs);
