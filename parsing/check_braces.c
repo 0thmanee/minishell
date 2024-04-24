@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 04:48:49 by obouchta          #+#    #+#             */
-/*   Updated: 2024/04/19 16:47:39 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/04/24 22:37:17 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,8 @@ int	check_braces(char *value)
 	int	i;
 
 	i = 0;
+	if (!ft_strchr(value, '{'))
+		return (0);
 	while (value[i])
 	{
 		if ((quoted(value, i) == '\"' || !quoted(value, i))

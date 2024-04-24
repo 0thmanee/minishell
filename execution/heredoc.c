@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 16:20:23 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/04/24 21:42:56 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/04/24 22:51:11 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,10 +44,7 @@ static void	utils(int fd[2], t_file *in, int mode, t_new_1 *new_strct)
 	}
 	if (mode)
 		close (fd[1]);
-	if (in->delim_flag)
-		ft_free_ptr(new_strct->ptrs, input);
-	else
-		free(input);
+	free(input);
 }
 
 int	here_doc(t_file *infile, int mode, t_list *list_env, t_free **ptrs)
@@ -61,12 +58,12 @@ int	here_doc(t_file *infile, int mode, t_list *list_env, t_free **ptrs)
 		(write(2, "minishell: ", 11), perror("pipe"), exit(1));
 	utils(fd, infile, mode, &tmp);
 	signal(SIGINT, handle_signals);
+	if (mode)
+		(dup2(fd[0], 0), close2(fd));
 	if (g_signum == SIGINT)
 	{
 		g_signum = 0;
 		return (1);
 	}
-	if (mode)
-		(dup2(fd[0], 0), close2(fd));
 	return (0);
 }
