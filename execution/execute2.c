@@ -6,27 +6,11 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 16:39:30 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/04/24 21:40:57 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/04/25 06:31:19 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-int	handle_io_helper(t_cmd *cmd, t_list *list_env, t_free **ptrs, int *io_fd)
-{
-	int	index;
-
-	index = handle_io_helper1(cmd, list_env, ptrs, io_fd);
-	if (index == -1)
-		return (-1);
-	else if (index >= 0)
-	{
-		if (cmd->outfiles)
-			open_prev(cmd, index, ptrs);
-		return (1);
-	}
-	return (0);
-}
 
 int	final_cmd(t_cmd *cmd, t_list **list_env, int io_fd[2], t_free **ptrs)
 {
@@ -34,7 +18,9 @@ int	final_cmd(t_cmd *cmd, t_list **list_env, int io_fd[2], t_free **ptrs)
 	int	pid;
 
 	dup2(io_fd[1], 1);
-	if (handle_io(cmd, *list_env, ptrs, io_fd))
+	if (cmd->files && handle_io_heredoc(cmd, *list_env, ptrs, io_fd))
+		return (1);
+	if (handle_io(cmd, ptrs))
 		return (1);
 	status = 0;
 	pid = new_fork();
@@ -59,11 +45,11 @@ int	has_heredoc(t_cmd *cmd)
 	int	i;
 
 	i = 0;
-	if (!cmd || !cmd->infiles)
+	if (!cmd || !cmd->files)
 		return (1);
-	while (cmd->infiles[i].fd != -42)
+	while (cmd->files[i].fd != -42)
 	{
-		if (cmd->infiles[i].type == 1)
+		if (cmd->files[i].type == 1)
 			return (0);
 		i++;
 	}
@@ -76,16 +62,9 @@ static int	middle_cmds(t_cmd *cmd,
 	int	status;
 	int	fd[2];
 	int	pid;
-	int	io_mode;
 
-	if (cmd->infiles)
-	{
-		io_mode = handle_io_helper(cmd, *list_env, ptrs, io_fd);
-		if (io_mode == -1)
-			return (1);
-		else if (io_mode)
-			return (2);
-	}
+	if (cmd->files && handle_io_heredoc(cmd, *list_env, ptrs, io_fd))
+		return (1);
 	status = 0;
 	if (pipe(fd) == -1)
 		(write(2, "minishell: ", 11), perror("pipe"), exit(1));

@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/17 04:30:01 by obouchta          #+#    #+#             */
-/*   Updated: 2024/04/25 02:58:19 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/04/25 16:17:43 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ int	get_cmd_from_args(t_token *curr, t_cmd *cmd, t_free **ptrs)
 	start = 0;
 	while (i < curr->args_len && !curr->args[i].value
 		&& !(!curr->args[i].value && curr->args[i].vars_len
-		&& !(curr->args[i].no_quote)))
+			&& !(curr->args[i].no_quote)))
 		i++;
 	if (i < curr->args_len)
 	{
@@ -57,7 +57,7 @@ int	get_new_args_len(t_token *token, int i)
 	{
 		if (token->args[i].value
 			|| (!token->args[i].value && token->args[i].vars_len
-			&& !(token->args[i].no_quote)))
+				&& !(token->args[i].no_quote)))
 			len++;
 		i++;
 	}
@@ -76,7 +76,8 @@ void	extract_args_helper(t_token *curr, t_cmd *cmd, int i, t_free **ptrs)
 	cmd->args = ft_malloc(ptrs, (new_len + 1) * sizeof(char *));
 	while (i < curr->args_len)
 	{
-		if (!curr->args[i].value && curr->args[i].vars_len && !(curr->args[i].no_quote))
+		if (!curr->args[i].value && curr->args[i].vars_len
+			&& !(curr->args[i].no_quote))
 		{
 			(cmd->args)[j] = ft_strdup("", ptrs);
 			j++;

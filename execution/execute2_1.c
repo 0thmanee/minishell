@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 23:00:44 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/04/24 00:03:17 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/04/25 06:31:29 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ int	child_execution(int fd[2], t_cmd *cmd, t_list **list_env, t_free **ptrs)
 	int	status;
 
 	dup2(fd[1], 1);
-	if (cmd->outfiles && handle_io_helper2(cmd, ptrs))
+	if (cmd->files && handle_io(cmd, ptrs))
 		return (1);
 	close2(fd);
 	status = 0;

@@ -6,20 +6,11 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 11:49:46 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/04/24 00:00:26 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/04/25 06:31:12 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-int	handle_io(t_cmd *cmd, t_list *list_env, t_free **ptrs, int *io_fd)
-{
-	if (cmd->infiles && handle_io_helper(cmd, list_env, ptrs, io_fd))
-		return (1);
-	if (cmd->outfiles && handle_io_helper2(cmd, ptrs))
-		return (1);
-	return (0);
-}
 
 void	env_lc_update(t_cmd *cmd, t_list **list_env, t_free **ptrs)
 {
@@ -102,7 +93,9 @@ int	execute_1(t_cmd *cmd, t_list **list_env, t_free **ptrs, int *io_fd)
 	status = 0;
 	if (tcgetattr(STDIN_FILENO, &attr) == -1)
 		(ft_free_all(ptrs), exit(1));
-	if (handle_io(cmd, *list_env, ptrs, io_fd))
+	if (handle_io_heredoc(cmd, *list_env, ptrs, io_fd))
+		return (1);
+	if (handle_io(cmd, ptrs))
 		return (1);
 	if (cmd->cmd == NULL)
 		return (0);

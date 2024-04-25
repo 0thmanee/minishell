@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 16:20:23 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/04/25 01:39:47 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/04/25 15:56:50 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ static void	utils(int fd[2], t_file *in, int mode, t_new_1 *new_strct)
 	free(input);
 }
 
-int	here_doc(t_file *infile, int mode, t_list *list_env, t_free **ptrs)
+int	here_doc(t_file *file, int mode, t_list *list_env, t_free **ptrs)
 {
 	int		fd[2];
 	t_new_1	tmp;
@@ -56,14 +56,15 @@ int	here_doc(t_file *infile, int mode, t_list *list_env, t_free **ptrs)
 	tmp.ptrs = ptrs;
 	if (mode && pipe(fd) == -1)
 		(write(2, "minishell: ", 11), perror("pipe"), exit(1));
-	utils(fd, infile, mode, &tmp);
-	signal(SIGINT, handle_signals);
+	utils(fd, file, mode, &tmp);
 	if (mode)
 		(dup2(fd[0], 0), close2(fd));
 	if (g_signum == SIGINT)
 	{
+		signal(SIGINT, handle_signals);
 		g_signum = 0;
 		return (1);
 	}
+	signal(SIGINT, handle_signals);
 	return (0);
 }

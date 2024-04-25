@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/16 22:51:37 by obouchta          #+#    #+#             */
-/*   Updated: 2024/04/24 00:00:09 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/04/25 06:18:59 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,7 @@ t_cmd	*ft_lstnew_3(t_free **ptrs)
 	new_node = ft_malloc(ptrs, sizeof(t_cmd));
 	new_node->cmd = NULL;
 	new_node->args = NULL;
-	new_node->infiles = NULL;
-	new_node->outfiles = NULL;
+	new_node->files = NULL;
 	new_node->cmd_is_var = 0;
 	new_node->next = NULL;
 	return (new_node);

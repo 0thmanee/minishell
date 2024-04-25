@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/06 01:54:38 by obouchta          #+#    #+#             */
-/*   Updated: 2024/04/25 03:39:24 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/04/25 16:08:40 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,15 +85,14 @@ typedef struct s_file
 	char	*delimiter;
 	int		no_quote;
 	int		is_var;
-	int		index;
+	int		last_in_out;
 }	t_file;
 
 typedef struct s_cmd
 {
 	char			*cmd;
 	char			**args;
-	t_file			*infiles;
-	t_file			*outfiles;
+	t_file			*files;
 	int				cmd_is_var;
 	struct s_cmd	*next;
 }	t_cmd;
@@ -188,7 +187,7 @@ char	*case_1(char *result, int *arr, t_list *list_env, t_free **ptrs);
 char	*case_2(char *result, int *i, t_free **ptrs);
 char	*case_3(char *result, int *i, t_free **ptrs);
 char	*case_4(char *result, int *arr, t_list *list_env, t_free **ptrs);
-void	check_empty_var(char **value, t_free **ptrs);
+void	check_empty_var(char **value, int vars, t_free **ptrs);
 char	*replace_str(char *str, int tab[2], char *min_str, t_free **ptrs);
 char	*remove_char(char *str, int char_index, t_free **ptrs);
 void	expanding(t_token **tokens, t_list *list_env, t_free **ptrs);
@@ -207,8 +206,15 @@ void	specify_vars(t_token **tokens, t_free **ptrs);
 int		tokens_len(t_token *tokens);
 void	extract_command(t_token *token, t_cmd *cmd, t_free **ptrs);
 void	extract_args(t_token *token, t_cmd *cmd, t_free **ptrs);
-void	extract_infiles(t_token *token, t_cmd *cmd, t_free **ptrs);
-void	extract_outfiles(t_token *token, t_cmd *cmd, t_free **ptrs);
+void	extract_files(t_token *token, t_cmd *cmd, t_free **ptrs);
+void	extract_files_helper_1(t_token *curr, t_file *files,
+			int *i, t_free **ptrs);
+void	extract_files_helper_2(t_token *curr, t_file *files,
+			int *i, t_free **ptrs);
+void	extract_files_helper_3(t_token *curr, t_file *files,
+			int *i, t_free **ptrs);
+void	extract_files_helper_4(t_token *curr, t_file *files,
+			int *i, t_free **ptrs);
 void	move_options(t_cmd *cmd, t_free **ptrs);
 int		syntax_error(t_token *token, int *here_doc);
 int		check_syntax(t_token *tokens);
@@ -241,7 +247,7 @@ int		unset(t_list **list_env, char **args, t_free **ptrs);
 char	**list2tab(t_list *list_env, t_free **ptrs);
 int		env_size(t_list *list_env);
 void	close2(int tab[2]);
-int		here_doc(t_file *infile, int mode, t_list *list_env, t_free **ptrs);
+int		here_doc(t_file *file, int mode, t_list *list_env, t_free **ptrs);
 int		new_execve(t_cmd *cmd, t_list **list_env, t_free **ptrs);
 int		execute_2(t_cmd **cmd_list, t_list **list_env,
 			t_free **ptrs, int *io_fd);
@@ -251,15 +257,11 @@ int		nvalid_output(char *str1, char *str2);
 void	env_lc_update(t_cmd *cmd, t_list **list_env, t_free **ptrs);
 int		ft_exit(t_cmd *cmd, t_free **ptrs, int exit_print);
 int		args_size(t_cmd *cmd);
-void	open_prev(t_cmd *cmd, int index, t_free **ptrs);
-int		handle_io(t_cmd *cmd, t_list *list_env, t_free **ptrs, int *io_fd);
-int		handle_io_helper(t_cmd *cmd, t_list *list_env,
+int		handle_io_heredoc(t_cmd *cmd, t_list *list_env,
 			t_free **ptrs, int *io_fd);
+int		handle_io(t_cmd *cmd, t_free **ptrs);
 int		execute_1(t_cmd *cmd, t_list **list_env, t_free **ptrs, int *io_fd);
-int		handle_io_helper1(t_cmd *cmd, t_list *list_env,
-			t_free **ptrs, int *io_fd);
 void	null_arg(t_list **list_env);
-int		handle_io_helper2(t_cmd *cmd, t_free **ptrs);
 void	case0(char *str, t_list **list_env, t_free **ptrs);
 int		valid_args(char **args, t_free **ptrs);
 int		new_perror(char *str);
