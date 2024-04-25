@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/16 03:19:46 by obouchta          #+#    #+#             */
-/*   Updated: 2024/04/19 19:22:33 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/04/25 02:57:06 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,9 +77,9 @@ void	specify_vars_helper(t_token *curr, t_free **ptrs)
 	i = 0;
 	if (!curr->args_len)
 		return ;
-	curr->args[i].removed_doll = check_removed_doll(curr->args[i].value);
 	while (i < curr->args_len)
 	{
+		curr->args[i].removed_doll = check_removed_doll(curr->args[i].value);
 		curr->args[i].vars_len = calc_vars(curr->args[i].value);
 		if (curr->args[i].vars_len)
 		{

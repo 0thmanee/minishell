@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/06 01:54:38 by obouchta          #+#    #+#             */
-/*   Updated: 2024/04/24 21:09:04 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/04/25 03:39:24 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,7 @@ typedef struct s_value
 	char	*value;
 	int		vars_len;
 	t_var	*vars;
+	int		no_quote;
 	int		removed_doll;
 }	t_value;
 
@@ -71,7 +72,7 @@ typedef struct s_token
 	int				type;
 	int				vars_len;
 	t_var			*vars;
-	int				delim_flag;
+	int				no_quote;
 	int				removed_doll;
 	struct s_token	*next;
 }	t_token;
@@ -82,7 +83,7 @@ typedef struct s_file
 	int		fd;
 	int		type;
 	char	*delimiter;
-	int		delim_flag;
+	int		no_quote;
 	int		is_var;
 	int		index;
 }	t_file;
@@ -158,7 +159,7 @@ int		ft_strchr(char *str, char c);
 void	ft_putstr_fd(char *s, int fd);
 long	ft_atoi(const char *str);
 int		ft_lstsize(t_cmd *lst);
-int		is_ambig(char *value);
+int		is_ambig(t_file io_file);
 
 // Parsing
 int		char_is_valid(char c);
@@ -187,6 +188,7 @@ char	*case_1(char *result, int *arr, t_list *list_env, t_free **ptrs);
 char	*case_2(char *result, int *i, t_free **ptrs);
 char	*case_3(char *result, int *i, t_free **ptrs);
 char	*case_4(char *result, int *arr, t_list *list_env, t_free **ptrs);
+void	check_empty_var(char **value, t_free **ptrs);
 char	*replace_str(char *str, int tab[2], char *min_str, t_free **ptrs);
 char	*remove_char(char *str, int char_index, t_free **ptrs);
 void	expanding(t_token **tokens, t_list *list_env, t_free **ptrs);

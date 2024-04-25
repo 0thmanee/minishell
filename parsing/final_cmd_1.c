@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/17 04:30:01 by obouchta          #+#    #+#             */
-/*   Updated: 2024/04/06 21:12:24 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/04/25 02:58:19 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,11 +32,16 @@ int	get_cmd_from_args(t_token *curr, t_cmd *cmd, t_free **ptrs)
 
 	i = 0;
 	start = 0;
-	while (i < curr->args_len && !curr->args[i].value)
+	while (i < curr->args_len && !curr->args[i].value
+		&& !(!curr->args[i].value && curr->args[i].vars_len
+		&& !(curr->args[i].no_quote)))
 		i++;
 	if (i < curr->args_len)
 	{
-		cmd->cmd = ft_strdup(curr->args[i].value, ptrs);
+		if (!curr->args[i].value)
+			cmd->cmd = ft_strdup("", ptrs);
+		else
+			cmd->cmd = ft_strdup(curr->args[i].value, ptrs);
 		cmd->cmd_is_var = curr->args[i].vars_len;
 		start = i + 1;
 	}
@@ -50,7 +55,9 @@ int	get_new_args_len(t_token *token, int i)
 	len = 0;
 	while (i < token->args_len)
 	{
-		if (token->args[i].value)
+		if (token->args[i].value
+			|| (!token->args[i].value && token->args[i].vars_len
+			&& !(token->args[i].no_quote)))
 			len++;
 		i++;
 	}
@@ -69,7 +76,12 @@ void	extract_args_helper(t_token *curr, t_cmd *cmd, int i, t_free **ptrs)
 	cmd->args = ft_malloc(ptrs, (new_len + 1) * sizeof(char *));
 	while (i < curr->args_len)
 	{
-		if (curr->args[i].value)
+		if (!curr->args[i].value && curr->args[i].vars_len && !(curr->args[i].no_quote))
+		{
+			(cmd->args)[j] = ft_strdup("", ptrs);
+			j++;
+		}
+		else if (curr->args[i].value)
 		{
 			(cmd->args)[j] = ft_strdup(curr->args[i].value, ptrs);
 			j++;

@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 16:20:23 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/04/24 22:51:11 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/04/25 01:39:47 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,13 +30,13 @@ static void	utils(int fd[2], t_file *in, int mode, t_new_1 *new_strct)
 	input = readline("> ");
 	while (input != NULL && ft_strcmp(input, in->delimiter))
 	{
-		if (in->delim_flag && !check_braces(input))
+		if (in->no_quote && !check_braces(input))
 			input = utils3(new_strct, input);
 		if (mode)
 			(write(fd[1], input, ft_strlen(input)), write(fd[1], "\n", 1));
 		if (mode && ft_strchr(input, '{') && check_braces(input))
 			write(fd[1], "minishell: bad substitution\n", 28);
-		if (in->delim_flag)
+		if (in->no_quote)
 			ft_free_ptr(new_strct->ptrs, input);
 		else
 			free(input);

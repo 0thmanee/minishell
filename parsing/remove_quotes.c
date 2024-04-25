@@ -6,22 +6,20 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 17:17:09 by obouchta          #+#    #+#             */
-/*   Updated: 2024/04/17 06:51:33 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/04/25 02:28:23 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	set_delim_flag(t_token *curr)
+int	set_no_quote(char *value)
 {
 	int	i;
 
-	if (curr->type != DELIMITER)
-		return (0);
 	i = 0;
-	while (curr->value[i])
+	while (value[i])
 	{
-		if (curr->value[i] == '\'' || curr->value[i] == '\"')
+		if (value[i] == '\'' || value[i] == '\"')
 			return (0);
 		i++;
 	}
@@ -94,6 +92,7 @@ void	remove_quotes_helper(t_token *curr, t_free **ptrs)
 	while (++i < curr->args_len)
 	{
 		tmp = curr->args[i].value;
+		curr->args[i].no_quote = set_no_quote(curr->args[i].value);
 		curr->args[i].value = no_quoted_value(curr->args[i].value,
 				no_quotes_len(curr->args[i].value), ptrs);
 		ft_free_ptr(ptrs, tmp);
@@ -108,7 +107,7 @@ void	remove_quotes(t_token **tokens, t_free **ptrs)
 	curr = *tokens;
 	while (curr)
 	{
-		curr->delim_flag = set_delim_flag(curr);
+		curr->no_quote = set_no_quote(curr->value);
 		if (curr->type == CMD || curr->type == OUT_FILE
 			|| curr->type == IN_FILE || curr->type == DELIMITER)
 		{

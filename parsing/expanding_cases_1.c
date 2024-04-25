@@ -6,11 +6,20 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/06 03:38:21 by obouchta          #+#    #+#             */
-/*   Updated: 2024/04/19 19:36:29 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/04/25 03:45:01 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void	check_empty_var(char **value, t_free **ptrs)
+{
+	char	*tmp;
+
+	tmp = *value;
+	*value = NULL;
+	ft_free_ptr(ptrs, tmp);
+}
 
 void	case_1_helper(char **result, int *arr, t_free **ptrs)
 {

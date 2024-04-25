@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/17 02:23:24 by obouchta          #+#    #+#             */
-/*   Updated: 2024/04/21 13:11:35 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/04/25 02:00:59 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,10 @@ void	extract_command(t_token *token, t_cmd *cmd, t_free **ptrs)
 	{
 		if (curr->type == CMD)
 		{
-			cmd->cmd = ft_strdup(curr->value, ptrs);
+			if (!curr->value && curr->vars_len && !(curr->no_quote))
+				cmd->cmd = ft_strdup("", ptrs);
+			else
+				cmd->cmd = ft_strdup(curr->value, ptrs);
 			cmd->cmd_is_var = curr->vars_len;
 		}
 		curr = curr->next;

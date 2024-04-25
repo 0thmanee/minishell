@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/06 00:03:20 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/04/21 13:11:21 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/04/25 03:54:55 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ int	handle_io_helper1(t_cmd *cmd, t_list *list_env, t_free **ptrs, int *io_fd)
 	{
 		if (cmd->infiles[i].type == 0)
 		{
-			if (cmd->infiles[i].is_var && is_ambig(cmd->infiles[i].file))
+			if (cmd->infiles[i].is_var && is_ambig(cmd->infiles[i]))
 				return (write(2, "minishell: ambiguous redirect\n", 30),
 					cmd->infiles[i].index);
 			cmd->infiles[i].fd = open(cmd->infiles[i].file, O_RDONLY);
@@ -64,7 +64,7 @@ int	handle_io_helper2_2(t_cmd *cmd, int *i, t_free **ptrs)
 {
 	while (cmd->outfiles[*i + 1].fd != -42)
 	{
-		if (cmd->outfiles[*i].is_var && is_ambig(cmd->outfiles[*i].file))
+		if (cmd->outfiles[*i].is_var && is_ambig(cmd->outfiles[*i]))
 			return (write(2, "minishell: ambiguous redirect\n", 30), 1);
 		if (cmd->outfiles[*i].is_var)
 			trim_input(&cmd->outfiles[*i].file, ptrs);
@@ -90,7 +90,7 @@ int	handle_io_helper2(t_cmd *cmd, t_free **ptrs)
 	i = 0;
 	if (handle_io_helper2_2(cmd, &i, ptrs))
 		return (1);
-	if (cmd->outfiles[i].is_var && is_ambig(cmd->outfiles[i].file))
+	if (cmd->outfiles[i].is_var && is_ambig(cmd->outfiles[i]))
 		return (write(2, "minishell: ambiguous redirect\n", 30), 1);
 	if (cmd->outfiles[i].is_var)
 		trim_input(&cmd->outfiles[i].file, ptrs);
@@ -119,7 +119,7 @@ void	open_prev(t_cmd *cmd, int index, t_free **ptrs)
 	{
 		if (cmd->outfiles[i].index < index)
 		{
-			if (cmd->outfiles[i].is_var && is_ambig(cmd->outfiles[i].file))
+			if (cmd->outfiles[i].is_var && is_ambig(cmd->outfiles[i]))
 				return ;
 			if (cmd->outfiles[i].is_var)
 				trim_input(&cmd->outfiles[i].file, ptrs);

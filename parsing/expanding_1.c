@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/15 02:58:32 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/04/21 13:26:49 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/04/25 03:49:19 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,8 +106,13 @@ void	expanding(t_token **tokens, t_list *list_env, t_free **ptrs)
 			tmp_val = curr->args[i].value;
 			curr->args[i].value = expanding_2(list_env, curr->args[i], ptrs);
 			ft_free_ptr(ptrs, tmp_val);
+			if (curr->args[i].value && !(curr->args[i].value)[0]
+				&& curr->args[i].vars_len)
+				check_empty_var(&curr->value, ptrs);
 		}
 		remove_last_doll(curr, ptrs);
+		if (curr->value && !(curr->value)[0] && curr->vars_len)
+			check_empty_var(&curr->value, ptrs);
 		curr = curr->next;
 	}
 }

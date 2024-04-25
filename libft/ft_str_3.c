@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/06 05:10:23 by obouchta          #+#    #+#             */
-/*   Updated: 2024/04/13 15:44:51 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/04/25 03:58:07 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,26 +27,28 @@ int	ft_lstsize(t_cmd *lst)
 	return (count);
 }
 
-int	is_ambig(char *value)
+int	is_ambig(t_file io_file)
 {
 	int	i;
 
-	if (!value || !value[0])
+	if (io_file.file && !io_file.file[0])
+		return (0);
+	if (!io_file.file)
 		return (1);
 	i = 0;
-	while (value[i] && is_whitespace(value[i]))
+	while (io_file.file[i] && is_whitespace(io_file.file[i]))
 		i++;
-	if (!value[i])
+	if (!io_file.file[i])
 		return (1);
-	while (value[i])
+	while (io_file.file[i])
 	{
-		if (is_whitespace(value[i]))
+		if (is_whitespace(io_file.file[i]))
 			break ;
 		i++;
 	}
-	while (value[i] && is_whitespace(value[i]))
+	while (io_file.file[i] && is_whitespace(io_file.file[i]))
 		i++;
-	if (value[i])
+	if (io_file.file[i])
 		return (1);
 	return (0);
 }
