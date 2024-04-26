@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 08:42:35 by obouchta          #+#    #+#             */
-/*   Updated: 2024/04/26 13:12:57 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/04/26 15:59:11 by yboutsli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,9 @@ int	process_input(char *input, t_list **list_env, t_free **ptrs)
 	expanding(&tokens, *list_env, ptrs);
 	if (final_command(&tokens, &cmd, *list_env, ptrs))
 		return (1);
-	return (ft_execution(&cmd, list_env, ptrs), 1);
+	ft_execution(&cmd, list_env, ptrs);
+	ft_rm_heredoc(cmd);
+	return (1);
 }
 
 void	read_input(t_list **list_env, t_free **ptrs)

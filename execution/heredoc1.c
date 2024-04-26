@@ -6,7 +6,7 @@
 /*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 22:26:57 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/04/19 21:00:00 by yboutsli         ###   ########.fr       */
+/*   Updated: 2024/04/26 16:00:16 by yboutsli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,4 +72,26 @@ char	*parse_heredoc(char *input, t_list *list_env, t_free **ptrs)
 		i++;
 	}
 	return (result);
+}
+
+void	ft_rm_heredoc(t_cmd *cmd)
+{
+	t_cmd	*curr;
+	int		i;
+
+	curr = cmd;
+	i = 0;
+	while (curr)
+	{
+		if (curr->files)
+		{
+			while (curr->files[i].fd != -42)
+			{
+				if (curr->files[i].type == 1)
+					unlink(curr->files[i].file);
+				i++;
+			}
+		}
+		curr = curr->next;
+	}
 }

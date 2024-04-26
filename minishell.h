@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/06 01:54:38 by obouchta          #+#    #+#             */
-/*   Updated: 2024/04/26 15:29:51 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/04/26 15:59:43 by yboutsli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -282,5 +282,6 @@ int		child_execution(int fd[2], t_cmd *cmd,
 			t_list **list_env, t_free **ptrs);
 char	*int_to_str(int num, t_free **ptrs);
 void	cmd_error(char *str1, char *str2);
+void	ft_rm_heredoc(t_cmd *cmd);
 
 #endif

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   io.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/06 00:03:20 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/04/26 15:23:12 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/04/26 15:48:50 by yboutsli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ int	handle_io(t_cmd *cmd, t_free **ptrs)
 		return (0);
 	while (cmd->files[i].fd != -42)
 	{
-		if (cmd->files[i].type == 0)
+		if (cmd->files[i].type == 0 || cmd->files[i].type == 1)
 		{
 			if (handle_io_infile(cmd, i))
 				return (1);

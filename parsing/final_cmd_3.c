@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   final_cmd_3.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/17 05:23:00 by obouchta          #+#    #+#             */
-/*   Updated: 2024/04/26 15:19:28 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/04/26 15:48:25 by yboutsli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ int	extract_files_helper_2(t_token *curr, t_file *files,
 	files[new_strct->i].no_quote = curr->no_quote;
 	files[new_strct->i].is_var = curr->vars_len;
 	files[new_strct->i].file = generate_file_name(new_strct->ptrs);
-	files[new_strct->i].type = 0;
+	files[new_strct->i].type = 1;
 	files[new_strct->i].delimiter = ft_strdup(curr->value, new_strct->ptrs);
 	if (here_doc(files + new_strct->i, new_strct->list_env, new_strct->ptrs))
 		return (1);
