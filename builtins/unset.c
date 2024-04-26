@@ -6,7 +6,7 @@
 /*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/10 21:19:24 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/04/18 21:28:07 by yboutsli         ###   ########.fr       */
+/*   Updated: 2024/04/26 16:34:27 by yboutsli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,22 @@ void	unset_utils2(t_list **curr, t_list **prev)
 	(*curr) = (*curr)->next;
 }
 
+static int	unset_valid(char *str)
+{
+	int	i;
+
+	i = 0;
+	if (ft_isalpha(str[0]) && str[0] != '_')
+		return (1);
+	while (str[i] != '\0')
+	{
+		if ((ft_isalpha(str[i]) && ft_isdigit(str[i])) && str[i] != '_')
+			return (1);
+		i++;
+	}
+	return (0);
+}
+
 int	unset(t_list **list_env, char **args, t_free **ptrs)
 {
 	t_list	*curr;
@@ -50,7 +66,7 @@ int	unset(t_list **list_env, char **args, t_free **ptrs)
 		unset_utils1(&curr, &prev, list_env);
 		while (curr)
 		{
-			if (valid(args[i]))
+			if (unset_valid(args[i]))
 			{
 				status = nvalid_output(args[i], "unset");
 				break ;
