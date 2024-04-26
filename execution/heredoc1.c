@@ -6,7 +6,7 @@
 /*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 22:26:57 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/04/26 16:00:16 by yboutsli         ###   ########.fr       */
+/*   Updated: 2024/04/26 17:13:35 by yboutsli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,14 +80,14 @@ void	ft_rm_heredoc(t_cmd *cmd)
 	int		i;
 
 	curr = cmd;
-	i = 0;
 	while (curr)
 	{
 		if (curr->files)
 		{
+			i = 0;
 			while (curr->files[i].fd != -42)
 			{
-				if (curr->files[i].type == 1)
+				if (curr->files[i].file && curr->files[i].type == 1)
 					unlink(curr->files[i].file);
 				i++;
 			}
