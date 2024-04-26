@@ -6,35 +6,11 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/06 00:03:20 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/04/25 16:03:06 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/04/26 15:23:12 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-int	handle_io_heredoc(t_cmd *cmd, t_list *list_env, t_free **ptrs, int *io_fd)
-{
-	int	i;
-
-	i = -1;
-	if (!cmd->files)
-		return (0);
-	while (cmd->files[++i].fd != -42)
-	{
-		if (cmd->files[i].type == 1)
-		{
-			dup2(io_fd[0], 0);
-			if (cmd->files[i].last_in_out)
-			{
-				if (here_doc(cmd->files + i, 1, list_env, ptrs))
-					return (1);
-			}
-			else if (here_doc(cmd->files + i, 0, list_env, ptrs))
-				return (1);
-		}
-	}
-	return (0);
-}
 
 int	handle_io_infile(t_cmd *cmd, int i)
 {

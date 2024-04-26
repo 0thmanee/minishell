@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 11:49:46 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/04/25 06:31:12 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/04/26 15:37:26 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,10 @@ static int	child_execve(t_cmd *cmd, t_list **list_env,
 		new_execve(cmd, list_env, ptrs);
 	waitpid(pid, &status, 0);
 	if (WIFSIGNALED(status) && WTERMSIG(status) == SIGINT)
+	{
+		printf("\n");
 		return (130);
+	}
 	if (WIFSIGNALED(status) && WTERMSIG(status) == SIGQUIT)
 	{
 		if (tcsetattr(STDIN_FILENO, TCSANOW, &attr) == -1)
@@ -85,7 +88,7 @@ static int	execute1_utils(t_cmd *cmd, t_list **list_env,
 	return (status);
 }
 
-int	execute_1(t_cmd *cmd, t_list **list_env, t_free **ptrs, int *io_fd)
+int	execute_1(t_cmd *cmd, t_list **list_env, t_free **ptrs)
 {
 	int				status;
 	struct termios	attr;
@@ -93,8 +96,6 @@ int	execute_1(t_cmd *cmd, t_list **list_env, t_free **ptrs, int *io_fd)
 	status = 0;
 	if (tcgetattr(STDIN_FILENO, &attr) == -1)
 		(ft_free_all(ptrs), exit(1));
-	if (handle_io_heredoc(cmd, *list_env, ptrs, io_fd))
-		return (1);
 	if (handle_io(cmd, ptrs))
 		return (1);
 	if (cmd->cmd == NULL)

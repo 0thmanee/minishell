@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
+/*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/05 11:01:54 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/04/05 17:30:03 by yboutsli         ###   ########.fr       */
+/*   Updated: 2024/04/26 15:32:11 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 
 static void	echo_utils(t_cmd *cmd, int *i)
 {
-	printf("%s", cmd->args[*i]);
+	ft_putstr_fd(cmd->args[*i], 1);
 	if (cmd->args[(*i) + 1])
-		printf(" ");
+		ft_putstr_fd(" ", 1);
 	(*i)++;
 }
 
@@ -32,7 +32,7 @@ static void	echo_utils1(t_cmd *cmd, int i, int nl)
 	while (cmd->args[i])
 		echo_utils(cmd, &i);
 	if (nl == 1)
-		printf("\n");
+		ft_putstr_fd("\n", 1);
 }
 
 int	echo(t_cmd *cmd)
@@ -43,7 +43,7 @@ int	echo(t_cmd *cmd)
 
 	echo_init(&nl, &j, &i);
 	if (!cmd->args)
-		return (printf("\n"), 0);
+		return (ft_putstr_fd("\n", 1), 0);
 	while (cmd->args[++i])
 	{
 		j = 0;

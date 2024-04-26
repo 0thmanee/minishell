@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 16:39:30 by yboutsli          #+#    #+#             */
-/*   Updated: 2024/04/25 06:31:19 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/04/26 12:10:43 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,6 @@ int	final_cmd(t_cmd *cmd, t_list **list_env, int io_fd[2], t_free **ptrs)
 	int	status;
 	int	pid;
 
-	dup2(io_fd[1], 1);
-	if (cmd->files && handle_io_heredoc(cmd, *list_env, ptrs, io_fd))
-		return (1);
 	if (handle_io(cmd, ptrs))
 		return (1);
 	status = 0;
@@ -40,31 +37,12 @@ int	final_cmd(t_cmd *cmd, t_list **list_env, int io_fd[2], t_free **ptrs)
 	return (status);
 }
 
-int	has_heredoc(t_cmd *cmd)
-{
-	int	i;
-
-	i = 0;
-	if (!cmd || !cmd->files)
-		return (1);
-	while (cmd->files[i].fd != -42)
-	{
-		if (cmd->files[i].type == 1)
-			return (0);
-		i++;
-	}
-	return (1);
-}
-
-static int	middle_cmds(t_cmd *cmd,
-			t_list **list_env, t_free **ptrs, int *io_fd)
+static int	middle_cmds(t_cmd *cmd, t_list **list_env, t_free **ptrs)
 {
 	int	status;
 	int	fd[2];
 	int	pid;
 
-	if (cmd->files && handle_io_heredoc(cmd, *list_env, ptrs, io_fd))
-		return (1);
 	status = 0;
 	if (pipe(fd) == -1)
 		(write(2, "minishell: ", 11), perror("pipe"), exit(1));
@@ -87,9 +65,7 @@ int	execute_2(t_cmd **cmd_list, t_list **list_env, t_free **ptrs, int *io_fd)
 	status = 0;
 	while (curr->next)
 	{
-		status = middle_cmds(curr, list_env, ptrs, io_fd);
-		if (status == 1)
-			return (status);
+		status = middle_cmds(curr, list_env, ptrs);
 		curr = curr->next;
 	}
 	status = final_cmd(curr, list_env, io_fd, ptrs);

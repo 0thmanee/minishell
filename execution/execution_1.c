@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution_1.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yboutsli <yboutsli@student.42.fr>          +#+  +:+       +#+        */
+/*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/12 03:41:21 by yasser03          #+#    #+#             */
-/*   Updated: 2024/04/21 18:18:54 by yboutsli         ###   ########.fr       */
+/*   Updated: 2024/04/26 12:10:33 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ int	ft_execution(t_cmd **cmd, t_list **list_env, t_free **ptrs)
 	fd = fd1(ptrs);
 	status = 0;
 	if (ft_lstsize(*cmd) == 1)
-		status = execute_1(*cmd, list_env, ptrs, fd);
+		status = execute_1(*cmd, list_env, ptrs);
 	else
 		status = execute_2(cmd, list_env, ptrs, fd);
 	exit_status(0, status);

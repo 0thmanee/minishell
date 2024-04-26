@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/06 01:54:38 by obouchta          #+#    #+#             */
-/*   Updated: 2024/04/25 16:08:40 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/04/26 15:29:51 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,6 +127,13 @@ typedef struct s_new_2
 	t_value	args;
 }	t_new_2;
 
+typedef struct s_new_3
+{
+	int		i;
+	t_list	*list_env;
+	t_free	**ptrs;
+}	t_new_3;
+
 int	g_signum;
 
 // libft
@@ -159,6 +166,7 @@ void	ft_putstr_fd(char *s, int fd);
 long	ft_atoi(const char *str);
 int		ft_lstsize(t_cmd *lst);
 int		is_ambig(t_file io_file);
+char	*generate_file_name(t_free **ptrs);
 
 // Parsing
 int		char_is_valid(char c);
@@ -198,7 +206,8 @@ char	*exp_init(int *i, int *count, char *new_result);
 void	utils2(int *i, int *count);
 void	make_tab(int tab[2], int i, int j);
 void	utils1(int *i, int len, char *str[3], t_free **ptrs);
-void	final_command(t_token **tokens, t_cmd **command, t_free **ptrs);
+int		final_command(t_token **tokens, t_cmd **command,
+			t_list *list_env, t_free **ptrs);
 void	check_for_var_helper_1(char *value, t_var *vars, int *i, int *j);
 void	check_for_var_helper_2(char *value, t_var *vars, int *i, int *j);
 void	check_for_var_helper_3(char *value, t_var *vars, int *i, int *j);
@@ -206,15 +215,16 @@ void	specify_vars(t_token **tokens, t_free **ptrs);
 int		tokens_len(t_token *tokens);
 void	extract_command(t_token *token, t_cmd *cmd, t_free **ptrs);
 void	extract_args(t_token *token, t_cmd *cmd, t_free **ptrs);
-void	extract_files(t_token *token, t_cmd *cmd, t_free **ptrs);
+int		extract_files(t_token *token, t_cmd *cmd,
+			t_list *list_env, t_free **ptrs);
 void	extract_files_helper_1(t_token *curr, t_file *files,
-			int *i, t_free **ptrs);
-void	extract_files_helper_2(t_token *curr, t_file *files,
-			int *i, t_free **ptrs);
+			t_new_3 *new_strct);
+int		extract_files_helper_2(t_token *curr, t_file *files,
+			t_new_3 *new_strct);
 void	extract_files_helper_3(t_token *curr, t_file *files,
-			int *i, t_free **ptrs);
+			t_new_3 *new_strct);
 void	extract_files_helper_4(t_token *curr, t_file *files,
-			int *i, t_free **ptrs);
+			t_new_3 *new_strct);
 void	move_options(t_cmd *cmd, t_free **ptrs);
 int		syntax_error(t_token *token, int *here_doc);
 int		check_syntax(t_token *tokens);
@@ -247,7 +257,7 @@ int		unset(t_list **list_env, char **args, t_free **ptrs);
 char	**list2tab(t_list *list_env, t_free **ptrs);
 int		env_size(t_list *list_env);
 void	close2(int tab[2]);
-int		here_doc(t_file *file, int mode, t_list *list_env, t_free **ptrs);
+int		here_doc(t_file *file, t_list *list_env, t_free **ptrs);
 int		new_execve(t_cmd *cmd, t_list **list_env, t_free **ptrs);
 int		execute_2(t_cmd **cmd_list, t_list **list_env,
 			t_free **ptrs, int *io_fd);
@@ -257,10 +267,8 @@ int		nvalid_output(char *str1, char *str2);
 void	env_lc_update(t_cmd *cmd, t_list **list_env, t_free **ptrs);
 int		ft_exit(t_cmd *cmd, t_free **ptrs, int exit_print);
 int		args_size(t_cmd *cmd);
-int		handle_io_heredoc(t_cmd *cmd, t_list *list_env,
-			t_free **ptrs, int *io_fd);
 int		handle_io(t_cmd *cmd, t_free **ptrs);
-int		execute_1(t_cmd *cmd, t_list **list_env, t_free **ptrs, int *io_fd);
+int		execute_1(t_cmd *cmd, t_list **list_env, t_free **ptrs);
 void	null_arg(t_list **list_env);
 void	case0(char *str, t_list **list_env, t_free **ptrs);
 int		valid_args(char **args, t_free **ptrs);

@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/17 02:23:24 by obouchta          #+#    #+#             */
-/*   Updated: 2024/04/25 06:24:01 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/04/26 15:35:13 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,8 @@ void	extract_command(t_token *token, t_cmd *cmd, t_free **ptrs)
 	}
 }
 
-void	final_command(t_token **tokens, t_cmd **command, t_free **ptrs)
+int	final_command(t_token **tokens, t_cmd **command,
+		t_list *list_env, t_free **ptrs)
 {
 	t_token	*curr;
 	t_cmd	*new_cmd;
@@ -46,7 +47,8 @@ void	final_command(t_token **tokens, t_cmd **command, t_free **ptrs)
 			new_cmd = ft_lstnew_3(ptrs);
 			extract_command(curr, new_cmd, ptrs);
 			extract_args(curr, new_cmd, ptrs);
-			extract_files(curr, new_cmd, ptrs);
+			if (extract_files(curr, new_cmd, list_env, ptrs))
+				return (1);
 			move_options(new_cmd, ptrs);
 			ft_lstadd_back_3(command, new_cmd);
 			if (curr && curr->type)
@@ -55,4 +57,5 @@ void	final_command(t_token **tokens, t_cmd **command, t_free **ptrs)
 		while (curr && curr->type != PIPE)
 			curr = curr->next;
 	}
+	return (0);
 }

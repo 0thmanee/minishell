@@ -6,7 +6,7 @@
 /*   By: obouchta <obouchta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/03 02:36:31 by obouchta          #+#    #+#             */
-/*   Updated: 2024/04/06 07:36:24 by obouchta         ###   ########.fr       */
+/*   Updated: 2024/04/26 11:49:57 by obouchta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,12 +75,12 @@ char	*ft_strjoin(char *s1, char *s2, t_free **ptrs)
 	len_s1 = ft_strlen(s1);
 	len_s2 = ft_strlen (s2);
 	s3 = ft_malloc(ptrs, len_s1 + len_s2 + 1);
-	while (i < len_s1 && s1[i])
+	while (s1 && i < len_s1 && s1[i])
 	{
 		s3[i] = s1[i];
 		i++;
 	}
-	while (j < len_s2 && s2[j])
+	while (s2 && j < len_s2 && s2[j])
 	{
 		s3[i + j] = s2[j];
 		j++;
