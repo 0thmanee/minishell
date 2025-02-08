@@ -52,8 +52,8 @@ minishell$ exit
     </ul>
     <h2>Contributors</h2>
     <ul>
-        <li><a href="https://github.com/03yasser">03yasser</a> - Major contributor</li>
-        <li><a href="https://github.com/0thmanee">0thmanee</a> - Contributor</li>
+        <li><a href="https://github.com/0thmanee">0thmanee</a></li>
+        <li><a href="https://github.com/03yasser">03yasser</a></li>
     </ul>
     <h2>License</h2>
     <p>This project does not have a license.</p>
